@@ -3,6 +3,7 @@ import TableSearch from "@/components/TableSearch";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { auth, getCurrentUser } from "@/lib/auth";
+import FormContainer from "@/components/FormContainer";
 import Image from "next/image";
 
 const MessagesPage = async ({
@@ -15,37 +16,86 @@ const MessagesPage = async ({
   const { page, search } = resolvedSearchParams;
   const p = page ? parseInt(page) : 1;
 
-  // Retrieve school announcements & communications
+  const role = user?.role;
+  const currentUserId = user?.id;
+
+  // Retrieve school announcements & communications targeted to user role
   const where: any = {};
   if (search) {
     where.OR = [{ title: { contains: search } }, { description: { contains: search } }];
   }
 
+  let audienceFilter = {};
+  if (role === "teacher" && currentUserId) {
+    audienceFilter = {
+      OR: [
+        { classId: null },
+        { teacherId: currentUserId },
+        {
+          class: {
+            OR: [
+              { supervisorId: currentUserId },
+              { lessons: { some: { teacherId: currentUserId } } },
+            ],
+          },
+        },
+      ],
+    };
+  } else if (role === "student" && currentUserId) {
+    audienceFilter = {
+      OR: [
+        { classId: null },
+        {
+          class: {
+            students: { some: { id: currentUserId } },
+          },
+        },
+      ],
+    };
+  } else if (role === "parent" && currentUserId) {
+    audienceFilter = {
+      OR: [
+        { classId: null },
+        {
+          class: {
+            students: { some: { parentId: currentUserId } },
+          },
+        },
+      ],
+    };
+  }
+
+  const finalWhere = { ...where, ...audienceFilter };
+
   const [announcements, count] = await prisma.$transaction([
     prisma.announcement.findMany({
-      where,
+      where: finalWhere,
       include: {
         class: { select: { name: true } },
+        teacher: { select: { name: true, surname: true } },
       },
       take: ITEM_PER_PAGE,
       skip: ITEM_PER_PAGE * (p - 1),
       orderBy: { date: "desc" },
     }),
-    prisma.announcement.count({ where }),
+    prisma.announcement.count({ where: finalWhere }),
   ]);
 
   return (
-    <div className="m-4 mt-0 flex flex-1 flex-col gap-6 rounded-md bg-white p-4 shadow-sm">
+    <div className="m-1 sm:m-4 mt-0 flex flex-1 flex-col gap-4 sm:gap-6 rounded-xl sm:rounded-2xl bg-white p-3 sm:p-5 shadow-sm">
       {/* HEADER */}
-      <div className="flex flex-col items-start justify-between gap-4 border-b border-gray-100 pb-4 md:flex-row md:items-center">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-gray-100 pb-3">
         <div>
-          <h1 className="text-xl font-bold text-gray-800">Messages & Bulletins</h1>
+          <h1 className="text-lg sm:text-xl font-bold text-gray-800">Messages & Class Bulletins</h1>
           <p className="mt-0.5 text-xs text-gray-500">
             Active communications and bulletins for {user?.name || user?.username} ({user?.role})
           </p>
         </div>
-        <div className="flex w-full items-center gap-4 md:w-auto">
+        <div className="flex w-full items-center gap-2 sm:w-auto">
           <TableSearch />
+          {(role === "admin" || role === "teacher") && (
+            <FormContainer table="announcement" type="create" />
+          )}
         </div>
       </div>
 

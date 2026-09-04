@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/generated/client";
 import {
   accountantSchema,
   AccountantSchema,
@@ -704,12 +704,14 @@ export const createAnnouncement = async (currentState: CurrentState, data: Annou
     }
 
     const classId = parsed.data.classId && parsed.data.classId > 0 ? parsed.data.classId : null;
+    const teacherId = actor.role === "teacher" ? actor.id : (parsed.data.teacherId || null);
     const created = await prisma.announcement.create({
       data: {
         title: parsed.data.title,
         description: parsed.data.description,
         date: parsed.data.date,
         classId,
+        teacherId,
       },
     });
 
@@ -1456,6 +1458,8 @@ export const createAssignment = async (currentState: CurrentState, data: Assignm
     const created = await prisma.assignment.create({
       data: {
         title: parsed.data.title,
+        description: parsed.data.description || null,
+        fileUrl: parsed.data.fileUrl || null,
         startDate: parsed.data.startDate,
         dueDate: parsed.data.dueDate,
         lessonId: parsed.data.lessonId,
@@ -1496,6 +1500,8 @@ export const updateAssignment = async (currentState: CurrentState, data: Assignm
       where: { id: data.id },
       data: {
         title: parsed.data.title,
+        description: parsed.data.description || null,
+        fileUrl: parsed.data.fileUrl || null,
         startDate: parsed.data.startDate,
         dueDate: parsed.data.dueDate,
         lessonId: parsed.data.lessonId,
@@ -1527,6 +1533,7 @@ export const deleteAssignment = async (currentState: CurrentState, data: FormDat
     const actor = await requireRole("admin", "teacher");
 
     await prisma.result.deleteMany({ where: { assignmentId: id } });
+    await prisma.assignmentSubmission.deleteMany({ where: { assignmentId: id } });
     await prisma.assignment.delete({
       where: { id },
     });
@@ -1546,6 +1553,148 @@ export const deleteAssignment = async (currentState: CurrentState, data: FormDat
   } catch (err: any) {
     console.error("deleteAssignment error:", err);
     return { success: false, error: true, message: err.message || "Failed to delete assignment." };
+  }
+};
+
+// ==========================================
+// ASSIGNMENT SUBMISSIONS & GRADING
+// ==========================================
+
+export const submitAssignment = async (
+  currentState: CurrentState,
+  data: { assignmentId: number; fileUrl?: string; notes?: string }
+) => {
+  try {
+    const actor = await requireRole("student", "admin");
+    if (!data.assignmentId) {
+      return { success: false, error: true, message: "Assignment ID is required." };
+    }
+
+    const assignment = await prisma.assignment.findUnique({
+      where: { id: data.assignmentId },
+    });
+
+    if (!assignment) {
+      return { success: false, error: true, message: "Assignment not found." };
+    }
+
+    const isLate = new Date() > new Date(assignment.dueDate);
+    const status = isLate ? "LATE" : "SUBMITTED";
+
+    const submission = await prisma.assignmentSubmission.upsert({
+      where: {
+        assignmentId_studentId: {
+          assignmentId: data.assignmentId,
+          studentId: actor.id,
+        },
+      },
+      update: {
+        fileUrl: data.fileUrl || null,
+        notes: data.notes || null,
+        status,
+        updatedAt: new Date(),
+      },
+      create: {
+        assignmentId: data.assignmentId,
+        studentId: actor.id,
+        fileUrl: data.fileUrl || null,
+        notes: data.notes || null,
+        status,
+      },
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        actorId: actor.id,
+        actorRole: actor.role,
+        action: "SUBMIT",
+        entity: "AssignmentSubmission",
+        entityId: String(submission.id),
+        details: JSON.stringify({ assignmentId: data.assignmentId, isLate }),
+      },
+    });
+
+    revalidatePath("/list/assignments");
+    return {
+      success: true,
+      error: false,
+      message: isLate ? "Assignment submitted (marked Late)." : "Assignment submitted successfully!",
+    };
+  } catch (err: any) {
+    console.error("submitAssignment error:", err);
+    return { success: false, error: true, message: err.message || "Failed to submit assignment." };
+  }
+};
+
+export const gradeAssignmentSubmission = async (
+  currentState: CurrentState,
+  data: {
+    submissionId: number;
+    score?: number;
+    feedback?: string;
+    status?: "PENDING" | "SUBMITTED" | "GRADED" | "LATE";
+  }
+) => {
+  try {
+    const actor = await requireRole("admin", "teacher");
+    if (!data.submissionId) {
+      return { success: false, error: true, message: "Submission ID is required." };
+    }
+
+    const updated = await prisma.assignmentSubmission.update({
+      where: { id: data.submissionId },
+      data: {
+        score: data.score !== undefined ? data.score : null,
+        feedback: data.feedback || null,
+        status: data.status || "GRADED",
+      },
+      include: {
+        assignment: true,
+      },
+    });
+
+    // Also synchronize to student Result if score is provided
+    if (data.score !== undefined && data.score !== null) {
+      const existingResult = await prisma.result.findFirst({
+        where: {
+          assignmentId: updated.assignmentId,
+          studentId: updated.studentId,
+        },
+      });
+
+      if (existingResult) {
+        await prisma.result.update({
+          where: { id: existingResult.id },
+          data: { score: data.score },
+        });
+      } else {
+        await prisma.result.create({
+          data: {
+            score: data.score,
+            assignmentId: updated.assignmentId,
+            studentId: updated.studentId,
+          },
+        });
+      }
+    }
+
+    await prisma.auditLog.create({
+      data: {
+        actorId: actor.id,
+        actorRole: actor.role,
+        action: "GRADE",
+        entity: "AssignmentSubmission",
+        entityId: String(updated.id),
+        details: JSON.stringify({ score: data.score, feedback: data.feedback }),
+      },
+    });
+
+    revalidatePath("/list/assignments");
+    revalidatePath("/list/results");
+    return { success: true, error: false, message: "Submission graded successfully!" };
+  } catch (err: any) {
+    console.error("gradeAssignmentSubmission error:", err);
+    return { success: false, error: true, message: err.message || "Failed to grade submission." };
   }
 };
 

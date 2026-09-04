@@ -5,7 +5,7 @@ import TableSearch from "@/components/TableSearch";
 
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
-import { Class, Prisma, Student } from "@prisma/client";
+import { Class, Prisma, Student } from "@/generated/client";
 import Image from "next/image";
 import TableActions from "@/components/TableActions";
 import Link from "next/link";
@@ -89,14 +89,56 @@ const StudentListPage = async ({
             </button>
           </Link>
           {role === "admin" && (
-            // <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurple">
-            //   <Image src="/delete.png" alt="" width={16} height={16} />
-            // </button>
             <FormContainer table="student" type="delete" id={item.id} />
           )}
         </div>
       </td>
     </tr>
+  );
+
+  const renderCard = (item: StudentList) => (
+    <div
+      key={item.id}
+      className="flex flex-col justify-between rounded-xl border border-gray-200/80 bg-white p-4 shadow-sm transition hover:shadow-md"
+    >
+      <div>
+        <div className="flex items-center gap-3">
+          <Image
+            src={item.img || "/noAvatar.png"}
+            alt=""
+            width={44}
+            height={44}
+            className="h-11 w-11 rounded-full object-cover ring-2 ring-sky-100"
+          />
+          <div className="min-w-0 flex-1">
+            <h3 className="truncate font-bold text-gray-800 text-sm">{item.name} {item.surname}</h3>
+            <p className="truncate text-xs text-gray-500">@{item.username}</p>
+          </div>
+          <span className="shrink-0 rounded-full bg-sky-50 px-2.5 py-0.5 text-xs font-semibold text-sky-700 ring-1 ring-sky-200">
+            Class {item.class.name}
+          </span>
+        </div>
+
+        <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500">
+          <span>Grade: {item.class.name[0]}</span>
+          {item.phone && <span>📞 {item.phone}</span>}
+        </div>
+      </div>
+
+      <div className="mt-3.5 flex items-center justify-between border-t border-gray-100 pt-2.5">
+        <span className="text-xs text-gray-400">ID: {item.id.slice(0, 8)}</span>
+        <div className="flex items-center gap-2">
+          <Link href={`/list/students/${item.id}`}>
+            <button className="flex h-7 w-7 items-center justify-center rounded-full bg-lamaSky shadow-sm hover:opacity-90">
+              <Image src="/view.png" alt="" width={15} height={15} />
+            </button>
+          </Link>
+          {role === "admin" && (
+            <FormContainer table="student" type="delete" id={item.id} />
+          )}
+        </div>
+      </div>
+    </div>
   );
 
   const { page, sort, ...queryParams } = resolvedSearchParams;
@@ -189,11 +231,11 @@ const StudentListPage = async ({
   return (
     <div className="m-4 mt-0 flex-1 rounded-md bg-white p-4">
       {/* TOP */}
-      <div className="flex items-center justify-between">
-        <h1 className="hidden text-lg font-semibold md:block">All Students</h1>
-        <div className="flex w-full flex-col items-center gap-4 md:w-auto md:flex-row">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <h1 className="text-base font-bold text-gray-800 md:text-lg">All Students</h1>
+        <div className="flex w-full flex-col items-center gap-3 sm:flex-row md:w-auto">
           <TableSearch />
-          <div className="flex items-center gap-4 self-end">
+          <div className="flex items-center gap-3 self-end sm:self-auto">
             <TableActions
               sortFields={[
                 { label: "Student Name (A-Z)", field: "name:asc" },
@@ -208,7 +250,7 @@ const StudentListPage = async ({
         </div>
       </div>
       {/* LIST */}
-      <Table columns={columns} renderRow={renderRow} data={data} />
+      <Table columns={columns} renderRow={renderRow} renderCard={renderCard} data={data} />
       {/* PAGINATION */}
       <Pagination page={p} count={count} />
     </div>

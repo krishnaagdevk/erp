@@ -5,7 +5,7 @@ import FormContainer from "@/components/FormContainer";
 import Performance from "@/components/Performance";
 import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { Teacher } from "@prisma/client";
+import { Teacher } from "@/generated/client";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";

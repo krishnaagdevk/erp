@@ -6,33 +6,44 @@ const Announcements = async () => {
   const { userId, sessionClaims } = await auth();
   const role = (sessionClaims?.metadata as { role?: string })?.role;
 
-  const roleConditions = userId
-    ? {
-        teacher: { lessons: { some: { teacherId: userId } } },
-        student: { students: { some: { id: userId } } },
-        parent: { students: { some: { parentId: userId } } },
-      }
-    : {
-        teacher: {},
-        student: {},
-        parent: {},
-      };
+  let audienceWhere: any = { classId: null };
+  if (role === "admin") {
+    audienceWhere = {};
+  } else if (role === "teacher" && userId) {
+    audienceWhere = {
+      OR: [
+        { classId: null },
+        { teacherId: userId },
+        {
+          class: {
+            OR: [
+              { supervisorId: userId },
+              { lessons: { some: { teacherId: userId } } },
+            ],
+          },
+        },
+      ],
+    };
+  } else if (role === "student" && userId) {
+    audienceWhere = {
+      OR: [
+        { classId: null },
+        { class: { students: { some: { id: userId } } } },
+      ],
+    };
+  } else if (role === "parent" && userId) {
+    audienceWhere = {
+      OR: [
+        { classId: null },
+        { class: { students: { some: { parentId: userId } } } },
+      ],
+    };
+  }
 
   const data = await prisma.announcement.findMany({
     take: 3,
     orderBy: { date: "desc" },
-    where: {
-      ...(role && role !== "admin"
-        ? {
-            OR: [
-              { classId: null },
-              { class: roleConditions[role as keyof typeof roleConditions] || {} },
-            ],
-          }
-        : role === "admin"
-          ? {}
-          : { classId: null }),
-    },
+    where: audienceWhere,
   });
 
   return (

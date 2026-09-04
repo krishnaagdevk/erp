@@ -122,6 +122,30 @@ const AssignmentForm = ({
           setValue={setValue}
         />
 
+        <div className="w-full flex flex-col gap-2">
+          <label className="text-xs text-gray-500">Instructions / Description</label>
+          <textarea
+            {...register("description")}
+            defaultValue={data?.description}
+            rows={3}
+            placeholder="Provide assignment guidelines, chapter references, or instructions for students..."
+            className="w-full rounded-md p-2 text-sm ring-[1.5px] ring-gray-300 focus:outline-none focus:ring-2 focus:ring-lamaSky"
+          />
+        </div>
+
+        <div className="w-full flex flex-col gap-2">
+          <label className="text-xs text-gray-500">Assignment File Attachment / Resource URL (Optional)</label>
+          <input
+            {...register("fileUrl")}
+            defaultValue={data?.fileUrl}
+            placeholder="https://... or link to assignment worksheet / PDF"
+            className="w-full rounded-md p-2 text-sm ring-[1.5px] ring-gray-300 focus:outline-none focus:ring-2 focus:ring-lamaSky"
+          />
+          <span className="text-[11px] text-gray-400">
+            Paste a link to a question paper, PDF, worksheet, or drive document for students to download.
+          </span>
+        </div>
+
         {data && (
           <InputField
             label="Id"

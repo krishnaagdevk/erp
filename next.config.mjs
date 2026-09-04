@@ -3,8 +3,9 @@ const nextConfig = {
   images: {
     remotePatterns: [{ hostname: "images.pexels.com" }, { hostname: "res.cloudinary.com" }],
   },
+  transpilePackages: ["react-big-calendar", "react-calendar", "recharts", "react-toastify"],
   experimental: {
-    optimizePackageImports: ["recharts", "react-toastify"],
+    optimizePackageImports: ["recharts", "react-toastify", "react-big-calendar", "react-calendar"],
   },
   poweredByHeader: false,
   async headers() {

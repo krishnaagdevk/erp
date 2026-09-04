@@ -3,7 +3,7 @@ import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import prisma from "@/lib/prisma";
-import { Class, Prisma, Subject, Teacher } from "@prisma/client";
+import { Class, Prisma, Subject, Teacher } from "@/generated/client";
 import Image from "next/image";
 import TableActions from "@/components/TableActions";
 import Link from "next/link";
@@ -95,14 +95,73 @@ const TeacherListPage = async ({
             </button>
           </Link>
           {role === "admin" && (
-            // <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurple">
-            //   <Image src="/delete.png" alt="" width={16} height={16} />
-            // </button>
             <FormContainer table="teacher" type="delete" id={item.id} />
           )}
         </div>
       </td>
     </tr>
+  );
+
+  const renderCard = (item: TeacherList) => (
+    <div
+      key={item.id}
+      className="flex flex-col justify-between rounded-xl border border-gray-200/80 bg-white p-4 shadow-sm transition hover:shadow-md"
+    >
+      <div>
+        <div className="flex items-center gap-3">
+          <Image
+            src={item.img || "/noAvatar.png"}
+            alt=""
+            width={44}
+            height={44}
+            className="h-11 w-11 rounded-full object-cover ring-2 ring-purple-100"
+          />
+          <div className="min-w-0 flex-1">
+            <h3 className="truncate font-bold text-gray-800 text-sm">{item.name} {item.surname}</h3>
+            <p className="truncate text-xs text-gray-500">{item.email || `@${item.username}`}</p>
+          </div>
+        </div>
+
+        <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
+          {item.subjects.map((s: Subject) => (
+            <span
+              key={s.id}
+              className="rounded-full bg-purple-50 px-2.5 py-0.5 font-semibold text-purple-700 ring-1 ring-purple-200"
+            >
+              {s.name}
+            </span>
+          ))}
+          {item.classes.map((c: Class) => (
+            <span
+              key={c.id}
+              className="rounded-full bg-sky-50 px-2 py-0.5 font-medium text-sky-700 ring-1 ring-sky-200"
+            >
+              Class {c.name}
+            </span>
+          ))}
+        </div>
+
+        {item.phone && (
+          <div className="mt-2.5 flex items-center gap-1.5 text-xs text-gray-500">
+            <span>📞 {item.phone}</span>
+          </div>
+        )}
+      </div>
+
+      <div className="mt-3.5 flex items-center justify-between border-t border-gray-100 pt-2.5">
+        <span className="text-xs text-gray-400 font-mono">@{item.username}</span>
+        <div className="flex items-center gap-2">
+          <Link href={`/list/teachers/${item.id}`}>
+            <button className="flex h-7 w-7 items-center justify-center rounded-full bg-lamaSky shadow-sm hover:opacity-90">
+              <Image src="/view.png" alt="" width={15} height={15} />
+            </button>
+          </Link>
+          {role === "admin" && (
+            <FormContainer table="teacher" type="delete" id={item.id} />
+          )}
+        </div>
+      </div>
+    </div>
   );
   const { page, sort, ...queryParams } = resolvedSearchParams;
 
@@ -188,11 +247,11 @@ const TeacherListPage = async ({
   return (
     <div className="m-4 mt-0 flex-1 rounded-md bg-white p-4">
       {/* TOP */}
-      <div className="flex items-center justify-between">
-        <h1 className="hidden text-lg font-semibold md:block">All Teachers</h1>
-        <div className="flex w-full flex-col items-center gap-4 md:w-auto md:flex-row">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <h1 className="text-base font-bold text-gray-800 md:text-lg">All Teachers</h1>
+        <div className="flex w-full flex-col items-center gap-3 sm:flex-row md:w-auto">
           <TableSearch />
-          <div className="flex items-center gap-4 self-end">
+          <div className="flex items-center gap-3 self-end sm:self-auto">
             <TableActions
               sortFields={[
                 { label: "Teacher Name (A-Z)", field: "name:asc" },
@@ -207,7 +266,7 @@ const TeacherListPage = async ({
         </div>
       </div>
       {/* LIST */}
-      <Table columns={columns} renderRow={renderRow} data={data} />
+      <Table columns={columns} renderRow={renderRow} renderCard={renderCard} data={data} />
       {/* PAGINATION */}
       <Pagination page={p} count={count} />
     </div>

@@ -5,7 +5,7 @@ import Performance from "@/components/Performance";
 import StudentAttendanceCard from "@/components/StudentAttendanceCard";
 import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { Class, Student } from "@prisma/client";
+import { Class, Student } from "@/generated/client";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";

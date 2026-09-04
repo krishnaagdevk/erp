@@ -4,7 +4,7 @@ import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
-import { Class, Lesson, Prisma, Subject, Teacher } from "@prisma/client";
+import { Class, Lesson, Prisma, Subject, Teacher } from "@/generated/client";
 import TableActions from "@/components/TableActions";
 import { auth } from "@/lib/auth";
 
@@ -51,7 +51,7 @@ const LessonListPage = async ({
       key={item.id}
       className="border-b border-gray-200 text-sm even:bg-slate-50 hover:bg-lamaPurpleLight"
     >
-      <td className="flex items-center gap-4 p-4">{item.subject.name}</td>
+      <td className="flex items-center gap-4 p-4 font-medium text-gray-800">{item.subject.name}</td>
       <td>{item.class.name}</td>
       <td className="hidden md:table-cell">{item.teacher.name + " " + item.teacher.surname}</td>
       <td>
@@ -65,6 +65,41 @@ const LessonListPage = async ({
         </div>
       </td>
     </tr>
+  );
+
+  const renderCard = (item: LessonList) => (
+    <div
+      key={item.id}
+      className="flex flex-col justify-between rounded-xl border border-gray-200/80 bg-white p-4 shadow-sm transition hover:shadow-md"
+    >
+      <div>
+        <div className="flex items-start justify-between gap-2">
+          <div>
+            <h3 className="text-sm font-bold text-gray-800">{item.name}</h3>
+            <span className="text-xs font-semibold text-lamaPurple">{item.subject.name}</span>
+          </div>
+          <span className="shrink-0 rounded-full bg-sky-50 px-2.5 py-0.5 text-xs font-semibold text-sky-700 ring-1 ring-sky-200">
+            Class {item.class.name}
+          </span>
+        </div>
+        <div className="mt-2.5 flex items-center gap-1.5 text-xs text-gray-500">
+          <span>👨‍🏫 Teacher:</span>
+          <span className="font-medium text-gray-700">
+            {item.teacher.name} {item.teacher.surname}
+          </span>
+        </div>
+      </div>
+
+      <div className="mt-3 flex items-center justify-between border-t border-gray-100 pt-2.5">
+        <span className="text-xs text-gray-400 font-medium">Day: {item.day}</span>
+        {role === "admin" && (
+          <div className="flex items-center gap-2">
+            <FormContainer table="lesson" type="update" data={item} />
+            <FormContainer table="lesson" type="delete" id={item.id} />
+          </div>
+        )}
+      </div>
+    </div>
   );
 
   const { page, sort, ...queryParams } = resolvedSearchParams;
@@ -165,11 +200,11 @@ const LessonListPage = async ({
   return (
     <div className="m-4 mt-0 flex-1 rounded-md bg-white p-4">
       {/* TOP */}
-      <div className="flex items-center justify-between">
-        <h1 className="hidden text-lg font-semibold md:block">All Lessons</h1>
-        <div className="flex w-full flex-col items-center gap-4 md:w-auto md:flex-row">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <h1 className="text-base font-bold text-gray-800 md:text-lg">All Lessons</h1>
+        <div className="flex w-full flex-col items-center gap-3 sm:flex-row md:w-auto">
           <TableSearch />
-          <div className="flex items-center gap-4 self-end">
+          <div className="flex items-center gap-3 self-end sm:self-auto">
             <TableActions
               sortFields={[
                 { label: "Lesson Name (A-Z)", field: "name:asc" },
@@ -183,7 +218,7 @@ const LessonListPage = async ({
         </div>
       </div>
       {/* LIST */}
-      <Table columns={columns} renderRow={renderRow} data={data} />
+      <Table columns={columns} renderRow={renderRow} renderCard={renderCard} data={data} />
       {/* PAGINATION */}
       <Pagination page={p} count={count} />
     </div>

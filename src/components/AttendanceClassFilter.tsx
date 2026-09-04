@@ -62,7 +62,12 @@ export default function AttendanceClassFilter({
   };
 
   const clearFilters = () => {
-    router.push(pathname);
+    const tab = searchParams.get("tab");
+    if (tab) {
+      router.push(`${pathname}?tab=${tab}`);
+    } else {
+      router.push(pathname);
+    }
   };
 
   return (

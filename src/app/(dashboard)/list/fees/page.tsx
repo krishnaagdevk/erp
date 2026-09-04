@@ -236,6 +236,128 @@ const FeesListPage = async ({
     );
   };
 
+  const renderCard = (item: any) => {
+    const amountNum = Number(item.amount);
+    const paidAmountNum = Number(item.paidAmount);
+    const balance = Math.max(0, amountNum - paidAmountNum);
+    const latestPayment = item.payments?.[0];
+
+    return (
+      <div
+        key={item.id}
+        className="flex flex-col justify-between rounded-xl border border-gray-200/80 bg-white p-4 shadow-sm transition hover:shadow-md"
+      >
+        <div>
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <h3 className="text-sm font-bold text-gray-900">
+                {item.student.name} {item.student.surname}
+              </h3>
+              <span className="text-xs text-gray-500">
+                ID: {item.student.username} · Class {item.student.class?.name || "N/A"}
+              </span>
+            </div>
+            <span
+              className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${
+                item.status === "PAID"
+                  ? "border border-green-200 bg-green-100 text-green-800"
+                  : item.status === "PARTIAL"
+                    ? "border border-amber-200 bg-amber-100 text-amber-800"
+                    : item.status === "OVERDUE"
+                      ? "border border-rose-200 bg-rose-100 text-rose-800"
+                      : "border border-gray-200 bg-gray-100 text-gray-800"
+              }`}
+            >
+              {item.status}
+            </span>
+          </div>
+
+          <div className="mt-2.5 rounded-lg bg-gray-50 p-2.5">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-semibold text-gray-700">{item.title}</span>
+              <span className="text-gray-400">{item.feeType}</span>
+            </div>
+            <div className="mt-2 flex items-center justify-between border-t border-gray-200/60 pt-1.5 text-xs">
+              <div>
+                <span className="text-[11px] text-gray-400 block">Total</span>
+                <span className="font-bold text-gray-800">₹{amountNum.toFixed(2)}</span>
+              </div>
+              <div>
+                <span className="text-[11px] text-green-600 block">Paid</span>
+                <span className="font-bold text-green-700">₹{paidAmountNum.toFixed(2)}</span>
+              </div>
+              <div className="text-right">
+                <span className="text-[11px] text-amber-600 block">Due</span>
+                <span className="font-bold text-amber-700">₹{balance.toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-3 flex items-center justify-between border-t border-gray-100 pt-2.5">
+          <span className="text-xs text-gray-400">
+            Due: {new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(item.dueDate))}
+          </span>
+          <div className="flex items-center gap-2">
+            {(role === "admin" || role === "accountant") && (
+              <RecordPaymentButton
+                fee={{
+                  id: item.id,
+                  title: item.title,
+                  amount: amountNum,
+                  paidAmount: paidAmountNum,
+                  student: {
+                    id: item.student.id,
+                    name: item.student.name,
+                    surname: item.student.surname,
+                    username: item.student.username,
+                  },
+                }}
+                accountantName={user.name || user.username}
+              />
+            )}
+            {latestPayment && (
+              <FeeReceiptModal
+                payment={{
+                  id: latestPayment.id,
+                  receiptNo: latestPayment.receiptNo,
+                  amount: Number(latestPayment.amount),
+                  paymentDate: latestPayment.paymentDate,
+                  paymentMethod: latestPayment.paymentMethod,
+                  transactionId: latestPayment.transactionId,
+                  remarks: latestPayment.remarks,
+                  recordedBy: latestPayment.recordedBy,
+                  fee: {
+                    title: item.title,
+                    feeType: item.feeType,
+                    amount: amountNum,
+                    paidAmount: paidAmountNum,
+                    status: item.status,
+                    academicYear: item.academicYear,
+                    student: {
+                      name: item.student.name,
+                      surname: item.student.surname,
+                      username: item.student.username,
+                      phone: item.student.phone,
+                      class: item.student.class,
+                      parent: item.student.parent,
+                    },
+                  },
+                }}
+              />
+            )}
+            {(role === "admin" || role === "accountant") && (
+              <>
+                <FormContainer table="fee" type="update" data={{ ...item, amount: amountNum }} />
+                <FormContainer table="fee" type="delete" id={item.id} />
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="m-4 mt-0 flex flex-1 flex-col gap-6 rounded-2xl bg-white p-4 shadow-sm">
       {/* TOP */}
@@ -311,7 +433,7 @@ const FeesListPage = async ({
       </div>
 
       {/* TABLE */}
-      <Table columns={columns} renderRow={renderRow} data={fees} />
+      <Table columns={columns} renderRow={renderRow} renderCard={renderCard} data={fees} />
 
       {/* PAGINATION */}
       <Pagination page={p} count={count} />

@@ -5,7 +5,9 @@ import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { auth } from "@/lib/auth";
 import Image from "next/image";
+import Link from "next/link";
 import AttendanceClassFilter from "@/components/AttendanceClassFilter";
+import AttendanceMarkingWidget from "@/components/AttendanceMarkingWidget";
 
 type AttendanceItem = {
   id: number;
@@ -41,8 +43,12 @@ const AttendanceListPage = async ({
   const role = (sessionClaims?.metadata as { role?: string })?.role;
   const currentUserId = userId;
 
-  const { page, search, classId, date, status } = resolvedSearchParams;
+  const { page, search, classId, date, status, tab } = resolvedSearchParams;
   const p = page ? parseInt(page) : 1;
+
+  // Determine active tab: for teacher, default to 'mark' unless filtering or explicitly on 'history'
+  const isHistoryFiltered = !!(search || classId || date || status || page);
+  const activeTab = tab ? tab : role === "teacher" && !isHistoryFiltered ? "mark" : "history";
 
   // Fetch available classes for filtering
   const classes = await prisma.class.findMany({
@@ -220,7 +226,7 @@ const AttendanceListPage = async ({
   let data: AttendanceItem[] = [];
   let count = 0;
 
-  if (!showPromptToSelectClass) {
+  if (activeTab === "history" && !showPromptToSelectClass) {
     const [fetchedData, fetchedCount] = await prisma.$transaction([
       prisma.attendance.findMany({
         where,
@@ -245,64 +251,149 @@ const AttendanceListPage = async ({
     count = fetchedCount;
   }
 
+  // Fetch teacher assigned lessons if current user is a teacher
+  let teacherLessons: any[] = [];
+  if (role === "teacher" && currentUserId) {
+    const fetchedLessons = await prisma.lesson.findMany({
+      where: { teacherId: currentUserId },
+      include: {
+        subject: { select: { name: true } },
+        class: {
+          include: {
+            students: {
+              select: {
+                id: true,
+                name: true,
+                surname: true,
+                username: true,
+                img: true,
+              },
+              orderBy: { name: "asc" },
+            },
+          },
+        },
+      },
+      orderBy: { name: "asc" },
+    });
+
+    teacherLessons = fetchedLessons.map((l: any) => ({
+      id: l.id,
+      name: l.name,
+      subjectName: l.subject.name,
+      className: `Class ${l.class.name}`,
+      classId: l.classId,
+      students: l.class.students,
+    }));
+  }
+
   return (
-    <div className="m-4 mt-0 flex flex-1 flex-col gap-4 rounded-md bg-white p-4 shadow-sm">
-      {/* TOP */}
-      <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+    <div className="m-1 sm:m-4 mt-0 flex flex-1 flex-col gap-4 sm:gap-6 rounded-xl sm:rounded-2xl bg-white p-2.5 sm:p-5 shadow-sm">
+      {/* TOP HEADER */}
+      <div className="flex flex-col items-start justify-between gap-3 md:flex-row md:items-center border-b border-gray-100 pb-3">
         <div>
-          <h1 className="text-lg font-semibold text-gray-800">Attendance Records</h1>
+          <h1 className="text-lg sm:text-xl font-bold text-gray-800">Attendance Center</h1>
           <p className="text-xs text-gray-500">
-            Filter attendance records by class/section, date, and status.
+            Take roll-calls, record daily presence, and audit historical student attendance.
           </p>
         </div>
-        <div className="flex w-full flex-col items-center gap-4 md:w-auto md:flex-row">
-          <TableSearch />
-        </div>
+
+        {/* TAB SWITCHER */}
+        {role === "teacher" ? (
+          <div className="flex w-full sm:w-auto items-center gap-1.5 rounded-xl bg-gray-100/90 p-1">
+            <Link
+              href="/list/attendance?tab=mark"
+              className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-semibold transition ${
+                activeTab === "mark"
+                  ? "bg-white text-blue-600 shadow-sm"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              <span>✓ Roll-Call</span>
+            </Link>
+            <Link
+              href="/list/attendance?tab=history"
+              className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-semibold transition ${
+                activeTab === "history"
+                  ? "bg-white text-blue-600 shadow-sm"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              <span>📋 History & Records</span>
+            </Link>
+          </div>
+        ) : (
+          <div className="flex w-full flex-col items-center gap-4 md:w-auto md:flex-row">
+            <TableSearch />
+          </div>
+        )}
       </div>
 
-      {/* CLASS & DATE FILTERS */}
-      <AttendanceClassFilter
-        classes={classes}
-        selectedClassId={classId}
-        selectedDate={date}
-        selectedStatus={status}
-      />
-
-      {/* PROMPT STATE WHEN NO CLASS IS SELECTED FOR ADMIN */}
-      {showPromptToSelectClass ? (
-        <div className="my-4 flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-300 bg-slate-50 p-12 text-center">
-          <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-lamaSkyLight">
-            <Image src="/class.png" alt="Select Class" width={32} height={32} />
-          </div>
-          <h3 className="text-base font-semibold text-gray-800">
-            Select a Class / Section to View Attendance
-          </h3>
-          <p className="mb-4 mt-1 max-w-md text-xs text-gray-500">
-            With many classes and students in the school, please choose a class from the dropdown
-            above or click on one of the quick class buttons below.
-          </p>
-          <div className="flex max-w-xl flex-wrap justify-center gap-2">
-            {classes.map((cls: any) => (
-              <a
-                key={cls.id}
-                href={`/list/attendance?classId=${cls.id}`}
-                className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm transition hover:border-lamaPurple hover:bg-lamaPurpleLight"
-              >
-                Class {cls.name} ({cls._count?.students || 0} students)
-              </a>
-            ))}
-          </div>
+      {/* TAB 1: TEACHER ATTENDANCE MARKING ROLL CALL HUB */}
+      {role === "teacher" && activeTab === "mark" && (
+        <div className="w-full">
+          <AttendanceMarkingWidget lessons={teacherLessons} />
         </div>
-      ) : (
-        <>
-          {/* LIST */}
-          <Table columns={columns} renderRow={renderRow} data={data} />
-          {/* PAGINATION */}
-          <Pagination page={p} count={count} />
-        </>
+      )}
+
+      {/* TAB 2: ATTENDANCE HISTORY & RECORDS */}
+      {activeTab === "history" && (
+        <div className="flex flex-col gap-4">
+          {/* SEARCH & FILTERS ROW */}
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <h2 className="text-sm font-bold text-gray-700">Attendance History & Records</h2>
+              {role === "teacher" && (
+                <div className="w-full sm:w-auto">
+                  <TableSearch />
+                </div>
+              )}
+            </div>
+
+            <AttendanceClassFilter
+              classes={classes}
+              selectedClassId={classId}
+              selectedDate={date}
+              selectedStatus={status}
+            />
+          </div>
+
+          {/* PROMPT STATE WHEN NO CLASS IS SELECTED FOR ADMIN */}
+          {showPromptToSelectClass ? (
+            <div className="my-4 flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-300 bg-slate-50 p-8 sm:p-12 text-center">
+              <div className="mb-3 flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-lamaSkyLight">
+                <Image src="/class.png" alt="Select Class" width={32} height={32} />
+              </div>
+              <h3 className="text-sm sm:text-base font-semibold text-gray-800">
+                Select a Class / Section to View Attendance
+              </h3>
+              <p className="mb-4 mt-1 max-w-md text-xs text-gray-500">
+                Please choose a class from the dropdown above or click on one of the quick class buttons below.
+              </p>
+              <div className="flex max-w-xl flex-wrap justify-center gap-2">
+                {classes.map((cls: any) => (
+                  <Link
+                    key={cls.id}
+                    href={`/list/attendance?tab=history&classId=${cls.id}`}
+                    className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm transition hover:border-lamaPurple hover:bg-lamaPurpleLight"
+                  >
+                    Class {cls.name} ({cls._count?.students || 0} students)
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* LIST */}
+              <Table columns={columns} renderRow={renderRow} data={data} />
+              {/* PAGINATION */}
+              <Pagination page={p} count={count} />
+            </>
+          )}
+        </div>
       )}
     </div>
   );
 };
 
 export default AttendanceListPage;
+

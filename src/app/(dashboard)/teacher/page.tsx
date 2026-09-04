@@ -2,7 +2,6 @@ export const dynamic = "force-dynamic";
 
 import Announcements from "@/components/Announcements";
 import BigCalendarContainer from "@/components/BigCalendarContainer";
-import AttendanceMarkingWidget from "@/components/AttendanceMarkingWidget";
 import prisma from "@/lib/prisma";
 import { auth, getCurrentUser } from "@/lib/auth";
 import Link from "next/link";
@@ -64,40 +63,36 @@ const TeacherPage = async () => {
     }),
   ]);
 
-  const lessonOptions = teacherLessons.map((l: any) => ({
-    id: l.id,
-    name: l.name,
-    subjectName: l.subject.name,
-    className: `Class ${l.class.name}`,
-    classId: l.classId,
-    students: l.class.students,
-  }));
+  // Fetch today's attendance stats for teacher's lessons
+  const today = new Date();
+  const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
+
+  const [todayAttendanceCount, todayPresentCount] = await Promise.all([
+    prisma.attendance.count({
+      where: {
+        lesson: { teacherId: userId },
+        date: { gte: startOfDay, lte: endOfDay },
+      },
+    }),
+    prisma.attendance.count({
+      where: {
+        lesson: { teacherId: userId },
+        date: { gte: startOfDay, lte: endOfDay },
+        present: true,
+      },
+    }),
+  ]);
+
+  const todayAttendanceRate =
+    todayAttendanceCount > 0 ? Math.round((todayPresentCount / todayAttendanceCount) * 100) : 0;
 
   return (
     <div className="flex flex-col gap-6 p-2 sm:p-4 xl:flex-row">
       {/* LEFT / MAIN COLUMN */}
       <div className="flex w-full flex-col gap-6 xl:w-2/3">
         {/* HERO GREETING */}
-        <div className="flex flex-col items-start justify-between gap-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-800 p-6 text-white shadow-lg sm:flex-row sm:items-center">
-          <div>
-            <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-emerald-200">
-              Teacher Faculty Workspace
-            </span>
-            <h1 className="mt-2 text-2xl font-bold">Welcome back, {user?.name || "Teacher"}!</h1>
-            <p className="mt-1 max-w-md text-xs text-emerald-100 sm:text-sm">
-              Manage your assigned classes, take attendance roll-calls, create exams and
-              assignments.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Link
-              href="/list/attendance"
-              className="flex items-center gap-1.5 rounded-xl bg-white/20 px-4 py-2.5 text-xs font-semibold text-white backdrop-blur-sm transition hover:bg-white/30"
-            >
-              <span>Attendance History</span>
-            </Link>
-          </div>
-        </div>
+
 
         {/* METRICS ROW */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -120,22 +115,30 @@ const TeacherPage = async () => {
           </div>
 
           <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
-            <span className="text-xs font-medium uppercase text-purple-600">Exams Scheduled</span>
-            <p className="mt-1 text-2xl font-bold text-purple-700">{totalExamsCount}</p>
-            <span className="mt-1 block text-[11px] text-purple-600">Upcoming tests</span>
+            <span className="text-xs font-medium uppercase text-purple-600">Today&apos;s Attendance</span>
+            <p className="mt-1 text-2xl font-bold text-purple-700">
+              {todayAttendanceCount > 0 ? `${todayAttendanceRate}%` : "Pending"}
+            </p>
+            <span className="mt-1 block text-[11px] text-purple-600">
+              {todayAttendanceCount > 0
+                ? `${todayPresentCount}/${todayAttendanceCount} present`
+                : "No roll-call taken today"}
+            </span>
           </div>
         </div>
 
-        {/* INTERACTIVE ATTENDANCE MARKING WIDGET */}
-        <AttendanceMarkingWidget lessons={lessonOptions} />
-
         {/* TIMETABLE SCHEDULE */}
-        <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-          <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3">
-            <h2 className="text-base font-bold text-gray-800">Weekly Teaching Schedule</h2>
-            <span className="text-xs text-gray-400">Periods & Lesson slots</span>
+        <div className="rounded-2xl border border-gray-100 bg-white p-3 sm:p-5 shadow-sm">
+          <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between border-b border-gray-100 pb-3">
+            <div>
+              <h2 className="text-sm sm:text-base font-bold text-gray-800">Weekly Teaching Schedule</h2>
+              <p className="text-[11px] text-gray-400">Class periods & scheduled lesson slots</p>
+            </div>
+            <span className="self-start sm:self-auto rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700">
+              Mon – Fri (8:00 AM - 5:00 PM)
+            </span>
           </div>
-          <div className="h-[600px]">
+          <div className="h-[520px] sm:h-[600px] w-full">
             <BigCalendarContainer type="teacherId" id={userId} />
           </div>
         </div>

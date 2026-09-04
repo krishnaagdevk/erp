@@ -140,12 +140,31 @@ export type ExamSchema = z.infer<typeof examSchema>;
 export const assignmentSchema = z.object({
   id: z.coerce.number().optional(),
   title: z.string().min(1, { message: "Title is required!" }),
+  description: z.string().optional(),
+  fileUrl: z.string().optional(),
   startDate: z.coerce.date({ message: "Start date is required!" }),
   dueDate: z.coerce.date({ message: "Due date is required!" }),
   lessonId: z.coerce.number({ message: "Lesson is required!" }),
 });
 
 export type AssignmentSchema = z.infer<typeof assignmentSchema>;
+
+export const assignmentSubmissionSchema = z.object({
+  assignmentId: z.coerce.number({ message: "Assignment ID is required!" }),
+  fileUrl: z.string().optional(),
+  notes: z.string().optional(),
+});
+
+export type AssignmentSubmissionSchema = z.infer<typeof assignmentSubmissionSchema>;
+
+export const assignmentGradeSchema = z.object({
+  submissionId: z.coerce.number({ message: "Submission ID is required!" }),
+  score: z.coerce.number().min(0).max(100).optional(),
+  feedback: z.string().optional(),
+  status: z.enum(["PENDING", "SUBMITTED", "GRADED", "LATE"]).default("GRADED"),
+});
+
+export type AssignmentGradeSchema = z.infer<typeof assignmentGradeSchema>;
 
 export const eventSchema = z.object({
   id: z.coerce.number().optional(),
@@ -176,6 +195,7 @@ export const announcementSchema = z.object({
         : Number(val),
     z.number().nullable().optional()
   ),
+  teacherId: z.string().optional(),
 });
 
 export type AnnouncementSchema = z.infer<typeof announcementSchema>;

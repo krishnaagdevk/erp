@@ -100,7 +100,7 @@ export default function AttendanceMarkingWidget({
       );
 
       if (res.success) {
-        toast.success(res.message || "Attendance saved successfully!");
+        toast.success(res.message || "Attendance recorded successfully!");
         router.refresh();
       } else {
         toast.error(res.message || "Failed to save attendance.");
@@ -125,8 +125,7 @@ export default function AttendanceMarkingWidget({
           />
           <h3 className="mt-3 text-sm font-semibold text-gray-700">No Assigned Lessons Found</h3>
           <p className="mt-1 text-xs text-gray-500">
-            You will be able to mark student attendance once the Admin assigns lessons and classes
-            to your profile.
+            You will be able to mark student attendance once lessons are assigned to your profile.
           </p>
         </div>
       </div>
@@ -138,44 +137,48 @@ export default function AttendanceMarkingWidget({
   const absentCount = totalCount - presentCount;
 
   return (
-    <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+    <div className="rounded-xl border border-gray-100 bg-white p-2.5 shadow-sm sm:rounded-2xl sm:p-5">
       {/* HEADER */}
-      <div className="mb-4 flex flex-col justify-between gap-3 border-b border-gray-100 pb-4 sm:flex-row sm:items-center">
+      <div className="mb-3 flex flex-col gap-2.5 border-b border-gray-100 pb-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-green-100 text-xs font-bold text-green-700">
+            <span className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-100 text-xs font-bold text-emerald-700">
               ✓
             </span>
-            <h2 className="text-base font-bold text-gray-800">Class Attendance Roll-Call</h2>
+            <h2 className="text-sm font-bold text-gray-800 sm:text-base">
+              Class Attendance Roll-Call
+            </h2>
           </div>
-          <p className="mt-0.5 text-xs text-gray-500">
-            Mark daily presence for students in your assigned classes.
+          <p className="mt-0.5 text-[11px] text-gray-500 sm:text-xs">
+            Mark daily presence for your assigned class roster.
           </p>
         </div>
 
-        {/* SUMMARY STATS */}
+        {/* SUMMARY STATS BADGES */}
         <div className="flex items-center gap-2">
-          <span className="rounded-lg bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
+          <span className="inline-flex items-center gap-1 rounded-lg border border-emerald-200/60 bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700 sm:px-2.5 sm:py-1">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
             Present: {presentCount}
           </span>
-          <span className="rounded-lg bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700">
+          <span className="inline-flex items-center gap-1 rounded-lg border border-rose-200/60 bg-rose-50 px-2 py-0.5 text-xs font-semibold text-rose-700 sm:px-2.5 sm:py-1">
+            <span className="h-1.5 w-1.5 rounded-full bg-rose-500"></span>
             Absent: {absentCount}
           </span>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:gap-4">
         {/* CONTROLS ROW */}
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
           {/* LESSON / CLASS SELECTOR */}
           <div>
             <label className="mb-1 block text-xs font-semibold text-gray-600">
-              Select Class / Lesson:
+              Class & Subject
             </label>
             <select
               value={selectedLessonId}
               onChange={(e) => handleLessonChange(Number(e.target.value))}
-              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-xs font-medium text-gray-800 transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-lamaSky"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50/70 px-3 py-2 text-xs font-medium text-gray-800 transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-lamaSky"
             >
               {lessons.map((l) => (
                 <option key={l.id} value={l.id}>
@@ -188,92 +191,90 @@ export default function AttendanceMarkingWidget({
           {/* DATE SELECTOR */}
           <div>
             <label className="mb-1 block text-xs font-semibold text-gray-600">
-              Attendance Date:
+              Attendance Date
             </label>
             <input
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-xs font-medium text-gray-800 transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-lamaSky"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50/70 px-3 py-2 text-xs font-medium text-gray-800 transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-lamaSky"
             />
-          </div>
-
-          {/* BULK TOGGLE BUTTONS */}
-          <div className="flex items-end gap-2 sm:col-span-2 lg:col-span-1">
-            <button
-              type="button"
-              onClick={() => markAll(true)}
-              className="flex-1 rounded-xl border border-green-200 bg-green-50 px-3 py-2 text-xs font-semibold text-green-700 transition hover:bg-green-100"
-            >
-              All Present
-            </button>
-            <button
-              type="button"
-              onClick={() => markAll(false)}
-              className="flex-1 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-700 transition hover:bg-rose-100"
-            >
-              All Absent
-            </button>
           </div>
         </div>
 
         {/* STUDENT ROSTER LIST */}
-        <div className="mt-2 overflow-hidden rounded-xl border border-gray-100">
-          <div className="bg-gray-50/70 px-4 py-2 text-[11px] font-semibold uppercase tracking-wider text-gray-400">
-            Student Roster ({currentLesson?.students?.length || 0} enrolled)
+        <div className="overflow-hidden rounded-xl border border-gray-200/80 bg-white">
+          <div className="flex items-center justify-between border-b border-gray-100 bg-gray-50/80 px-3 py-2 text-[11px] font-semibold text-gray-500">
+            <span>STUDENT STRENGTH ({currentLesson?.students?.length || 0})</span>
           </div>
 
-          <div className="max-h-72 divide-y divide-gray-100 overflow-y-auto bg-white">
-            {currentLesson?.students?.map((student) => {
-              const isPresent = presenceMap[student.id] ?? true;
-              return (
-                <div
-                  key={student.id}
-                  onClick={() => togglePresence(student.id)}
-                  className="flex cursor-pointer items-center justify-between p-3 transition hover:bg-gray-50"
-                >
-                  <div className="flex items-center gap-3">
-                    <Image
-                      src={student.img || "/avatar.png"}
-                      alt=""
-                      width={32}
-                      height={32}
-                      className="h-8 w-8 rounded-full border border-gray-100 object-cover"
-                    />
-                    <div>
-                      <p className="text-xs font-bold text-gray-800">
-                        {student.name} {student.surname}
-                      </p>
-                      <p className="text-[11px] text-gray-400">@{student.username}</p>
+          <div className="max-h-80 divide-y divide-gray-100 overflow-y-auto">
+            {currentLesson?.students?.length === 0 ? (
+              <div className="p-6 text-center text-xs text-gray-400">
+                No students enrolled in this class.
+              </div>
+            ) : (
+              currentLesson?.students?.map((student, index) => {
+                const isPresent = presenceMap[student.id] ?? true;
+                const rollNumber = String(index + 1).padStart(2, "0");
+                return (
+                  <div
+                    key={student.id}
+                    onClick={() => togglePresence(student.id)}
+                    className="flex cursor-pointer select-none items-center justify-between p-2 transition hover:bg-slate-50 sm:p-3"
+                  >
+                    {/* LEFT: ROLL NO + STUDENT DETAILS */}
+                    <div className="flex min-w-0 items-center gap-2 pr-2 sm:gap-3">
+                      {/* ROLL NO BADGE */}
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-[11px] font-bold text-slate-700 sm:h-8 sm:w-8 sm:text-xs">
+                        {rollNumber}
+                      </span>
+
+                      {/* NAME & USERNAME */}
+                      <div className="min-w-0">
+                        <p className="truncate text-xs font-semibold leading-tight text-gray-800 sm:text-sm">
+                          {student.name} {student.surname}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* RIGHT: TOGGLE BUTTON */}
+                    <div className="shrink-0">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          togglePresence(student.id);
+                        }}
+                        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold shadow-sm transition-all duration-150 active:scale-95 ${
+                          isPresent
+                            ? "border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                            : "border border-rose-300 bg-rose-50 text-rose-700 hover:bg-rose-100"
+                        }`}
+                      >
+                        <span
+                          className={`flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-black text-white ${
+                            isPresent ? "bg-emerald-600" : "bg-rose-600"
+                          }`}
+                        >
+                          {isPresent ? "✓" : "✕"}
+                        </span>
+                        <span className="font-semibold">{isPresent ? "P" : "A"}</span>
+                      </button>
                     </div>
                   </div>
-
-                  <div className="flex items-center gap-2">
-                    <span
-                      className={`rounded-full px-3 py-1 text-xs font-bold transition-all ${
-                        isPresent
-                          ? "border border-green-200 bg-green-100 text-green-800"
-                          : "border border-rose-200 bg-rose-100 text-rose-800"
-                      }`}
-                    >
-                      {isPresent ? "✓ Present" : "✕ Absent"}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
         </div>
 
         {/* SAVE ACTION BUTTON */}
-        <div className="flex items-center justify-between pt-2">
-          <p className="text-xs text-gray-400">
-            Tap a student to toggle between Present and Absent.
-          </p>
+        <div className="flex flex-col-reverse gap-2 pt-1 sm:flex-row sm:items-center sm:justify-between">
           <button
             type="submit"
             disabled={loading}
-            className="rounded-xl bg-blue-600 px-6 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:opacity-50"
+            className="w-full rounded-xl bg-blue-600 px-6 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 active:scale-95 disabled:opacity-50 sm:w-auto"
           >
             {loading ? "Submitting..." : "Save Class Attendance"}
           </button>

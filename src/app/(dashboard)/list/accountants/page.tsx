@@ -4,7 +4,7 @@ import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
-import { Accountant, Prisma } from "@prisma/client";
+import { Accountant, Prisma } from "@/generated/client";
 import Image from "next/image";
 import TableActions from "@/components/TableActions";
 import { auth } from "@/lib/auth";
@@ -64,7 +64,7 @@ const AccountantListPage = async ({
           className="h-10 w-10 rounded-full object-cover md:hidden xl:block"
         />
         <div className="flex flex-col">
-          <h3 className="font-semibold">
+          <h3 className="font-semibold text-gray-800">
             {item.name} {item.surname}
           </h3>
           <p className="text-xs text-gray-500">{item?.email || "No email"}</p>
@@ -88,6 +88,48 @@ const AccountantListPage = async ({
         </div>
       </td>
     </tr>
+  );
+
+  const renderCard = (item: AccountantList) => (
+    <div
+      key={item.id}
+      className="flex flex-col justify-between rounded-xl border border-gray-200/80 bg-white p-4 shadow-sm transition hover:shadow-md"
+    >
+      <div>
+        <div className="flex items-center gap-3">
+          <Image
+            src={item.img || "/avatar.png"}
+            alt=""
+            width={44}
+            height={44}
+            className="h-11 w-11 rounded-full object-cover ring-2 ring-blue-100"
+          />
+          <div className="min-w-0 flex-1">
+            <h3 className="truncate font-bold text-gray-800 text-sm">{item.name} {item.surname}</h3>
+            <p className="truncate text-xs text-gray-500">{item.email || `@${item.username}`}</p>
+          </div>
+          <span className="shrink-0 rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-blue-700 ring-1 ring-blue-200">
+            Accountant
+          </span>
+        </div>
+
+        {item.phone && (
+          <div className="mt-3 flex items-center gap-1.5 text-xs text-gray-500">
+            <span>📞 {item.phone}</span>
+          </div>
+        )}
+      </div>
+
+      <div className="mt-3.5 flex items-center justify-between border-t border-gray-100 pt-2.5">
+        <span className="text-xs text-gray-400 font-mono">@{item.username}</span>
+        {role === "admin" && (
+          <div className="flex items-center gap-2">
+            <FormContainer table="accountant" type="update" data={item} />
+            <FormContainer table="accountant" type="delete" id={item.id} />
+          </div>
+        )}
+      </div>
+    </div>
   );
 
   const { page, sort, ...queryParams } = resolvedSearchParams;
@@ -141,17 +183,17 @@ const AccountantListPage = async ({
   return (
     <div className="m-4 mt-0 flex-1 rounded-md bg-white p-4">
       {/* TOP */}
-      <div className="flex items-center justify-between">
-        <h1 className="hidden text-lg font-semibold md:block">All Accountants</h1>
-        <div className="flex w-full flex-col items-center gap-4 md:w-auto md:flex-row">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <h1 className="text-base font-bold text-gray-800 md:text-lg">All Accountants</h1>
+        <div className="flex w-full flex-col items-center gap-3 sm:flex-row md:w-auto">
           <TableSearch />
-          <div className="flex items-center gap-4 self-end">
+          <div className="flex items-center gap-3 self-end sm:self-auto">
             <TableActions
               sortFields={[
                 { label: "Accountant Name (A-Z)", field: "name:asc" },
                 { label: "Accountant Name (Z-A)", field: "name:desc" },
-                { label: "Newest First", field: "createdAt:desc" },
-                { label: "Oldest First", field: "createdAt:asc" },
+                { label: "Newest Joined", field: "createdAt:desc" },
+                { label: "Oldest Joined", field: "createdAt:asc" },
               ]}
             />
             {role === "admin" && <FormContainer table="accountant" type="create" />}
@@ -159,7 +201,7 @@ const AccountantListPage = async ({
         </div>
       </div>
       {/* LIST */}
-      <Table columns={columns} renderRow={renderRow} data={data} />
+      <Table columns={columns} renderRow={renderRow} renderCard={renderCard} data={data} />
       {/* PAGINATION */}
       <Pagination page={p} count={count} />
     </div>
