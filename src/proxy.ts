@@ -13,7 +13,7 @@ const matchers = Object.keys(routeAccessMap).map((route) => {
   };
 });
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Immediately allow static files, images, favicon, and auth api
