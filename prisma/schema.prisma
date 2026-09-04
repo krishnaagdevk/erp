@@ -284,6 +284,25 @@ model AuditLog {
   @@index([createdAt])
 }
 
+model StoredFile {
+  id           String    @id @default(cuid())
+  accountId    String    // e.g. "account_1", "account_2" or the actual CF account ID
+  bucket       String    // The R2 bucket name
+  key          String    @unique // Unique object key path in the bucket
+  fileName     String    // Original uploaded filename
+  fileType     String?   // MIME type
+  fileSize     BigInt?   // File size in bytes
+  category     String?   // e.g. "assignments", "receipts", "documents"
+  publicUrl    String?   @db.Text
+  uploadedById String?
+  createdAt    DateTime  @default(now())
+  deletedAt    DateTime?
+
+  @@index([accountId])
+  @@index([category])
+  @@index([uploadedById])
+}
+
 enum FeeStatus {
   PENDING
   PARTIAL

@@ -72,3 +72,30 @@ export function getCurrentAcademicYear(date: Date = new Date()): string {
   const endYearShort = String(startYear + 1).slice(-2);
   return `${startYear}/${endYearShort}`;
 }
+
+/**
+ * Optimizes a Cloudinary image URL by automatically applying
+ * modern compression (f_auto), automatic quality (q_auto), and responsive dimensions.
+ */
+export function getOptimizedCloudinaryUrl(
+  urlOrPublicId: string | null | undefined,
+  width = 200,
+  height = 200
+): string {
+  if (!urlOrPublicId) return "/noAvatar.png";
+  if (!urlOrPublicId.includes("cloudinary.com")) {
+    // If it's a relative path or external URL, return as is
+    return urlOrPublicId;
+  }
+
+  // Inject transformation if not already transformed
+  if (urlOrPublicId.includes("/image/upload/") && !urlOrPublicId.includes("f_auto")) {
+    return urlOrPublicId.replace(
+      "/image/upload/",
+      `/image/upload/w_${width},h_${height},c_fill,g_face,f_auto,q_auto/`
+    );
+  }
+
+  return urlOrPublicId;
+}
+
