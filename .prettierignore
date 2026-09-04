@@ -1,0 +1,10 @@
+node_modules
+.next
+out
+dist
+build
+android
+coverage
+.pnpm-store
+package-lock.json
+pnpm-lock.yaml
