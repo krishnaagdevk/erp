@@ -98,4 +98,3 @@ export function getOptimizedCloudinaryUrl(
 
   return urlOrPublicId;
 }
-

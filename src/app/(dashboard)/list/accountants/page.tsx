@@ -105,7 +105,9 @@ const AccountantListPage = async ({
             className="h-11 w-11 rounded-full object-cover ring-2 ring-blue-100"
           />
           <div className="min-w-0 flex-1">
-            <h3 className="truncate font-bold text-gray-800 text-sm">{item.name} {item.surname}</h3>
+            <h3 className="truncate text-sm font-bold text-gray-800">
+              {item.name} {item.surname}
+            </h3>
             <p className="truncate text-xs text-gray-500">{item.email || `@${item.username}`}</p>
           </div>
           <span className="shrink-0 rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-blue-700 ring-1 ring-blue-200">
@@ -121,7 +123,7 @@ const AccountantListPage = async ({
       </div>
 
       <div className="mt-3.5 flex items-center justify-between border-t border-gray-100 pt-2.5">
-        <span className="text-xs text-gray-400 font-mono">@{item.username}</span>
+        <span className="font-mono text-xs text-gray-400">@{item.username}</span>
         {role === "admin" && (
           <div className="flex items-center gap-2">
             <FormContainer table="accountant" type="update" data={item} />
@@ -170,7 +172,7 @@ const AccountantListPage = async ({
     }
   }
 
-  const [data, count] = await prisma.$transaction([
+  const [data, count] = await Promise.all([
     prisma.accountant.findMany({
       where: query,
       orderBy,

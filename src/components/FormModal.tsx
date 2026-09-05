@@ -4,6 +4,7 @@ import {
   deleteAccountant,
   deleteAnnouncement,
   deleteAssignment,
+  deleteCaste,
   deleteClass,
   deleteEvent,
   deleteExam,
@@ -34,6 +35,7 @@ const deleteActionMap: Partial<Record<FormContainerProps["table"], any>> = {
   event: deleteEvent,
   announcement: deleteAnnouncement,
   fee: deleteFee,
+  caste: deleteCaste,
 };
 
 const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
@@ -70,6 +72,9 @@ const AnnouncementForm = dynamic(() => import("./forms/AnnouncementForm"), {
   loading: () => <h1>Loading...</h1>,
 });
 const FeeForm = dynamic(() => import("./forms/FeeForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+const CasteForm = dynamic(() => import("./forms/CasteForm"), {
   loading: () => <h1>Loading...</h1>,
 });
 
@@ -116,6 +121,9 @@ const forms: {
   ),
   fee: (setOpen, type, data, relatedData) => (
     <FeeForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
+  ),
+  caste: (setOpen, type, data, relatedData) => (
+    <CasteForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
   ),
 };
 

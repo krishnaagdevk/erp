@@ -227,7 +227,7 @@ const AttendanceListPage = async ({
   let count = 0;
 
   if (activeTab === "history" && !showPromptToSelectClass) {
-    const [fetchedData, fetchedCount] = await prisma.$transaction([
+    const [fetchedData, fetchedCount] = await Promise.all([
       prisma.attendance.findMany({
         where,
         include: {
@@ -287,11 +287,11 @@ const AttendanceListPage = async ({
   }
 
   return (
-    <div className="m-1 sm:m-4 mt-0 flex flex-1 flex-col gap-4 sm:gap-6 rounded-xl sm:rounded-2xl bg-white p-2.5 sm:p-5 shadow-sm">
+    <div className="m-1 mt-0 flex flex-1 flex-col gap-4 rounded-xl bg-white p-2.5 shadow-sm sm:m-4 sm:gap-6 sm:rounded-2xl sm:p-5">
       {/* TOP HEADER */}
-      <div className="flex flex-col items-start justify-between gap-3 md:flex-row md:items-center border-b border-gray-100 pb-3">
+      <div className="flex flex-col items-start justify-between gap-3 border-b border-gray-100 pb-3 md:flex-row md:items-center">
         <div>
-          <h1 className="text-lg sm:text-xl font-bold text-gray-800">Attendance Center</h1>
+          <h1 className="text-lg font-bold text-gray-800 sm:text-xl">Attendance Center</h1>
           <p className="text-xs text-gray-500">
             Take roll-calls, record daily presence, and audit historical student attendance.
           </p>
@@ -299,10 +299,10 @@ const AttendanceListPage = async ({
 
         {/* TAB SWITCHER */}
         {role === "teacher" ? (
-          <div className="flex w-full sm:w-auto items-center gap-1.5 rounded-xl bg-gray-100/90 p-1">
+          <div className="flex w-full items-center gap-1.5 rounded-xl bg-gray-100/90 p-1 sm:w-auto">
             <Link
               href="/list/attendance?tab=mark"
-              className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-semibold transition ${
+              className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-semibold transition sm:flex-initial ${
                 activeTab === "mark"
                   ? "bg-white text-blue-600 shadow-sm"
                   : "text-gray-600 hover:text-gray-900"
@@ -312,7 +312,7 @@ const AttendanceListPage = async ({
             </Link>
             <Link
               href="/list/attendance?tab=history"
-              className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-semibold transition ${
+              className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-semibold transition sm:flex-initial ${
                 activeTab === "history"
                   ? "bg-white text-blue-600 shadow-sm"
                   : "text-gray-600 hover:text-gray-900"
@@ -340,7 +340,7 @@ const AttendanceListPage = async ({
         <div className="flex flex-col gap-4">
           {/* SEARCH & FILTERS ROW */}
           <div className="flex flex-col gap-3">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <h2 className="text-sm font-bold text-gray-700">Attendance History & Records</h2>
               {role === "teacher" && (
                 <div className="w-full sm:w-auto">
@@ -359,15 +359,16 @@ const AttendanceListPage = async ({
 
           {/* PROMPT STATE WHEN NO CLASS IS SELECTED FOR ADMIN */}
           {showPromptToSelectClass ? (
-            <div className="my-4 flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-300 bg-slate-50 p-8 sm:p-12 text-center">
-              <div className="mb-3 flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-lamaSkyLight">
+            <div className="my-4 flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-300 bg-slate-50 p-8 text-center sm:p-12">
+              <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-lamaSkyLight sm:h-16 sm:w-16">
                 <Image src="/class.png" alt="Select Class" width={32} height={32} />
               </div>
-              <h3 className="text-sm sm:text-base font-semibold text-gray-800">
+              <h3 className="text-sm font-semibold text-gray-800 sm:text-base">
                 Select a Class / Section to View Attendance
               </h3>
               <p className="mb-4 mt-1 max-w-md text-xs text-gray-500">
-                Please choose a class from the dropdown above or click on one of the quick class buttons below.
+                Please choose a class from the dropdown above or click on one of the quick class
+                buttons below.
               </p>
               <div className="flex max-w-xl flex-wrap justify-center gap-2">
                 {classes.map((cls: any) => (
@@ -396,4 +397,3 @@ const AttendanceListPage = async ({
 };
 
 export default AttendanceListPage;
-

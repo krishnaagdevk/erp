@@ -9,6 +9,8 @@ import TableActions from "@/components/TableActions";
 import Link from "next/link";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { auth } from "@/lib/auth";
+import { getClassOptions, getSubjectOptions } from "@/lib/queries";
+import { getOptimizedCloudinaryUrl } from "@/lib/utils";
 
 type TeacherList = Teacher & { subjects: Subject[] } & { classes: Class[] };
 
@@ -67,7 +69,7 @@ const TeacherListPage = async ({
     >
       <td className="flex items-center gap-4 p-4">
         <Image
-          src={item.img || "/noAvatar.png"}
+          src={getOptimizedCloudinaryUrl(item.img, 80, 80)}
           alt=""
           width={40}
           height={40}
@@ -94,9 +96,7 @@ const TeacherListPage = async ({
               <Image src="/view.png" alt="" width={16} height={16} />
             </button>
           </Link>
-          {role === "admin" && (
-            <FormContainer table="teacher" type="delete" id={item.id} />
-          )}
+          {role === "admin" && <FormContainer table="teacher" type="delete" id={item.id} />}
         </div>
       </td>
     </tr>
@@ -110,14 +110,16 @@ const TeacherListPage = async ({
       <div>
         <div className="flex items-center gap-3">
           <Image
-            src={item.img || "/noAvatar.png"}
+            src={getOptimizedCloudinaryUrl(item.img, 88, 88)}
             alt=""
             width={44}
             height={44}
             className="h-11 w-11 rounded-full object-cover ring-2 ring-purple-100"
           />
           <div className="min-w-0 flex-1">
-            <h3 className="truncate font-bold text-gray-800 text-sm">{item.name} {item.surname}</h3>
+            <h3 className="truncate text-sm font-bold text-gray-800">
+              {item.name} {item.surname}
+            </h3>
             <p className="truncate text-xs text-gray-500">{item.email || `@${item.username}`}</p>
           </div>
         </div>
@@ -149,16 +151,14 @@ const TeacherListPage = async ({
       </div>
 
       <div className="mt-3.5 flex items-center justify-between border-t border-gray-100 pt-2.5">
-        <span className="text-xs text-gray-400 font-mono">@{item.username}</span>
+        <span className="font-mono text-xs text-gray-400">@{item.username}</span>
         <div className="flex items-center gap-2">
           <Link href={`/list/teachers/${item.id}`}>
             <button className="flex h-7 w-7 items-center justify-center rounded-full bg-lamaSky shadow-sm hover:opacity-90">
               <Image src="/view.png" alt="" width={15} height={15} />
             </button>
           </Link>
-          {role === "admin" && (
-            <FormContainer table="teacher" type="delete" id={item.id} />
-          )}
+          {role === "admin" && <FormContainer table="teacher" type="delete" id={item.id} />}
         </div>
       </div>
     </div>
@@ -215,7 +215,7 @@ const TeacherListPage = async ({
     }
   }
 
-  const [data, count, filterClasses, filterSubjects] = await prisma.$transaction([
+  const [data, count, filterClasses, filterSubjects] = await Promise.all([
     prisma.teacher.findMany({
       where: query,
       include: {
@@ -227,8 +227,8 @@ const TeacherListPage = async ({
       skip: ITEM_PER_PAGE * (p - 1),
     }),
     prisma.teacher.count({ where: query }),
-    prisma.class.findMany({ select: { id: true, name: true } }),
-    prisma.subject.findMany({ select: { id: true, name: true } }),
+    getClassOptions(),
+    getSubjectOptions(),
   ]);
 
   const filterOptions = [

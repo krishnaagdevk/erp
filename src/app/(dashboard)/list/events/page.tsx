@@ -7,6 +7,7 @@ import { ITEM_PER_PAGE } from "@/lib/settings";
 import { Class, Event, Prisma } from "@/generated/client";
 import TableActions from "@/components/TableActions";
 import { auth } from "@/lib/auth";
+import { getClassOptions } from "@/lib/queries";
 
 type EventList = Event & { class: Class };
 
@@ -110,7 +111,7 @@ const EventListPage = async ({
           </span>
         </div>
         {item.description && (
-          <p className="mt-2 text-xs text-gray-600 line-clamp-2 leading-relaxed">
+          <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-gray-600">
             {item.description}
           </p>
         )}
@@ -129,7 +130,18 @@ const EventListPage = async ({
             </span>
           </span>
           <span className="rounded-md bg-amber-50 px-2 py-0.5 font-semibold text-amber-700 ring-1 ring-amber-200">
-            ⏰ {item.startTime.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false })} - {item.endTime.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false })}
+            ⏰{" "}
+            {item.startTime.toLocaleTimeString("en-US", {
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: false,
+            })}{" "}
+            -{" "}
+            {item.endTime.toLocaleTimeString("en-US", {
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: false,
+            })}
           </span>
         </div>
         {role === "admin" && (
@@ -192,7 +204,7 @@ const EventListPage = async ({
     }
   }
 
-  const [data, count, filterClasses] = await prisma.$transaction([
+  const [data, count, filterClasses] = await Promise.all([
     prisma.event.findMany({
       where: query,
       include: {
@@ -203,7 +215,7 @@ const EventListPage = async ({
       skip: ITEM_PER_PAGE * (p - 1),
     }),
     prisma.event.count({ where: query }),
-    prisma.class.findMany({ select: { id: true, name: true } }),
+    getClassOptions(),
   ]);
 
   const filterOptions = [

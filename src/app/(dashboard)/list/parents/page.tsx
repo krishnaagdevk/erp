@@ -57,12 +57,15 @@ const ParentListPage = async ({
     >
       <td className="flex items-center gap-4 p-4 font-semibold text-gray-800">
         <div className="flex flex-col">
-          <h3>{item.name} {item.surname}</h3>
+          <h3>
+            {item.name} {item.surname}
+          </h3>
           <p className="text-xs text-gray-500">{item?.email}</p>
         </div>
       </td>
       <td className="hidden md:table-cell">
-        {item.students.map((student: Student) => `${student.name} ${student.surname}`).join(", ") || "None"}
+        {item.students.map((student: Student) => `${student.name} ${student.surname}`).join(", ") ||
+          "None"}
       </td>
       <td className="hidden md:table-cell">{item.phone}</td>
       <td className="hidden md:table-cell">{item.address}</td>
@@ -87,7 +90,9 @@ const ParentListPage = async ({
       <div>
         <div className="flex items-start justify-between gap-2">
           <div>
-            <h3 className="text-sm font-bold text-gray-800">{item.name} {item.surname}</h3>
+            <h3 className="text-sm font-bold text-gray-800">
+              {item.name} {item.surname}
+            </h3>
             <p className="text-xs text-gray-500">{item.email || `@${item.username}`}</p>
           </div>
           <span className="shrink-0 rounded-full bg-purple-50 px-2.5 py-0.5 text-xs font-semibold text-purple-700 ring-1 ring-purple-200">
@@ -96,7 +101,7 @@ const ParentListPage = async ({
         </div>
 
         <div className="mt-2.5 flex flex-wrap gap-1.5 text-xs">
-          <span className="text-gray-500 font-medium">Students:</span>
+          <span className="font-medium text-gray-500">Students:</span>
           {item.students.map((s: Student) => (
             <span
               key={s.id}
@@ -105,9 +110,7 @@ const ParentListPage = async ({
               {s.name} {s.surname}
             </span>
           ))}
-          {item.students.length === 0 && (
-            <span className="text-gray-400">No linked students</span>
-          )}
+          {item.students.length === 0 && <span className="text-gray-400">No linked students</span>}
         </div>
 
         {item.phone && (
@@ -118,7 +121,7 @@ const ParentListPage = async ({
       </div>
 
       <div className="mt-3.5 flex items-center justify-between border-t border-gray-100 pt-2.5">
-        <span className="text-xs text-gray-400 font-mono">@{item.username}</span>
+        <span className="font-mono text-xs text-gray-400">@{item.username}</span>
         {role === "admin" && (
           <div className="flex items-center gap-2">
             <FormContainer table="parent" type="update" data={item} />
@@ -147,6 +150,7 @@ const ParentListPage = async ({
               { surname: { contains: value } },
               { username: { contains: value } },
               { phone: { contains: value } },
+              { aadhar: { contains: value } },
             ];
             break;
           default:
@@ -166,7 +170,7 @@ const ParentListPage = async ({
     }
   }
 
-  const [data, count] = await prisma.$transaction([
+  const [data, count] = await Promise.all([
     prisma.parent.findMany({
       where: query,
       include: {

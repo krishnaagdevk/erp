@@ -1,4 +1,11 @@
-import { Day, FeeStatus, FeeType, PaymentMethod, PrismaClient, UserSex } from "../src/generated/client";
+import {
+  Day,
+  FeeStatus,
+  FeeType,
+  PaymentMethod,
+  PrismaClient,
+  UserSex,
+} from "../src/generated/client";
 import bcrypt from "bcryptjs";
 
 declare const process: any;

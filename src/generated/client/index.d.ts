@@ -113,6 +113,16 @@ export type AuditLog = $Result.DefaultSelection<Prisma.$AuditLogPayload>
  * 
  */
 export type StoredFile = $Result.DefaultSelection<Prisma.$StoredFilePayload>
+/**
+ * Model SystemSetting
+ * 
+ */
+export type SystemSetting = $Result.DefaultSelection<Prisma.$SystemSettingPayload>
+/**
+ * Model Caste
+ * 
+ */
+export type Caste = $Result.DefaultSelection<Prisma.$CastePayload>
 
 /**
  * Enums
@@ -124,6 +134,34 @@ export namespace $Enums {
 };
 
 export type UserSex = (typeof UserSex)[keyof typeof UserSex]
+
+
+export const SocialCategory: {
+  GENERAL: 'GENERAL',
+  OBC: 'OBC',
+  SC: 'SC',
+  ST: 'ST',
+  EWS: 'EWS',
+  MINORITY: 'MINORITY',
+  OTHER: 'OTHER'
+};
+
+export type SocialCategory = (typeof SocialCategory)[keyof typeof SocialCategory]
+
+
+export const Religion: {
+  HINDU: 'HINDU',
+  MUSLIM: 'MUSLIM',
+  CHRISTIAN: 'CHRISTIAN',
+  SIKH: 'SIKH',
+  BUDDHIST: 'BUDDHIST',
+  JAIN: 'JAIN',
+  PARSI: 'PARSI',
+  JEWISH: 'JEWISH',
+  OTHER: 'OTHER'
+};
+
+export type Religion = (typeof Religion)[keyof typeof Religion]
 
 
 export const Day: {
@@ -186,6 +224,14 @@ export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
 export type UserSex = $Enums.UserSex
 
 export const UserSex: typeof $Enums.UserSex
+
+export type SocialCategory = $Enums.SocialCategory
+
+export const SocialCategory: typeof $Enums.SocialCategory
+
+export type Religion = $Enums.Religion
+
+export const Religion: typeof $Enums.Religion
 
 export type Day = $Enums.Day
 
@@ -529,6 +575,26 @@ export class PrismaClient<
     * ```
     */
   get storedFile(): Prisma.StoredFileDelegate<ExtArgs>;
+
+  /**
+   * `prisma.systemSetting`: Exposes CRUD operations for the **SystemSetting** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SystemSettings
+    * const systemSettings = await prisma.systemSetting.findMany()
+    * ```
+    */
+  get systemSetting(): Prisma.SystemSettingDelegate<ExtArgs>;
+
+  /**
+   * `prisma.caste`: Exposes CRUD operations for the **Caste** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Castes
+    * const castes = await prisma.caste.findMany()
+    * ```
+    */
+  get caste(): Prisma.CasteDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -989,7 +1055,9 @@ export namespace Prisma {
     Fee: 'Fee',
     FeePayment: 'FeePayment',
     AuditLog: 'AuditLog',
-    StoredFile: 'StoredFile'
+    StoredFile: 'StoredFile',
+    SystemSetting: 'SystemSetting',
+    Caste: 'Caste'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1005,7 +1073,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "admin" | "accountant" | "student" | "teacher" | "parent" | "grade" | "class" | "subject" | "lesson" | "exam" | "assignment" | "assignmentSubmission" | "result" | "attendance" | "event" | "announcement" | "fee" | "feePayment" | "auditLog" | "storedFile"
+      modelProps: "admin" | "accountant" | "student" | "teacher" | "parent" | "grade" | "class" | "subject" | "lesson" | "exam" | "assignment" | "assignmentSubmission" | "result" | "attendance" | "event" | "announcement" | "fee" | "feePayment" | "auditLog" | "storedFile" | "systemSetting" | "caste"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2329,6 +2397,138 @@ export namespace Prisma {
           }
         }
       }
+      SystemSetting: {
+        payload: Prisma.$SystemSettingPayload<ExtArgs>
+        fields: Prisma.SystemSettingFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SystemSettingFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SystemSettingFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>
+          }
+          findFirst: {
+            args: Prisma.SystemSettingFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SystemSettingFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>
+          }
+          findMany: {
+            args: Prisma.SystemSettingFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>[]
+          }
+          create: {
+            args: Prisma.SystemSettingCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>
+          }
+          createMany: {
+            args: Prisma.SystemSettingCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.SystemSettingDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>
+          }
+          update: {
+            args: Prisma.SystemSettingUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>
+          }
+          deleteMany: {
+            args: Prisma.SystemSettingDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SystemSettingUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SystemSettingUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>
+          }
+          aggregate: {
+            args: Prisma.SystemSettingAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSystemSetting>
+          }
+          groupBy: {
+            args: Prisma.SystemSettingGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SystemSettingGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SystemSettingCountArgs<ExtArgs>
+            result: $Utils.Optional<SystemSettingCountAggregateOutputType> | number
+          }
+        }
+      }
+      Caste: {
+        payload: Prisma.$CastePayload<ExtArgs>
+        fields: Prisma.CasteFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CasteFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CastePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CasteFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CastePayload>
+          }
+          findFirst: {
+            args: Prisma.CasteFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CastePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CasteFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CastePayload>
+          }
+          findMany: {
+            args: Prisma.CasteFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CastePayload>[]
+          }
+          create: {
+            args: Prisma.CasteCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CastePayload>
+          }
+          createMany: {
+            args: Prisma.CasteCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.CasteDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CastePayload>
+          }
+          update: {
+            args: Prisma.CasteUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CastePayload>
+          }
+          deleteMany: {
+            args: Prisma.CasteDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CasteUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CasteUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CastePayload>
+          }
+          aggregate: {
+            args: Prisma.CasteAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCaste>
+          }
+          groupBy: {
+            args: Prisma.CasteGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CasteGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CasteCountArgs<ExtArgs>
+            result: $Utils.Optional<CasteCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2918,6 +3118,37 @@ export namespace Prisma {
    */
   export type FeeCountOutputTypeCountPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FeePaymentWhereInput
+  }
+
+
+  /**
+   * Count Type CasteCountOutputType
+   */
+
+  export type CasteCountOutputType = {
+    students: number
+  }
+
+  export type CasteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    students?: boolean | CasteCountOutputTypeCountStudentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CasteCountOutputType without action
+   */
+  export type CasteCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CasteCountOutputType
+     */
+    select?: CasteCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CasteCountOutputType without action
+   */
+  export type CasteCountOutputTypeCountStudentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentWhereInput
   }
 
 
@@ -4659,11 +4890,13 @@ export namespace Prisma {
   export type StudentAvgAggregateOutputType = {
     classId: number | null
     gradeId: number | null
+    casteId: number | null
   }
 
   export type StudentSumAggregateOutputType = {
     classId: number | null
     gradeId: number | null
+    casteId: number | null
   }
 
   export type StudentMinAggregateOutputType = {
@@ -4674,6 +4907,7 @@ export namespace Prisma {
     surname: string | null
     email: string | null
     phone: string | null
+    aadhar: string | null
     address: string | null
     img: string | null
     bloodType: string | null
@@ -4684,6 +4918,9 @@ export namespace Prisma {
     classId: number | null
     gradeId: number | null
     birthday: Date | null
+    category: $Enums.SocialCategory | null
+    religion: $Enums.Religion | null
+    casteId: number | null
   }
 
   export type StudentMaxAggregateOutputType = {
@@ -4694,6 +4931,7 @@ export namespace Prisma {
     surname: string | null
     email: string | null
     phone: string | null
+    aadhar: string | null
     address: string | null
     img: string | null
     bloodType: string | null
@@ -4704,6 +4942,9 @@ export namespace Prisma {
     classId: number | null
     gradeId: number | null
     birthday: Date | null
+    category: $Enums.SocialCategory | null
+    religion: $Enums.Religion | null
+    casteId: number | null
   }
 
   export type StudentCountAggregateOutputType = {
@@ -4714,6 +4955,7 @@ export namespace Prisma {
     surname: number
     email: number
     phone: number
+    aadhar: number
     address: number
     img: number
     bloodType: number
@@ -4724,6 +4966,9 @@ export namespace Prisma {
     classId: number
     gradeId: number
     birthday: number
+    category: number
+    religion: number
+    casteId: number
     _all: number
   }
 
@@ -4731,11 +4976,13 @@ export namespace Prisma {
   export type StudentAvgAggregateInputType = {
     classId?: true
     gradeId?: true
+    casteId?: true
   }
 
   export type StudentSumAggregateInputType = {
     classId?: true
     gradeId?: true
+    casteId?: true
   }
 
   export type StudentMinAggregateInputType = {
@@ -4746,6 +4993,7 @@ export namespace Prisma {
     surname?: true
     email?: true
     phone?: true
+    aadhar?: true
     address?: true
     img?: true
     bloodType?: true
@@ -4756,6 +5004,9 @@ export namespace Prisma {
     classId?: true
     gradeId?: true
     birthday?: true
+    category?: true
+    religion?: true
+    casteId?: true
   }
 
   export type StudentMaxAggregateInputType = {
@@ -4766,6 +5017,7 @@ export namespace Prisma {
     surname?: true
     email?: true
     phone?: true
+    aadhar?: true
     address?: true
     img?: true
     bloodType?: true
@@ -4776,6 +5028,9 @@ export namespace Prisma {
     classId?: true
     gradeId?: true
     birthday?: true
+    category?: true
+    religion?: true
+    casteId?: true
   }
 
   export type StudentCountAggregateInputType = {
@@ -4786,6 +5041,7 @@ export namespace Prisma {
     surname?: true
     email?: true
     phone?: true
+    aadhar?: true
     address?: true
     img?: true
     bloodType?: true
@@ -4796,6 +5052,9 @@ export namespace Prisma {
     classId?: true
     gradeId?: true
     birthday?: true
+    category?: true
+    religion?: true
+    casteId?: true
     _all?: true
   }
 
@@ -4893,6 +5152,7 @@ export namespace Prisma {
     surname: string
     email: string | null
     phone: string | null
+    aadhar: string | null
     address: string
     img: string | null
     bloodType: string
@@ -4903,6 +5163,9 @@ export namespace Prisma {
     classId: number
     gradeId: number
     birthday: Date
+    category: $Enums.SocialCategory | null
+    religion: $Enums.Religion | null
+    casteId: number | null
     _count: StudentCountAggregateOutputType | null
     _avg: StudentAvgAggregateOutputType | null
     _sum: StudentSumAggregateOutputType | null
@@ -4932,6 +5195,7 @@ export namespace Prisma {
     surname?: boolean
     email?: boolean
     phone?: boolean
+    aadhar?: boolean
     address?: boolean
     img?: boolean
     bloodType?: boolean
@@ -4942,6 +5206,9 @@ export namespace Prisma {
     classId?: boolean
     gradeId?: boolean
     birthday?: boolean
+    category?: boolean
+    religion?: boolean
+    casteId?: boolean
     parent?: boolean | ParentDefaultArgs<ExtArgs>
     class?: boolean | ClassDefaultArgs<ExtArgs>
     grade?: boolean | GradeDefaultArgs<ExtArgs>
@@ -4949,6 +5216,7 @@ export namespace Prisma {
     results?: boolean | Student$resultsArgs<ExtArgs>
     fees?: boolean | Student$feesArgs<ExtArgs>
     assignmentSubmissions?: boolean | Student$assignmentSubmissionsArgs<ExtArgs>
+    caste?: boolean | Student$casteArgs<ExtArgs>
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["student"]>
 
@@ -4961,6 +5229,7 @@ export namespace Prisma {
     surname?: boolean
     email?: boolean
     phone?: boolean
+    aadhar?: boolean
     address?: boolean
     img?: boolean
     bloodType?: boolean
@@ -4971,6 +5240,9 @@ export namespace Prisma {
     classId?: boolean
     gradeId?: boolean
     birthday?: boolean
+    category?: boolean
+    religion?: boolean
+    casteId?: boolean
   }
 
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4981,6 +5253,7 @@ export namespace Prisma {
     results?: boolean | Student$resultsArgs<ExtArgs>
     fees?: boolean | Student$feesArgs<ExtArgs>
     assignmentSubmissions?: boolean | Student$assignmentSubmissionsArgs<ExtArgs>
+    caste?: boolean | Student$casteArgs<ExtArgs>
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -4994,6 +5267,7 @@ export namespace Prisma {
       results: Prisma.$ResultPayload<ExtArgs>[]
       fees: Prisma.$FeePayload<ExtArgs>[]
       assignmentSubmissions: Prisma.$AssignmentSubmissionPayload<ExtArgs>[]
+      caste: Prisma.$CastePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5003,6 +5277,7 @@ export namespace Prisma {
       surname: string
       email: string | null
       phone: string | null
+      aadhar: string | null
       address: string
       img: string | null
       bloodType: string
@@ -5013,6 +5288,9 @@ export namespace Prisma {
       classId: number
       gradeId: number
       birthday: Date
+      category: $Enums.SocialCategory | null
+      religion: $Enums.Religion | null
+      casteId: number | null
     }, ExtArgs["result"]["student"]>
     composites: {}
   }
@@ -5360,6 +5638,7 @@ export namespace Prisma {
     results<T extends Student$resultsArgs<ExtArgs> = {}>(args?: Subset<T, Student$resultsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResultPayload<ExtArgs>, T, "findMany"> | Null>
     fees<T extends Student$feesArgs<ExtArgs> = {}>(args?: Subset<T, Student$feesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeePayload<ExtArgs>, T, "findMany"> | Null>
     assignmentSubmissions<T extends Student$assignmentSubmissionsArgs<ExtArgs> = {}>(args?: Subset<T, Student$assignmentSubmissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssignmentSubmissionPayload<ExtArgs>, T, "findMany"> | Null>
+    caste<T extends Student$casteArgs<ExtArgs> = {}>(args?: Subset<T, Student$casteArgs<ExtArgs>>): Prisma__CasteClient<$Result.GetResult<Prisma.$CastePayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5396,6 +5675,7 @@ export namespace Prisma {
     readonly surname: FieldRef<"Student", 'String'>
     readonly email: FieldRef<"Student", 'String'>
     readonly phone: FieldRef<"Student", 'String'>
+    readonly aadhar: FieldRef<"Student", 'String'>
     readonly address: FieldRef<"Student", 'String'>
     readonly img: FieldRef<"Student", 'String'>
     readonly bloodType: FieldRef<"Student", 'String'>
@@ -5406,6 +5686,9 @@ export namespace Prisma {
     readonly classId: FieldRef<"Student", 'Int'>
     readonly gradeId: FieldRef<"Student", 'Int'>
     readonly birthday: FieldRef<"Student", 'DateTime'>
+    readonly category: FieldRef<"Student", 'SocialCategory'>
+    readonly religion: FieldRef<"Student", 'Religion'>
+    readonly casteId: FieldRef<"Student", 'Int'>
   }
     
 
@@ -5782,6 +6065,21 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AssignmentSubmissionScalarFieldEnum | AssignmentSubmissionScalarFieldEnum[]
+  }
+
+  /**
+   * Student.caste
+   */
+  export type Student$casteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Caste
+     */
+    select?: CasteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CasteInclude<ExtArgs> | null
+    where?: CasteWhereInput
   }
 
   /**
@@ -6889,6 +7187,7 @@ export namespace Prisma {
     surname: string | null
     email: string | null
     phone: string | null
+    aadhar: string | null
     address: string | null
     createdAt: Date | null
     deletedAt: Date | null
@@ -6902,6 +7201,7 @@ export namespace Prisma {
     surname: string | null
     email: string | null
     phone: string | null
+    aadhar: string | null
     address: string | null
     createdAt: Date | null
     deletedAt: Date | null
@@ -6915,6 +7215,7 @@ export namespace Prisma {
     surname: number
     email: number
     phone: number
+    aadhar: number
     address: number
     createdAt: number
     deletedAt: number
@@ -6930,6 +7231,7 @@ export namespace Prisma {
     surname?: true
     email?: true
     phone?: true
+    aadhar?: true
     address?: true
     createdAt?: true
     deletedAt?: true
@@ -6943,6 +7245,7 @@ export namespace Prisma {
     surname?: true
     email?: true
     phone?: true
+    aadhar?: true
     address?: true
     createdAt?: true
     deletedAt?: true
@@ -6956,6 +7259,7 @@ export namespace Prisma {
     surname?: true
     email?: true
     phone?: true
+    aadhar?: true
     address?: true
     createdAt?: true
     deletedAt?: true
@@ -7042,6 +7346,7 @@ export namespace Prisma {
     surname: string
     email: string | null
     phone: string
+    aadhar: string | null
     address: string
     createdAt: Date
     deletedAt: Date | null
@@ -7072,6 +7377,7 @@ export namespace Prisma {
     surname?: boolean
     email?: boolean
     phone?: boolean
+    aadhar?: boolean
     address?: boolean
     createdAt?: boolean
     deletedAt?: boolean
@@ -7088,6 +7394,7 @@ export namespace Prisma {
     surname?: boolean
     email?: boolean
     phone?: boolean
+    aadhar?: boolean
     address?: boolean
     createdAt?: boolean
     deletedAt?: boolean
@@ -7111,6 +7418,7 @@ export namespace Prisma {
       surname: string
       email: string | null
       phone: string
+      aadhar: string | null
       address: string
       createdAt: Date
       deletedAt: Date | null
@@ -7491,6 +7799,7 @@ export namespace Prisma {
     readonly surname: FieldRef<"Parent", 'String'>
     readonly email: FieldRef<"Parent", 'String'>
     readonly phone: FieldRef<"Parent", 'String'>
+    readonly aadhar: FieldRef<"Parent", 'String'>
     readonly address: FieldRef<"Parent", 'String'>
     readonly createdAt: FieldRef<"Parent", 'DateTime'>
     readonly deletedAt: FieldRef<"Parent", 'DateTime'>
@@ -22312,6 +22621,1903 @@ export namespace Prisma {
 
 
   /**
+   * Model SystemSetting
+   */
+
+  export type AggregateSystemSetting = {
+    _count: SystemSettingCountAggregateOutputType | null
+    _avg: SystemSettingAvgAggregateOutputType | null
+    _sum: SystemSettingSumAggregateOutputType | null
+    _min: SystemSettingMinAggregateOutputType | null
+    _max: SystemSettingMaxAggregateOutputType | null
+  }
+
+  export type SystemSettingAvgAggregateOutputType = {
+    studentIdDigits: number | null
+    teacherIdDigits: number | null
+    parentIdDigits: number | null
+  }
+
+  export type SystemSettingSumAggregateOutputType = {
+    studentIdDigits: number | null
+    teacherIdDigits: number | null
+    parentIdDigits: number | null
+  }
+
+  export type SystemSettingMinAggregateOutputType = {
+    id: string | null
+    studentIdPrefix: string | null
+    studentIdYear: boolean | null
+    studentIdDigits: number | null
+    studentIdFormat: string | null
+    teacherIdPrefix: string | null
+    teacherIdYear: boolean | null
+    teacherIdDigits: number | null
+    teacherIdFormat: string | null
+    parentIdPrefix: string | null
+    parentIdDigits: number | null
+    parentIdFormat: string | null
+    updatedAt: Date | null
+  }
+
+  export type SystemSettingMaxAggregateOutputType = {
+    id: string | null
+    studentIdPrefix: string | null
+    studentIdYear: boolean | null
+    studentIdDigits: number | null
+    studentIdFormat: string | null
+    teacherIdPrefix: string | null
+    teacherIdYear: boolean | null
+    teacherIdDigits: number | null
+    teacherIdFormat: string | null
+    parentIdPrefix: string | null
+    parentIdDigits: number | null
+    parentIdFormat: string | null
+    updatedAt: Date | null
+  }
+
+  export type SystemSettingCountAggregateOutputType = {
+    id: number
+    studentIdPrefix: number
+    studentIdYear: number
+    studentIdDigits: number
+    studentIdFormat: number
+    teacherIdPrefix: number
+    teacherIdYear: number
+    teacherIdDigits: number
+    teacherIdFormat: number
+    parentIdPrefix: number
+    parentIdDigits: number
+    parentIdFormat: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SystemSettingAvgAggregateInputType = {
+    studentIdDigits?: true
+    teacherIdDigits?: true
+    parentIdDigits?: true
+  }
+
+  export type SystemSettingSumAggregateInputType = {
+    studentIdDigits?: true
+    teacherIdDigits?: true
+    parentIdDigits?: true
+  }
+
+  export type SystemSettingMinAggregateInputType = {
+    id?: true
+    studentIdPrefix?: true
+    studentIdYear?: true
+    studentIdDigits?: true
+    studentIdFormat?: true
+    teacherIdPrefix?: true
+    teacherIdYear?: true
+    teacherIdDigits?: true
+    teacherIdFormat?: true
+    parentIdPrefix?: true
+    parentIdDigits?: true
+    parentIdFormat?: true
+    updatedAt?: true
+  }
+
+  export type SystemSettingMaxAggregateInputType = {
+    id?: true
+    studentIdPrefix?: true
+    studentIdYear?: true
+    studentIdDigits?: true
+    studentIdFormat?: true
+    teacherIdPrefix?: true
+    teacherIdYear?: true
+    teacherIdDigits?: true
+    teacherIdFormat?: true
+    parentIdPrefix?: true
+    parentIdDigits?: true
+    parentIdFormat?: true
+    updatedAt?: true
+  }
+
+  export type SystemSettingCountAggregateInputType = {
+    id?: true
+    studentIdPrefix?: true
+    studentIdYear?: true
+    studentIdDigits?: true
+    studentIdFormat?: true
+    teacherIdPrefix?: true
+    teacherIdYear?: true
+    teacherIdDigits?: true
+    teacherIdFormat?: true
+    parentIdPrefix?: true
+    parentIdDigits?: true
+    parentIdFormat?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SystemSettingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SystemSetting to aggregate.
+     */
+    where?: SystemSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SystemSettings to fetch.
+     */
+    orderBy?: SystemSettingOrderByWithRelationInput | SystemSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SystemSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SystemSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SystemSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SystemSettings
+    **/
+    _count?: true | SystemSettingCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SystemSettingAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SystemSettingSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SystemSettingMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SystemSettingMaxAggregateInputType
+  }
+
+  export type GetSystemSettingAggregateType<T extends SystemSettingAggregateArgs> = {
+        [P in keyof T & keyof AggregateSystemSetting]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSystemSetting[P]>
+      : GetScalarType<T[P], AggregateSystemSetting[P]>
+  }
+
+
+
+
+  export type SystemSettingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SystemSettingWhereInput
+    orderBy?: SystemSettingOrderByWithAggregationInput | SystemSettingOrderByWithAggregationInput[]
+    by: SystemSettingScalarFieldEnum[] | SystemSettingScalarFieldEnum
+    having?: SystemSettingScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SystemSettingCountAggregateInputType | true
+    _avg?: SystemSettingAvgAggregateInputType
+    _sum?: SystemSettingSumAggregateInputType
+    _min?: SystemSettingMinAggregateInputType
+    _max?: SystemSettingMaxAggregateInputType
+  }
+
+  export type SystemSettingGroupByOutputType = {
+    id: string
+    studentIdPrefix: string
+    studentIdYear: boolean
+    studentIdDigits: number
+    studentIdFormat: string
+    teacherIdPrefix: string
+    teacherIdYear: boolean
+    teacherIdDigits: number
+    teacherIdFormat: string
+    parentIdPrefix: string
+    parentIdDigits: number
+    parentIdFormat: string
+    updatedAt: Date
+    _count: SystemSettingCountAggregateOutputType | null
+    _avg: SystemSettingAvgAggregateOutputType | null
+    _sum: SystemSettingSumAggregateOutputType | null
+    _min: SystemSettingMinAggregateOutputType | null
+    _max: SystemSettingMaxAggregateOutputType | null
+  }
+
+  type GetSystemSettingGroupByPayload<T extends SystemSettingGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SystemSettingGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SystemSettingGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SystemSettingGroupByOutputType[P]>
+            : GetScalarType<T[P], SystemSettingGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SystemSettingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentIdPrefix?: boolean
+    studentIdYear?: boolean
+    studentIdDigits?: boolean
+    studentIdFormat?: boolean
+    teacherIdPrefix?: boolean
+    teacherIdYear?: boolean
+    teacherIdDigits?: boolean
+    teacherIdFormat?: boolean
+    parentIdPrefix?: boolean
+    parentIdDigits?: boolean
+    parentIdFormat?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["systemSetting"]>
+
+
+  export type SystemSettingSelectScalar = {
+    id?: boolean
+    studentIdPrefix?: boolean
+    studentIdYear?: boolean
+    studentIdDigits?: boolean
+    studentIdFormat?: boolean
+    teacherIdPrefix?: boolean
+    teacherIdYear?: boolean
+    teacherIdDigits?: boolean
+    teacherIdFormat?: boolean
+    parentIdPrefix?: boolean
+    parentIdDigits?: boolean
+    parentIdFormat?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $SystemSettingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SystemSetting"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      studentIdPrefix: string
+      studentIdYear: boolean
+      studentIdDigits: number
+      studentIdFormat: string
+      teacherIdPrefix: string
+      teacherIdYear: boolean
+      teacherIdDigits: number
+      teacherIdFormat: string
+      parentIdPrefix: string
+      parentIdDigits: number
+      parentIdFormat: string
+      updatedAt: Date
+    }, ExtArgs["result"]["systemSetting"]>
+    composites: {}
+  }
+
+  type SystemSettingGetPayload<S extends boolean | null | undefined | SystemSettingDefaultArgs> = $Result.GetResult<Prisma.$SystemSettingPayload, S>
+
+  type SystemSettingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SystemSettingFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SystemSettingCountAggregateInputType | true
+    }
+
+  export interface SystemSettingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SystemSetting'], meta: { name: 'SystemSetting' } }
+    /**
+     * Find zero or one SystemSetting that matches the filter.
+     * @param {SystemSettingFindUniqueArgs} args - Arguments to find a SystemSetting
+     * @example
+     * // Get one SystemSetting
+     * const systemSetting = await prisma.systemSetting.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SystemSettingFindUniqueArgs>(args: SelectSubset<T, SystemSettingFindUniqueArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SystemSetting that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SystemSettingFindUniqueOrThrowArgs} args - Arguments to find a SystemSetting
+     * @example
+     * // Get one SystemSetting
+     * const systemSetting = await prisma.systemSetting.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SystemSettingFindUniqueOrThrowArgs>(args: SelectSubset<T, SystemSettingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SystemSetting that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingFindFirstArgs} args - Arguments to find a SystemSetting
+     * @example
+     * // Get one SystemSetting
+     * const systemSetting = await prisma.systemSetting.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SystemSettingFindFirstArgs>(args?: SelectSubset<T, SystemSettingFindFirstArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SystemSetting that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingFindFirstOrThrowArgs} args - Arguments to find a SystemSetting
+     * @example
+     * // Get one SystemSetting
+     * const systemSetting = await prisma.systemSetting.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SystemSettingFindFirstOrThrowArgs>(args?: SelectSubset<T, SystemSettingFindFirstOrThrowArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SystemSettings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SystemSettings
+     * const systemSettings = await prisma.systemSetting.findMany()
+     * 
+     * // Get first 10 SystemSettings
+     * const systemSettings = await prisma.systemSetting.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const systemSettingWithIdOnly = await prisma.systemSetting.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SystemSettingFindManyArgs>(args?: SelectSubset<T, SystemSettingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SystemSetting.
+     * @param {SystemSettingCreateArgs} args - Arguments to create a SystemSetting.
+     * @example
+     * // Create one SystemSetting
+     * const SystemSetting = await prisma.systemSetting.create({
+     *   data: {
+     *     // ... data to create a SystemSetting
+     *   }
+     * })
+     * 
+     */
+    create<T extends SystemSettingCreateArgs>(args: SelectSubset<T, SystemSettingCreateArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SystemSettings.
+     * @param {SystemSettingCreateManyArgs} args - Arguments to create many SystemSettings.
+     * @example
+     * // Create many SystemSettings
+     * const systemSetting = await prisma.systemSetting.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SystemSettingCreateManyArgs>(args?: SelectSubset<T, SystemSettingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a SystemSetting.
+     * @param {SystemSettingDeleteArgs} args - Arguments to delete one SystemSetting.
+     * @example
+     * // Delete one SystemSetting
+     * const SystemSetting = await prisma.systemSetting.delete({
+     *   where: {
+     *     // ... filter to delete one SystemSetting
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SystemSettingDeleteArgs>(args: SelectSubset<T, SystemSettingDeleteArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SystemSetting.
+     * @param {SystemSettingUpdateArgs} args - Arguments to update one SystemSetting.
+     * @example
+     * // Update one SystemSetting
+     * const systemSetting = await prisma.systemSetting.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SystemSettingUpdateArgs>(args: SelectSubset<T, SystemSettingUpdateArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SystemSettings.
+     * @param {SystemSettingDeleteManyArgs} args - Arguments to filter SystemSettings to delete.
+     * @example
+     * // Delete a few SystemSettings
+     * const { count } = await prisma.systemSetting.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SystemSettingDeleteManyArgs>(args?: SelectSubset<T, SystemSettingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SystemSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SystemSettings
+     * const systemSetting = await prisma.systemSetting.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SystemSettingUpdateManyArgs>(args: SelectSubset<T, SystemSettingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SystemSetting.
+     * @param {SystemSettingUpsertArgs} args - Arguments to update or create a SystemSetting.
+     * @example
+     * // Update or create a SystemSetting
+     * const systemSetting = await prisma.systemSetting.upsert({
+     *   create: {
+     *     // ... data to create a SystemSetting
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SystemSetting we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SystemSettingUpsertArgs>(args: SelectSubset<T, SystemSettingUpsertArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SystemSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingCountArgs} args - Arguments to filter SystemSettings to count.
+     * @example
+     * // Count the number of SystemSettings
+     * const count = await prisma.systemSetting.count({
+     *   where: {
+     *     // ... the filter for the SystemSettings we want to count
+     *   }
+     * })
+    **/
+    count<T extends SystemSettingCountArgs>(
+      args?: Subset<T, SystemSettingCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SystemSettingCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SystemSetting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SystemSettingAggregateArgs>(args: Subset<T, SystemSettingAggregateArgs>): Prisma.PrismaPromise<GetSystemSettingAggregateType<T>>
+
+    /**
+     * Group by SystemSetting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SystemSettingGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SystemSettingGroupByArgs['orderBy'] }
+        : { orderBy?: SystemSettingGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SystemSettingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSystemSettingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SystemSetting model
+   */
+  readonly fields: SystemSettingFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SystemSetting.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SystemSettingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SystemSetting model
+   */ 
+  interface SystemSettingFieldRefs {
+    readonly id: FieldRef<"SystemSetting", 'String'>
+    readonly studentIdPrefix: FieldRef<"SystemSetting", 'String'>
+    readonly studentIdYear: FieldRef<"SystemSetting", 'Boolean'>
+    readonly studentIdDigits: FieldRef<"SystemSetting", 'Int'>
+    readonly studentIdFormat: FieldRef<"SystemSetting", 'String'>
+    readonly teacherIdPrefix: FieldRef<"SystemSetting", 'String'>
+    readonly teacherIdYear: FieldRef<"SystemSetting", 'Boolean'>
+    readonly teacherIdDigits: FieldRef<"SystemSetting", 'Int'>
+    readonly teacherIdFormat: FieldRef<"SystemSetting", 'String'>
+    readonly parentIdPrefix: FieldRef<"SystemSetting", 'String'>
+    readonly parentIdDigits: FieldRef<"SystemSetting", 'Int'>
+    readonly parentIdFormat: FieldRef<"SystemSetting", 'String'>
+    readonly updatedAt: FieldRef<"SystemSetting", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SystemSetting findUnique
+   */
+  export type SystemSettingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelect<ExtArgs> | null
+    /**
+     * Filter, which SystemSetting to fetch.
+     */
+    where: SystemSettingWhereUniqueInput
+  }
+
+  /**
+   * SystemSetting findUniqueOrThrow
+   */
+  export type SystemSettingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelect<ExtArgs> | null
+    /**
+     * Filter, which SystemSetting to fetch.
+     */
+    where: SystemSettingWhereUniqueInput
+  }
+
+  /**
+   * SystemSetting findFirst
+   */
+  export type SystemSettingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelect<ExtArgs> | null
+    /**
+     * Filter, which SystemSetting to fetch.
+     */
+    where?: SystemSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SystemSettings to fetch.
+     */
+    orderBy?: SystemSettingOrderByWithRelationInput | SystemSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SystemSettings.
+     */
+    cursor?: SystemSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SystemSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SystemSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SystemSettings.
+     */
+    distinct?: SystemSettingScalarFieldEnum | SystemSettingScalarFieldEnum[]
+  }
+
+  /**
+   * SystemSetting findFirstOrThrow
+   */
+  export type SystemSettingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelect<ExtArgs> | null
+    /**
+     * Filter, which SystemSetting to fetch.
+     */
+    where?: SystemSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SystemSettings to fetch.
+     */
+    orderBy?: SystemSettingOrderByWithRelationInput | SystemSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SystemSettings.
+     */
+    cursor?: SystemSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SystemSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SystemSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SystemSettings.
+     */
+    distinct?: SystemSettingScalarFieldEnum | SystemSettingScalarFieldEnum[]
+  }
+
+  /**
+   * SystemSetting findMany
+   */
+  export type SystemSettingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelect<ExtArgs> | null
+    /**
+     * Filter, which SystemSettings to fetch.
+     */
+    where?: SystemSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SystemSettings to fetch.
+     */
+    orderBy?: SystemSettingOrderByWithRelationInput | SystemSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SystemSettings.
+     */
+    cursor?: SystemSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SystemSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SystemSettings.
+     */
+    skip?: number
+    distinct?: SystemSettingScalarFieldEnum | SystemSettingScalarFieldEnum[]
+  }
+
+  /**
+   * SystemSetting create
+   */
+  export type SystemSettingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelect<ExtArgs> | null
+    /**
+     * The data needed to create a SystemSetting.
+     */
+    data: XOR<SystemSettingCreateInput, SystemSettingUncheckedCreateInput>
+  }
+
+  /**
+   * SystemSetting createMany
+   */
+  export type SystemSettingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SystemSettings.
+     */
+    data: SystemSettingCreateManyInput | SystemSettingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SystemSetting update
+   */
+  export type SystemSettingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelect<ExtArgs> | null
+    /**
+     * The data needed to update a SystemSetting.
+     */
+    data: XOR<SystemSettingUpdateInput, SystemSettingUncheckedUpdateInput>
+    /**
+     * Choose, which SystemSetting to update.
+     */
+    where: SystemSettingWhereUniqueInput
+  }
+
+  /**
+   * SystemSetting updateMany
+   */
+  export type SystemSettingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SystemSettings.
+     */
+    data: XOR<SystemSettingUpdateManyMutationInput, SystemSettingUncheckedUpdateManyInput>
+    /**
+     * Filter which SystemSettings to update
+     */
+    where?: SystemSettingWhereInput
+  }
+
+  /**
+   * SystemSetting upsert
+   */
+  export type SystemSettingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelect<ExtArgs> | null
+    /**
+     * The filter to search for the SystemSetting to update in case it exists.
+     */
+    where: SystemSettingWhereUniqueInput
+    /**
+     * In case the SystemSetting found by the `where` argument doesn't exist, create a new SystemSetting with this data.
+     */
+    create: XOR<SystemSettingCreateInput, SystemSettingUncheckedCreateInput>
+    /**
+     * In case the SystemSetting was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SystemSettingUpdateInput, SystemSettingUncheckedUpdateInput>
+  }
+
+  /**
+   * SystemSetting delete
+   */
+  export type SystemSettingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelect<ExtArgs> | null
+    /**
+     * Filter which SystemSetting to delete.
+     */
+    where: SystemSettingWhereUniqueInput
+  }
+
+  /**
+   * SystemSetting deleteMany
+   */
+  export type SystemSettingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SystemSettings to delete
+     */
+    where?: SystemSettingWhereInput
+  }
+
+  /**
+   * SystemSetting without action
+   */
+  export type SystemSettingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Caste
+   */
+
+  export type AggregateCaste = {
+    _count: CasteCountAggregateOutputType | null
+    _avg: CasteAvgAggregateOutputType | null
+    _sum: CasteSumAggregateOutputType | null
+    _min: CasteMinAggregateOutputType | null
+    _max: CasteMaxAggregateOutputType | null
+  }
+
+  export type CasteAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type CasteSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type CasteMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    category: string | null
+    description: string | null
+    createdAt: Date | null
+  }
+
+  export type CasteMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    category: string | null
+    description: string | null
+    createdAt: Date | null
+  }
+
+  export type CasteCountAggregateOutputType = {
+    id: number
+    name: number
+    category: number
+    description: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type CasteAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type CasteSumAggregateInputType = {
+    id?: true
+  }
+
+  export type CasteMinAggregateInputType = {
+    id?: true
+    name?: true
+    category?: true
+    description?: true
+    createdAt?: true
+  }
+
+  export type CasteMaxAggregateInputType = {
+    id?: true
+    name?: true
+    category?: true
+    description?: true
+    createdAt?: true
+  }
+
+  export type CasteCountAggregateInputType = {
+    id?: true
+    name?: true
+    category?: true
+    description?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type CasteAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Caste to aggregate.
+     */
+    where?: CasteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Castes to fetch.
+     */
+    orderBy?: CasteOrderByWithRelationInput | CasteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CasteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Castes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Castes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Castes
+    **/
+    _count?: true | CasteCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CasteAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CasteSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CasteMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CasteMaxAggregateInputType
+  }
+
+  export type GetCasteAggregateType<T extends CasteAggregateArgs> = {
+        [P in keyof T & keyof AggregateCaste]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCaste[P]>
+      : GetScalarType<T[P], AggregateCaste[P]>
+  }
+
+
+
+
+  export type CasteGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CasteWhereInput
+    orderBy?: CasteOrderByWithAggregationInput | CasteOrderByWithAggregationInput[]
+    by: CasteScalarFieldEnum[] | CasteScalarFieldEnum
+    having?: CasteScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CasteCountAggregateInputType | true
+    _avg?: CasteAvgAggregateInputType
+    _sum?: CasteSumAggregateInputType
+    _min?: CasteMinAggregateInputType
+    _max?: CasteMaxAggregateInputType
+  }
+
+  export type CasteGroupByOutputType = {
+    id: number
+    name: string
+    category: string | null
+    description: string | null
+    createdAt: Date
+    _count: CasteCountAggregateOutputType | null
+    _avg: CasteAvgAggregateOutputType | null
+    _sum: CasteSumAggregateOutputType | null
+    _min: CasteMinAggregateOutputType | null
+    _max: CasteMaxAggregateOutputType | null
+  }
+
+  type GetCasteGroupByPayload<T extends CasteGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CasteGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CasteGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CasteGroupByOutputType[P]>
+            : GetScalarType<T[P], CasteGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CasteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    category?: boolean
+    description?: boolean
+    createdAt?: boolean
+    students?: boolean | Caste$studentsArgs<ExtArgs>
+    _count?: boolean | CasteCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["caste"]>
+
+
+  export type CasteSelectScalar = {
+    id?: boolean
+    name?: boolean
+    category?: boolean
+    description?: boolean
+    createdAt?: boolean
+  }
+
+  export type CasteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    students?: boolean | Caste$studentsArgs<ExtArgs>
+    _count?: boolean | CasteCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+  export type $CastePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Caste"
+    objects: {
+      students: Prisma.$StudentPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string
+      category: string | null
+      description: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["caste"]>
+    composites: {}
+  }
+
+  type CasteGetPayload<S extends boolean | null | undefined | CasteDefaultArgs> = $Result.GetResult<Prisma.$CastePayload, S>
+
+  type CasteCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CasteFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CasteCountAggregateInputType | true
+    }
+
+  export interface CasteDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Caste'], meta: { name: 'Caste' } }
+    /**
+     * Find zero or one Caste that matches the filter.
+     * @param {CasteFindUniqueArgs} args - Arguments to find a Caste
+     * @example
+     * // Get one Caste
+     * const caste = await prisma.caste.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CasteFindUniqueArgs>(args: SelectSubset<T, CasteFindUniqueArgs<ExtArgs>>): Prisma__CasteClient<$Result.GetResult<Prisma.$CastePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Caste that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CasteFindUniqueOrThrowArgs} args - Arguments to find a Caste
+     * @example
+     * // Get one Caste
+     * const caste = await prisma.caste.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CasteFindUniqueOrThrowArgs>(args: SelectSubset<T, CasteFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CasteClient<$Result.GetResult<Prisma.$CastePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Caste that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CasteFindFirstArgs} args - Arguments to find a Caste
+     * @example
+     * // Get one Caste
+     * const caste = await prisma.caste.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CasteFindFirstArgs>(args?: SelectSubset<T, CasteFindFirstArgs<ExtArgs>>): Prisma__CasteClient<$Result.GetResult<Prisma.$CastePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Caste that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CasteFindFirstOrThrowArgs} args - Arguments to find a Caste
+     * @example
+     * // Get one Caste
+     * const caste = await prisma.caste.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CasteFindFirstOrThrowArgs>(args?: SelectSubset<T, CasteFindFirstOrThrowArgs<ExtArgs>>): Prisma__CasteClient<$Result.GetResult<Prisma.$CastePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Castes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CasteFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Castes
+     * const castes = await prisma.caste.findMany()
+     * 
+     * // Get first 10 Castes
+     * const castes = await prisma.caste.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const casteWithIdOnly = await prisma.caste.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CasteFindManyArgs>(args?: SelectSubset<T, CasteFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CastePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Caste.
+     * @param {CasteCreateArgs} args - Arguments to create a Caste.
+     * @example
+     * // Create one Caste
+     * const Caste = await prisma.caste.create({
+     *   data: {
+     *     // ... data to create a Caste
+     *   }
+     * })
+     * 
+     */
+    create<T extends CasteCreateArgs>(args: SelectSubset<T, CasteCreateArgs<ExtArgs>>): Prisma__CasteClient<$Result.GetResult<Prisma.$CastePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Castes.
+     * @param {CasteCreateManyArgs} args - Arguments to create many Castes.
+     * @example
+     * // Create many Castes
+     * const caste = await prisma.caste.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CasteCreateManyArgs>(args?: SelectSubset<T, CasteCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Caste.
+     * @param {CasteDeleteArgs} args - Arguments to delete one Caste.
+     * @example
+     * // Delete one Caste
+     * const Caste = await prisma.caste.delete({
+     *   where: {
+     *     // ... filter to delete one Caste
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CasteDeleteArgs>(args: SelectSubset<T, CasteDeleteArgs<ExtArgs>>): Prisma__CasteClient<$Result.GetResult<Prisma.$CastePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Caste.
+     * @param {CasteUpdateArgs} args - Arguments to update one Caste.
+     * @example
+     * // Update one Caste
+     * const caste = await prisma.caste.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CasteUpdateArgs>(args: SelectSubset<T, CasteUpdateArgs<ExtArgs>>): Prisma__CasteClient<$Result.GetResult<Prisma.$CastePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Castes.
+     * @param {CasteDeleteManyArgs} args - Arguments to filter Castes to delete.
+     * @example
+     * // Delete a few Castes
+     * const { count } = await prisma.caste.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CasteDeleteManyArgs>(args?: SelectSubset<T, CasteDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Castes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CasteUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Castes
+     * const caste = await prisma.caste.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CasteUpdateManyArgs>(args: SelectSubset<T, CasteUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Caste.
+     * @param {CasteUpsertArgs} args - Arguments to update or create a Caste.
+     * @example
+     * // Update or create a Caste
+     * const caste = await prisma.caste.upsert({
+     *   create: {
+     *     // ... data to create a Caste
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Caste we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CasteUpsertArgs>(args: SelectSubset<T, CasteUpsertArgs<ExtArgs>>): Prisma__CasteClient<$Result.GetResult<Prisma.$CastePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Castes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CasteCountArgs} args - Arguments to filter Castes to count.
+     * @example
+     * // Count the number of Castes
+     * const count = await prisma.caste.count({
+     *   where: {
+     *     // ... the filter for the Castes we want to count
+     *   }
+     * })
+    **/
+    count<T extends CasteCountArgs>(
+      args?: Subset<T, CasteCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CasteCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Caste.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CasteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CasteAggregateArgs>(args: Subset<T, CasteAggregateArgs>): Prisma.PrismaPromise<GetCasteAggregateType<T>>
+
+    /**
+     * Group by Caste.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CasteGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CasteGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CasteGroupByArgs['orderBy'] }
+        : { orderBy?: CasteGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CasteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCasteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Caste model
+   */
+  readonly fields: CasteFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Caste.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CasteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    students<T extends Caste$studentsArgs<ExtArgs> = {}>(args?: Subset<T, Caste$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Caste model
+   */ 
+  interface CasteFieldRefs {
+    readonly id: FieldRef<"Caste", 'Int'>
+    readonly name: FieldRef<"Caste", 'String'>
+    readonly category: FieldRef<"Caste", 'String'>
+    readonly description: FieldRef<"Caste", 'String'>
+    readonly createdAt: FieldRef<"Caste", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Caste findUnique
+   */
+  export type CasteFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Caste
+     */
+    select?: CasteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CasteInclude<ExtArgs> | null
+    /**
+     * Filter, which Caste to fetch.
+     */
+    where: CasteWhereUniqueInput
+  }
+
+  /**
+   * Caste findUniqueOrThrow
+   */
+  export type CasteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Caste
+     */
+    select?: CasteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CasteInclude<ExtArgs> | null
+    /**
+     * Filter, which Caste to fetch.
+     */
+    where: CasteWhereUniqueInput
+  }
+
+  /**
+   * Caste findFirst
+   */
+  export type CasteFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Caste
+     */
+    select?: CasteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CasteInclude<ExtArgs> | null
+    /**
+     * Filter, which Caste to fetch.
+     */
+    where?: CasteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Castes to fetch.
+     */
+    orderBy?: CasteOrderByWithRelationInput | CasteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Castes.
+     */
+    cursor?: CasteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Castes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Castes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Castes.
+     */
+    distinct?: CasteScalarFieldEnum | CasteScalarFieldEnum[]
+  }
+
+  /**
+   * Caste findFirstOrThrow
+   */
+  export type CasteFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Caste
+     */
+    select?: CasteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CasteInclude<ExtArgs> | null
+    /**
+     * Filter, which Caste to fetch.
+     */
+    where?: CasteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Castes to fetch.
+     */
+    orderBy?: CasteOrderByWithRelationInput | CasteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Castes.
+     */
+    cursor?: CasteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Castes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Castes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Castes.
+     */
+    distinct?: CasteScalarFieldEnum | CasteScalarFieldEnum[]
+  }
+
+  /**
+   * Caste findMany
+   */
+  export type CasteFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Caste
+     */
+    select?: CasteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CasteInclude<ExtArgs> | null
+    /**
+     * Filter, which Castes to fetch.
+     */
+    where?: CasteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Castes to fetch.
+     */
+    orderBy?: CasteOrderByWithRelationInput | CasteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Castes.
+     */
+    cursor?: CasteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Castes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Castes.
+     */
+    skip?: number
+    distinct?: CasteScalarFieldEnum | CasteScalarFieldEnum[]
+  }
+
+  /**
+   * Caste create
+   */
+  export type CasteCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Caste
+     */
+    select?: CasteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CasteInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Caste.
+     */
+    data: XOR<CasteCreateInput, CasteUncheckedCreateInput>
+  }
+
+  /**
+   * Caste createMany
+   */
+  export type CasteCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Castes.
+     */
+    data: CasteCreateManyInput | CasteCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Caste update
+   */
+  export type CasteUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Caste
+     */
+    select?: CasteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CasteInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Caste.
+     */
+    data: XOR<CasteUpdateInput, CasteUncheckedUpdateInput>
+    /**
+     * Choose, which Caste to update.
+     */
+    where: CasteWhereUniqueInput
+  }
+
+  /**
+   * Caste updateMany
+   */
+  export type CasteUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Castes.
+     */
+    data: XOR<CasteUpdateManyMutationInput, CasteUncheckedUpdateManyInput>
+    /**
+     * Filter which Castes to update
+     */
+    where?: CasteWhereInput
+  }
+
+  /**
+   * Caste upsert
+   */
+  export type CasteUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Caste
+     */
+    select?: CasteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CasteInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Caste to update in case it exists.
+     */
+    where: CasteWhereUniqueInput
+    /**
+     * In case the Caste found by the `where` argument doesn't exist, create a new Caste with this data.
+     */
+    create: XOR<CasteCreateInput, CasteUncheckedCreateInput>
+    /**
+     * In case the Caste was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CasteUpdateInput, CasteUncheckedUpdateInput>
+  }
+
+  /**
+   * Caste delete
+   */
+  export type CasteDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Caste
+     */
+    select?: CasteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CasteInclude<ExtArgs> | null
+    /**
+     * Filter which Caste to delete.
+     */
+    where: CasteWhereUniqueInput
+  }
+
+  /**
+   * Caste deleteMany
+   */
+  export type CasteDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Castes to delete
+     */
+    where?: CasteWhereInput
+  }
+
+  /**
+   * Caste.students
+   */
+  export type Caste$studentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Student
+     */
+    select?: StudentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentInclude<ExtArgs> | null
+    where?: StudentWhereInput
+    orderBy?: StudentOrderByWithRelationInput | StudentOrderByWithRelationInput[]
+    cursor?: StudentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentScalarFieldEnum | StudentScalarFieldEnum[]
+  }
+
+  /**
+   * Caste without action
+   */
+  export type CasteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Caste
+     */
+    select?: CasteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CasteInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -22360,6 +24566,7 @@ export namespace Prisma {
     surname: 'surname',
     email: 'email',
     phone: 'phone',
+    aadhar: 'aadhar',
     address: 'address',
     img: 'img',
     bloodType: 'bloodType',
@@ -22369,7 +24576,10 @@ export namespace Prisma {
     parentId: 'parentId',
     classId: 'classId',
     gradeId: 'gradeId',
-    birthday: 'birthday'
+    birthday: 'birthday',
+    category: 'category',
+    religion: 'religion',
+    casteId: 'casteId'
   };
 
   export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum]
@@ -22403,6 +24613,7 @@ export namespace Prisma {
     surname: 'surname',
     email: 'email',
     phone: 'phone',
+    aadhar: 'aadhar',
     address: 'address',
     createdAt: 'createdAt',
     deletedAt: 'deletedAt'
@@ -22605,6 +24816,36 @@ export namespace Prisma {
   export type StoredFileScalarFieldEnum = (typeof StoredFileScalarFieldEnum)[keyof typeof StoredFileScalarFieldEnum]
 
 
+  export const SystemSettingScalarFieldEnum: {
+    id: 'id',
+    studentIdPrefix: 'studentIdPrefix',
+    studentIdYear: 'studentIdYear',
+    studentIdDigits: 'studentIdDigits',
+    studentIdFormat: 'studentIdFormat',
+    teacherIdPrefix: 'teacherIdPrefix',
+    teacherIdYear: 'teacherIdYear',
+    teacherIdDigits: 'teacherIdDigits',
+    teacherIdFormat: 'teacherIdFormat',
+    parentIdPrefix: 'parentIdPrefix',
+    parentIdDigits: 'parentIdDigits',
+    parentIdFormat: 'parentIdFormat',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SystemSettingScalarFieldEnum = (typeof SystemSettingScalarFieldEnum)[keyof typeof SystemSettingScalarFieldEnum]
+
+
+  export const CasteScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    category: 'category',
+    description: 'description',
+    createdAt: 'createdAt'
+  };
+
+  export type CasteScalarFieldEnum = (typeof CasteScalarFieldEnum)[keyof typeof CasteScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -22651,6 +24892,20 @@ export namespace Prisma {
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'SocialCategory'
+   */
+  export type EnumSocialCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SocialCategory'>
+    
+
+
+  /**
+   * Reference to a field of type 'Religion'
+   */
+  export type EnumReligionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Religion'>
     
 
 
@@ -22860,6 +25115,7 @@ export namespace Prisma {
     surname?: StringFilter<"Student"> | string
     email?: StringNullableFilter<"Student"> | string | null
     phone?: StringNullableFilter<"Student"> | string | null
+    aadhar?: StringNullableFilter<"Student"> | string | null
     address?: StringFilter<"Student"> | string
     img?: StringNullableFilter<"Student"> | string | null
     bloodType?: StringFilter<"Student"> | string
@@ -22870,6 +25126,9 @@ export namespace Prisma {
     classId?: IntFilter<"Student"> | number
     gradeId?: IntFilter<"Student"> | number
     birthday?: DateTimeFilter<"Student"> | Date | string
+    category?: EnumSocialCategoryNullableFilter<"Student"> | $Enums.SocialCategory | null
+    religion?: EnumReligionNullableFilter<"Student"> | $Enums.Religion | null
+    casteId?: IntNullableFilter<"Student"> | number | null
     parent?: XOR<ParentRelationFilter, ParentWhereInput>
     class?: XOR<ClassRelationFilter, ClassWhereInput>
     grade?: XOR<GradeRelationFilter, GradeWhereInput>
@@ -22877,6 +25136,7 @@ export namespace Prisma {
     results?: ResultListRelationFilter
     fees?: FeeListRelationFilter
     assignmentSubmissions?: AssignmentSubmissionListRelationFilter
+    caste?: XOR<CasteNullableRelationFilter, CasteWhereInput> | null
   }
 
   export type StudentOrderByWithRelationInput = {
@@ -22887,6 +25147,7 @@ export namespace Prisma {
     surname?: SortOrder
     email?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
+    aadhar?: SortOrderInput | SortOrder
     address?: SortOrder
     img?: SortOrderInput | SortOrder
     bloodType?: SortOrder
@@ -22897,6 +25158,9 @@ export namespace Prisma {
     classId?: SortOrder
     gradeId?: SortOrder
     birthday?: SortOrder
+    category?: SortOrderInput | SortOrder
+    religion?: SortOrderInput | SortOrder
+    casteId?: SortOrderInput | SortOrder
     parent?: ParentOrderByWithRelationInput
     class?: ClassOrderByWithRelationInput
     grade?: GradeOrderByWithRelationInput
@@ -22904,6 +25168,7 @@ export namespace Prisma {
     results?: ResultOrderByRelationAggregateInput
     fees?: FeeOrderByRelationAggregateInput
     assignmentSubmissions?: AssignmentSubmissionOrderByRelationAggregateInput
+    caste?: CasteOrderByWithRelationInput
   }
 
   export type StudentWhereUniqueInput = Prisma.AtLeast<{
@@ -22911,6 +25176,7 @@ export namespace Prisma {
     username?: string
     email?: string
     phone?: string
+    aadhar?: string
     AND?: StudentWhereInput | StudentWhereInput[]
     OR?: StudentWhereInput[]
     NOT?: StudentWhereInput | StudentWhereInput[]
@@ -22927,6 +25193,9 @@ export namespace Prisma {
     classId?: IntFilter<"Student"> | number
     gradeId?: IntFilter<"Student"> | number
     birthday?: DateTimeFilter<"Student"> | Date | string
+    category?: EnumSocialCategoryNullableFilter<"Student"> | $Enums.SocialCategory | null
+    religion?: EnumReligionNullableFilter<"Student"> | $Enums.Religion | null
+    casteId?: IntNullableFilter<"Student"> | number | null
     parent?: XOR<ParentRelationFilter, ParentWhereInput>
     class?: XOR<ClassRelationFilter, ClassWhereInput>
     grade?: XOR<GradeRelationFilter, GradeWhereInput>
@@ -22934,7 +25203,8 @@ export namespace Prisma {
     results?: ResultListRelationFilter
     fees?: FeeListRelationFilter
     assignmentSubmissions?: AssignmentSubmissionListRelationFilter
-  }, "id" | "username" | "email" | "phone">
+    caste?: XOR<CasteNullableRelationFilter, CasteWhereInput> | null
+  }, "id" | "username" | "email" | "phone" | "aadhar">
 
   export type StudentOrderByWithAggregationInput = {
     id?: SortOrder
@@ -22944,6 +25214,7 @@ export namespace Prisma {
     surname?: SortOrder
     email?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
+    aadhar?: SortOrderInput | SortOrder
     address?: SortOrder
     img?: SortOrderInput | SortOrder
     bloodType?: SortOrder
@@ -22954,6 +25225,9 @@ export namespace Prisma {
     classId?: SortOrder
     gradeId?: SortOrder
     birthday?: SortOrder
+    category?: SortOrderInput | SortOrder
+    religion?: SortOrderInput | SortOrder
+    casteId?: SortOrderInput | SortOrder
     _count?: StudentCountOrderByAggregateInput
     _avg?: StudentAvgOrderByAggregateInput
     _max?: StudentMaxOrderByAggregateInput
@@ -22972,6 +25246,7 @@ export namespace Prisma {
     surname?: StringWithAggregatesFilter<"Student"> | string
     email?: StringNullableWithAggregatesFilter<"Student"> | string | null
     phone?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    aadhar?: StringNullableWithAggregatesFilter<"Student"> | string | null
     address?: StringWithAggregatesFilter<"Student"> | string
     img?: StringNullableWithAggregatesFilter<"Student"> | string | null
     bloodType?: StringWithAggregatesFilter<"Student"> | string
@@ -22982,6 +25257,9 @@ export namespace Prisma {
     classId?: IntWithAggregatesFilter<"Student"> | number
     gradeId?: IntWithAggregatesFilter<"Student"> | number
     birthday?: DateTimeWithAggregatesFilter<"Student"> | Date | string
+    category?: EnumSocialCategoryNullableWithAggregatesFilter<"Student"> | $Enums.SocialCategory | null
+    religion?: EnumReligionNullableWithAggregatesFilter<"Student"> | $Enums.Religion | null
+    casteId?: IntNullableWithAggregatesFilter<"Student"> | number | null
   }
 
   export type TeacherWhereInput = {
@@ -23104,6 +25382,7 @@ export namespace Prisma {
     surname?: StringFilter<"Parent"> | string
     email?: StringNullableFilter<"Parent"> | string | null
     phone?: StringFilter<"Parent"> | string
+    aadhar?: StringNullableFilter<"Parent"> | string | null
     address?: StringFilter<"Parent"> | string
     createdAt?: DateTimeFilter<"Parent"> | Date | string
     deletedAt?: DateTimeNullableFilter<"Parent"> | Date | string | null
@@ -23118,6 +25397,7 @@ export namespace Prisma {
     surname?: SortOrder
     email?: SortOrderInput | SortOrder
     phone?: SortOrder
+    aadhar?: SortOrderInput | SortOrder
     address?: SortOrder
     createdAt?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
@@ -23129,6 +25409,7 @@ export namespace Prisma {
     username?: string
     email?: string
     phone?: string
+    aadhar?: string
     AND?: ParentWhereInput | ParentWhereInput[]
     OR?: ParentWhereInput[]
     NOT?: ParentWhereInput | ParentWhereInput[]
@@ -23139,7 +25420,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Parent"> | Date | string
     deletedAt?: DateTimeNullableFilter<"Parent"> | Date | string | null
     students?: StudentListRelationFilter
-  }, "id" | "username" | "email" | "phone">
+  }, "id" | "username" | "email" | "phone" | "aadhar">
 
   export type ParentOrderByWithAggregationInput = {
     id?: SortOrder
@@ -23149,6 +25430,7 @@ export namespace Prisma {
     surname?: SortOrder
     email?: SortOrderInput | SortOrder
     phone?: SortOrder
+    aadhar?: SortOrderInput | SortOrder
     address?: SortOrder
     createdAt?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
@@ -23168,6 +25450,7 @@ export namespace Prisma {
     surname?: StringWithAggregatesFilter<"Parent"> | string
     email?: StringNullableWithAggregatesFilter<"Parent"> | string | null
     phone?: StringWithAggregatesFilter<"Parent"> | string
+    aadhar?: StringNullableWithAggregatesFilter<"Parent"> | string | null
     address?: StringWithAggregatesFilter<"Parent"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Parent"> | Date | string
     deletedAt?: DateTimeNullableWithAggregatesFilter<"Parent"> | Date | string | null
@@ -24232,6 +26515,157 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableWithAggregatesFilter<"StoredFile"> | Date | string | null
   }
 
+  export type SystemSettingWhereInput = {
+    AND?: SystemSettingWhereInput | SystemSettingWhereInput[]
+    OR?: SystemSettingWhereInput[]
+    NOT?: SystemSettingWhereInput | SystemSettingWhereInput[]
+    id?: StringFilter<"SystemSetting"> | string
+    studentIdPrefix?: StringFilter<"SystemSetting"> | string
+    studentIdYear?: BoolFilter<"SystemSetting"> | boolean
+    studentIdDigits?: IntFilter<"SystemSetting"> | number
+    studentIdFormat?: StringFilter<"SystemSetting"> | string
+    teacherIdPrefix?: StringFilter<"SystemSetting"> | string
+    teacherIdYear?: BoolFilter<"SystemSetting"> | boolean
+    teacherIdDigits?: IntFilter<"SystemSetting"> | number
+    teacherIdFormat?: StringFilter<"SystemSetting"> | string
+    parentIdPrefix?: StringFilter<"SystemSetting"> | string
+    parentIdDigits?: IntFilter<"SystemSetting"> | number
+    parentIdFormat?: StringFilter<"SystemSetting"> | string
+    updatedAt?: DateTimeFilter<"SystemSetting"> | Date | string
+  }
+
+  export type SystemSettingOrderByWithRelationInput = {
+    id?: SortOrder
+    studentIdPrefix?: SortOrder
+    studentIdYear?: SortOrder
+    studentIdDigits?: SortOrder
+    studentIdFormat?: SortOrder
+    teacherIdPrefix?: SortOrder
+    teacherIdYear?: SortOrder
+    teacherIdDigits?: SortOrder
+    teacherIdFormat?: SortOrder
+    parentIdPrefix?: SortOrder
+    parentIdDigits?: SortOrder
+    parentIdFormat?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SystemSettingWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SystemSettingWhereInput | SystemSettingWhereInput[]
+    OR?: SystemSettingWhereInput[]
+    NOT?: SystemSettingWhereInput | SystemSettingWhereInput[]
+    studentIdPrefix?: StringFilter<"SystemSetting"> | string
+    studentIdYear?: BoolFilter<"SystemSetting"> | boolean
+    studentIdDigits?: IntFilter<"SystemSetting"> | number
+    studentIdFormat?: StringFilter<"SystemSetting"> | string
+    teacherIdPrefix?: StringFilter<"SystemSetting"> | string
+    teacherIdYear?: BoolFilter<"SystemSetting"> | boolean
+    teacherIdDigits?: IntFilter<"SystemSetting"> | number
+    teacherIdFormat?: StringFilter<"SystemSetting"> | string
+    parentIdPrefix?: StringFilter<"SystemSetting"> | string
+    parentIdDigits?: IntFilter<"SystemSetting"> | number
+    parentIdFormat?: StringFilter<"SystemSetting"> | string
+    updatedAt?: DateTimeFilter<"SystemSetting"> | Date | string
+  }, "id">
+
+  export type SystemSettingOrderByWithAggregationInput = {
+    id?: SortOrder
+    studentIdPrefix?: SortOrder
+    studentIdYear?: SortOrder
+    studentIdDigits?: SortOrder
+    studentIdFormat?: SortOrder
+    teacherIdPrefix?: SortOrder
+    teacherIdYear?: SortOrder
+    teacherIdDigits?: SortOrder
+    teacherIdFormat?: SortOrder
+    parentIdPrefix?: SortOrder
+    parentIdDigits?: SortOrder
+    parentIdFormat?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SystemSettingCountOrderByAggregateInput
+    _avg?: SystemSettingAvgOrderByAggregateInput
+    _max?: SystemSettingMaxOrderByAggregateInput
+    _min?: SystemSettingMinOrderByAggregateInput
+    _sum?: SystemSettingSumOrderByAggregateInput
+  }
+
+  export type SystemSettingScalarWhereWithAggregatesInput = {
+    AND?: SystemSettingScalarWhereWithAggregatesInput | SystemSettingScalarWhereWithAggregatesInput[]
+    OR?: SystemSettingScalarWhereWithAggregatesInput[]
+    NOT?: SystemSettingScalarWhereWithAggregatesInput | SystemSettingScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SystemSetting"> | string
+    studentIdPrefix?: StringWithAggregatesFilter<"SystemSetting"> | string
+    studentIdYear?: BoolWithAggregatesFilter<"SystemSetting"> | boolean
+    studentIdDigits?: IntWithAggregatesFilter<"SystemSetting"> | number
+    studentIdFormat?: StringWithAggregatesFilter<"SystemSetting"> | string
+    teacherIdPrefix?: StringWithAggregatesFilter<"SystemSetting"> | string
+    teacherIdYear?: BoolWithAggregatesFilter<"SystemSetting"> | boolean
+    teacherIdDigits?: IntWithAggregatesFilter<"SystemSetting"> | number
+    teacherIdFormat?: StringWithAggregatesFilter<"SystemSetting"> | string
+    parentIdPrefix?: StringWithAggregatesFilter<"SystemSetting"> | string
+    parentIdDigits?: IntWithAggregatesFilter<"SystemSetting"> | number
+    parentIdFormat?: StringWithAggregatesFilter<"SystemSetting"> | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SystemSetting"> | Date | string
+  }
+
+  export type CasteWhereInput = {
+    AND?: CasteWhereInput | CasteWhereInput[]
+    OR?: CasteWhereInput[]
+    NOT?: CasteWhereInput | CasteWhereInput[]
+    id?: IntFilter<"Caste"> | number
+    name?: StringFilter<"Caste"> | string
+    category?: StringNullableFilter<"Caste"> | string | null
+    description?: StringNullableFilter<"Caste"> | string | null
+    createdAt?: DateTimeFilter<"Caste"> | Date | string
+    students?: StudentListRelationFilter
+  }
+
+  export type CasteOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    category?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    students?: StudentOrderByRelationAggregateInput
+  }
+
+  export type CasteWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    name?: string
+    AND?: CasteWhereInput | CasteWhereInput[]
+    OR?: CasteWhereInput[]
+    NOT?: CasteWhereInput | CasteWhereInput[]
+    category?: StringNullableFilter<"Caste"> | string | null
+    description?: StringNullableFilter<"Caste"> | string | null
+    createdAt?: DateTimeFilter<"Caste"> | Date | string
+    students?: StudentListRelationFilter
+  }, "id" | "name">
+
+  export type CasteOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    category?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: CasteCountOrderByAggregateInput
+    _avg?: CasteAvgOrderByAggregateInput
+    _max?: CasteMaxOrderByAggregateInput
+    _min?: CasteMinOrderByAggregateInput
+    _sum?: CasteSumOrderByAggregateInput
+  }
+
+  export type CasteScalarWhereWithAggregatesInput = {
+    AND?: CasteScalarWhereWithAggregatesInput | CasteScalarWhereWithAggregatesInput[]
+    OR?: CasteScalarWhereWithAggregatesInput[]
+    NOT?: CasteScalarWhereWithAggregatesInput | CasteScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Caste"> | number
+    name?: StringWithAggregatesFilter<"Caste"> | string
+    category?: StringNullableWithAggregatesFilter<"Caste"> | string | null
+    description?: StringNullableWithAggregatesFilter<"Caste"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Caste"> | Date | string
+  }
+
   export type AdminCreateInput = {
     id?: string
     username: string
@@ -24387,6 +26821,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone?: string | null
+    aadhar?: string | null
     address: string
     img?: string | null
     bloodType: string
@@ -24394,6 +26829,8 @@ export namespace Prisma {
     createdAt?: Date | string
     deletedAt?: Date | string | null
     birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
     parent: ParentCreateNestedOneWithoutStudentsInput
     class: ClassCreateNestedOneWithoutStudentsInput
     grade: GradeCreateNestedOneWithoutStudentsInput
@@ -24401,6 +26838,7 @@ export namespace Prisma {
     results?: ResultCreateNestedManyWithoutStudentInput
     fees?: FeeCreateNestedManyWithoutStudentInput
     assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutStudentInput
+    caste?: CasteCreateNestedOneWithoutStudentsInput
   }
 
   export type StudentUncheckedCreateInput = {
@@ -24411,6 +26849,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone?: string | null
+    aadhar?: string | null
     address: string
     img?: string | null
     bloodType: string
@@ -24421,6 +26860,9 @@ export namespace Prisma {
     classId: number
     gradeId: number
     birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
+    casteId?: number | null
     attendances?: AttendanceUncheckedCreateNestedManyWithoutStudentInput
     results?: ResultUncheckedCreateNestedManyWithoutStudentInput
     fees?: FeeUncheckedCreateNestedManyWithoutStudentInput
@@ -24435,6 +26877,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -24442,6 +26885,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
     parent?: ParentUpdateOneRequiredWithoutStudentsNestedInput
     class?: ClassUpdateOneRequiredWithoutStudentsNestedInput
     grade?: GradeUpdateOneRequiredWithoutStudentsNestedInput
@@ -24449,6 +26894,7 @@ export namespace Prisma {
     results?: ResultUpdateManyWithoutStudentNestedInput
     fees?: FeeUpdateManyWithoutStudentNestedInput
     assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutStudentNestedInput
+    caste?: CasteUpdateOneWithoutStudentsNestedInput
   }
 
   export type StudentUncheckedUpdateInput = {
@@ -24459,6 +26905,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -24469,6 +26916,9 @@ export namespace Prisma {
     classId?: IntFieldUpdateOperationsInput | number
     gradeId?: IntFieldUpdateOperationsInput | number
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
+    casteId?: NullableIntFieldUpdateOperationsInput | number | null
     attendances?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput
     results?: ResultUncheckedUpdateManyWithoutStudentNestedInput
     fees?: FeeUncheckedUpdateManyWithoutStudentNestedInput
@@ -24483,6 +26933,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone?: string | null
+    aadhar?: string | null
     address: string
     img?: string | null
     bloodType: string
@@ -24493,6 +26944,9 @@ export namespace Prisma {
     classId: number
     gradeId: number
     birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
+    casteId?: number | null
   }
 
   export type StudentUpdateManyMutationInput = {
@@ -24503,6 +26957,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -24510,6 +26965,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
   }
 
   export type StudentUncheckedUpdateManyInput = {
@@ -24520,6 +26977,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -24530,6 +26988,9 @@ export namespace Prisma {
     classId?: IntFieldUpdateOperationsInput | number
     gradeId?: IntFieldUpdateOperationsInput | number
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
+    casteId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type TeacherCreateInput = {
@@ -24675,6 +27136,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone: string
+    aadhar?: string | null
     address: string
     createdAt?: Date | string
     deletedAt?: Date | string | null
@@ -24689,6 +27151,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone: string
+    aadhar?: string | null
     address: string
     createdAt?: Date | string
     deletedAt?: Date | string | null
@@ -24703,6 +27166,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -24717,6 +27181,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -24731,6 +27196,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone: string
+    aadhar?: string | null
     address: string
     createdAt?: Date | string
     deletedAt?: Date | string | null
@@ -24744,6 +27210,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -24757,6 +27224,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -25804,6 +28272,175 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type SystemSettingCreateInput = {
+    id?: string
+    studentIdPrefix?: string
+    studentIdYear?: boolean
+    studentIdDigits?: number
+    studentIdFormat?: string
+    teacherIdPrefix?: string
+    teacherIdYear?: boolean
+    teacherIdDigits?: number
+    teacherIdFormat?: string
+    parentIdPrefix?: string
+    parentIdDigits?: number
+    parentIdFormat?: string
+    updatedAt?: Date | string
+  }
+
+  export type SystemSettingUncheckedCreateInput = {
+    id?: string
+    studentIdPrefix?: string
+    studentIdYear?: boolean
+    studentIdDigits?: number
+    studentIdFormat?: string
+    teacherIdPrefix?: string
+    teacherIdYear?: boolean
+    teacherIdDigits?: number
+    teacherIdFormat?: string
+    parentIdPrefix?: string
+    parentIdDigits?: number
+    parentIdFormat?: string
+    updatedAt?: Date | string
+  }
+
+  export type SystemSettingUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentIdPrefix?: StringFieldUpdateOperationsInput | string
+    studentIdYear?: BoolFieldUpdateOperationsInput | boolean
+    studentIdDigits?: IntFieldUpdateOperationsInput | number
+    studentIdFormat?: StringFieldUpdateOperationsInput | string
+    teacherIdPrefix?: StringFieldUpdateOperationsInput | string
+    teacherIdYear?: BoolFieldUpdateOperationsInput | boolean
+    teacherIdDigits?: IntFieldUpdateOperationsInput | number
+    teacherIdFormat?: StringFieldUpdateOperationsInput | string
+    parentIdPrefix?: StringFieldUpdateOperationsInput | string
+    parentIdDigits?: IntFieldUpdateOperationsInput | number
+    parentIdFormat?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SystemSettingUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentIdPrefix?: StringFieldUpdateOperationsInput | string
+    studentIdYear?: BoolFieldUpdateOperationsInput | boolean
+    studentIdDigits?: IntFieldUpdateOperationsInput | number
+    studentIdFormat?: StringFieldUpdateOperationsInput | string
+    teacherIdPrefix?: StringFieldUpdateOperationsInput | string
+    teacherIdYear?: BoolFieldUpdateOperationsInput | boolean
+    teacherIdDigits?: IntFieldUpdateOperationsInput | number
+    teacherIdFormat?: StringFieldUpdateOperationsInput | string
+    parentIdPrefix?: StringFieldUpdateOperationsInput | string
+    parentIdDigits?: IntFieldUpdateOperationsInput | number
+    parentIdFormat?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SystemSettingCreateManyInput = {
+    id?: string
+    studentIdPrefix?: string
+    studentIdYear?: boolean
+    studentIdDigits?: number
+    studentIdFormat?: string
+    teacherIdPrefix?: string
+    teacherIdYear?: boolean
+    teacherIdDigits?: number
+    teacherIdFormat?: string
+    parentIdPrefix?: string
+    parentIdDigits?: number
+    parentIdFormat?: string
+    updatedAt?: Date | string
+  }
+
+  export type SystemSettingUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentIdPrefix?: StringFieldUpdateOperationsInput | string
+    studentIdYear?: BoolFieldUpdateOperationsInput | boolean
+    studentIdDigits?: IntFieldUpdateOperationsInput | number
+    studentIdFormat?: StringFieldUpdateOperationsInput | string
+    teacherIdPrefix?: StringFieldUpdateOperationsInput | string
+    teacherIdYear?: BoolFieldUpdateOperationsInput | boolean
+    teacherIdDigits?: IntFieldUpdateOperationsInput | number
+    teacherIdFormat?: StringFieldUpdateOperationsInput | string
+    parentIdPrefix?: StringFieldUpdateOperationsInput | string
+    parentIdDigits?: IntFieldUpdateOperationsInput | number
+    parentIdFormat?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SystemSettingUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentIdPrefix?: StringFieldUpdateOperationsInput | string
+    studentIdYear?: BoolFieldUpdateOperationsInput | boolean
+    studentIdDigits?: IntFieldUpdateOperationsInput | number
+    studentIdFormat?: StringFieldUpdateOperationsInput | string
+    teacherIdPrefix?: StringFieldUpdateOperationsInput | string
+    teacherIdYear?: BoolFieldUpdateOperationsInput | boolean
+    teacherIdDigits?: IntFieldUpdateOperationsInput | number
+    teacherIdFormat?: StringFieldUpdateOperationsInput | string
+    parentIdPrefix?: StringFieldUpdateOperationsInput | string
+    parentIdDigits?: IntFieldUpdateOperationsInput | number
+    parentIdFormat?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CasteCreateInput = {
+    name: string
+    category?: string | null
+    description?: string | null
+    createdAt?: Date | string
+    students?: StudentCreateNestedManyWithoutCasteInput
+  }
+
+  export type CasteUncheckedCreateInput = {
+    id?: number
+    name: string
+    category?: string | null
+    description?: string | null
+    createdAt?: Date | string
+    students?: StudentUncheckedCreateNestedManyWithoutCasteInput
+  }
+
+  export type CasteUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUpdateManyWithoutCasteNestedInput
+  }
+
+  export type CasteUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUncheckedUpdateManyWithoutCasteNestedInput
+  }
+
+  export type CasteCreateManyInput = {
+    id?: number
+    name: string
+    category?: string | null
+    description?: string | null
+    createdAt?: Date | string
+  }
+
+  export type CasteUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CasteUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -26002,6 +28639,31 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type EnumSocialCategoryNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.SocialCategory | EnumSocialCategoryFieldRefInput<$PrismaModel> | null
+    in?: $Enums.SocialCategory[] | null
+    notIn?: $Enums.SocialCategory[] | null
+    not?: NestedEnumSocialCategoryNullableFilter<$PrismaModel> | $Enums.SocialCategory | null
+  }
+
+  export type EnumReligionNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Religion | EnumReligionFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Religion[] | null
+    notIn?: $Enums.Religion[] | null
+    not?: NestedEnumReligionNullableFilter<$PrismaModel> | $Enums.Religion | null
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type ParentRelationFilter = {
     is?: ParentWhereInput
     isNot?: ParentWhereInput
@@ -26041,6 +28703,11 @@ export namespace Prisma {
     none?: AssignmentSubmissionWhereInput
   }
 
+  export type CasteNullableRelationFilter = {
+    is?: CasteWhereInput | null
+    isNot?: CasteWhereInput | null
+  }
+
   export type AttendanceOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -26065,6 +28732,7 @@ export namespace Prisma {
     surname?: SortOrder
     email?: SortOrder
     phone?: SortOrder
+    aadhar?: SortOrder
     address?: SortOrder
     img?: SortOrder
     bloodType?: SortOrder
@@ -26075,11 +28743,15 @@ export namespace Prisma {
     classId?: SortOrder
     gradeId?: SortOrder
     birthday?: SortOrder
+    category?: SortOrder
+    religion?: SortOrder
+    casteId?: SortOrder
   }
 
   export type StudentAvgOrderByAggregateInput = {
     classId?: SortOrder
     gradeId?: SortOrder
+    casteId?: SortOrder
   }
 
   export type StudentMaxOrderByAggregateInput = {
@@ -26090,6 +28762,7 @@ export namespace Prisma {
     surname?: SortOrder
     email?: SortOrder
     phone?: SortOrder
+    aadhar?: SortOrder
     address?: SortOrder
     img?: SortOrder
     bloodType?: SortOrder
@@ -26100,6 +28773,9 @@ export namespace Prisma {
     classId?: SortOrder
     gradeId?: SortOrder
     birthday?: SortOrder
+    category?: SortOrder
+    religion?: SortOrder
+    casteId?: SortOrder
   }
 
   export type StudentMinOrderByAggregateInput = {
@@ -26110,6 +28786,7 @@ export namespace Prisma {
     surname?: SortOrder
     email?: SortOrder
     phone?: SortOrder
+    aadhar?: SortOrder
     address?: SortOrder
     img?: SortOrder
     bloodType?: SortOrder
@@ -26120,11 +28797,15 @@ export namespace Prisma {
     classId?: SortOrder
     gradeId?: SortOrder
     birthday?: SortOrder
+    category?: SortOrder
+    religion?: SortOrder
+    casteId?: SortOrder
   }
 
   export type StudentSumOrderByAggregateInput = {
     classId?: SortOrder
     gradeId?: SortOrder
+    casteId?: SortOrder
   }
 
   export type EnumUserSexWithAggregatesFilter<$PrismaModel = never> = {
@@ -26151,6 +28832,42 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type EnumSocialCategoryNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SocialCategory | EnumSocialCategoryFieldRefInput<$PrismaModel> | null
+    in?: $Enums.SocialCategory[] | null
+    notIn?: $Enums.SocialCategory[] | null
+    not?: NestedEnumSocialCategoryNullableWithAggregatesFilter<$PrismaModel> | $Enums.SocialCategory | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumSocialCategoryNullableFilter<$PrismaModel>
+    _max?: NestedEnumSocialCategoryNullableFilter<$PrismaModel>
+  }
+
+  export type EnumReligionNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Religion | EnumReligionFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Religion[] | null
+    notIn?: $Enums.Religion[] | null
+    not?: NestedEnumReligionNullableWithAggregatesFilter<$PrismaModel> | $Enums.Religion | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumReligionNullableFilter<$PrismaModel>
+    _max?: NestedEnumReligionNullableFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type SubjectListRelationFilter = {
@@ -26262,6 +28979,7 @@ export namespace Prisma {
     surname?: SortOrder
     email?: SortOrder
     phone?: SortOrder
+    aadhar?: SortOrder
     address?: SortOrder
     createdAt?: SortOrder
     deletedAt?: SortOrder
@@ -26275,6 +28993,7 @@ export namespace Prisma {
     surname?: SortOrder
     email?: SortOrder
     phone?: SortOrder
+    aadhar?: SortOrder
     address?: SortOrder
     createdAt?: SortOrder
     deletedAt?: SortOrder
@@ -26288,6 +29007,7 @@ export namespace Prisma {
     surname?: SortOrder
     email?: SortOrder
     phone?: SortOrder
+    aadhar?: SortOrder
     address?: SortOrder
     createdAt?: SortOrder
     deletedAt?: SortOrder
@@ -26580,17 +29300,6 @@ export namespace Prisma {
     not?: NestedEnumSubmissionStatusFilter<$PrismaModel> | $Enums.SubmissionStatus
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type AssignmentRelationFilter = {
     is?: AssignmentWhereInput
     isNot?: AssignmentWhereInput
@@ -26665,22 +29374,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumSubmissionStatusFilter<$PrismaModel>
     _max?: NestedEnumSubmissionStatusFilter<$PrismaModel>
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type ExamNullableRelationFilter = {
@@ -27188,6 +29881,98 @@ export namespace Prisma {
     _max?: NestedBigIntNullableFilter<$PrismaModel>
   }
 
+  export type SystemSettingCountOrderByAggregateInput = {
+    id?: SortOrder
+    studentIdPrefix?: SortOrder
+    studentIdYear?: SortOrder
+    studentIdDigits?: SortOrder
+    studentIdFormat?: SortOrder
+    teacherIdPrefix?: SortOrder
+    teacherIdYear?: SortOrder
+    teacherIdDigits?: SortOrder
+    teacherIdFormat?: SortOrder
+    parentIdPrefix?: SortOrder
+    parentIdDigits?: SortOrder
+    parentIdFormat?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SystemSettingAvgOrderByAggregateInput = {
+    studentIdDigits?: SortOrder
+    teacherIdDigits?: SortOrder
+    parentIdDigits?: SortOrder
+  }
+
+  export type SystemSettingMaxOrderByAggregateInput = {
+    id?: SortOrder
+    studentIdPrefix?: SortOrder
+    studentIdYear?: SortOrder
+    studentIdDigits?: SortOrder
+    studentIdFormat?: SortOrder
+    teacherIdPrefix?: SortOrder
+    teacherIdYear?: SortOrder
+    teacherIdDigits?: SortOrder
+    teacherIdFormat?: SortOrder
+    parentIdPrefix?: SortOrder
+    parentIdDigits?: SortOrder
+    parentIdFormat?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SystemSettingMinOrderByAggregateInput = {
+    id?: SortOrder
+    studentIdPrefix?: SortOrder
+    studentIdYear?: SortOrder
+    studentIdDigits?: SortOrder
+    studentIdFormat?: SortOrder
+    teacherIdPrefix?: SortOrder
+    teacherIdYear?: SortOrder
+    teacherIdDigits?: SortOrder
+    teacherIdFormat?: SortOrder
+    parentIdPrefix?: SortOrder
+    parentIdDigits?: SortOrder
+    parentIdFormat?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SystemSettingSumOrderByAggregateInput = {
+    studentIdDigits?: SortOrder
+    teacherIdDigits?: SortOrder
+    parentIdDigits?: SortOrder
+  }
+
+  export type CasteCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CasteAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type CasteMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CasteMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CasteSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -27250,6 +30035,12 @@ export namespace Prisma {
     connect?: AssignmentSubmissionWhereUniqueInput | AssignmentSubmissionWhereUniqueInput[]
   }
 
+  export type CasteCreateNestedOneWithoutStudentsInput = {
+    create?: XOR<CasteCreateWithoutStudentsInput, CasteUncheckedCreateWithoutStudentsInput>
+    connectOrCreate?: CasteCreateOrConnectWithoutStudentsInput
+    connect?: CasteWhereUniqueInput
+  }
+
   export type AttendanceUncheckedCreateNestedManyWithoutStudentInput = {
     create?: XOR<AttendanceCreateWithoutStudentInput, AttendanceUncheckedCreateWithoutStudentInput> | AttendanceCreateWithoutStudentInput[] | AttendanceUncheckedCreateWithoutStudentInput[]
     connectOrCreate?: AttendanceCreateOrConnectWithoutStudentInput | AttendanceCreateOrConnectWithoutStudentInput[]
@@ -27280,6 +30071,14 @@ export namespace Prisma {
 
   export type EnumUserSexFieldUpdateOperationsInput = {
     set?: $Enums.UserSex
+  }
+
+  export type NullableEnumSocialCategoryFieldUpdateOperationsInput = {
+    set?: $Enums.SocialCategory | null
+  }
+
+  export type NullableEnumReligionFieldUpdateOperationsInput = {
+    set?: $Enums.Religion | null
   }
 
   export type ParentUpdateOneRequiredWithoutStudentsNestedInput = {
@@ -27362,8 +30161,26 @@ export namespace Prisma {
     deleteMany?: AssignmentSubmissionScalarWhereInput | AssignmentSubmissionScalarWhereInput[]
   }
 
+  export type CasteUpdateOneWithoutStudentsNestedInput = {
+    create?: XOR<CasteCreateWithoutStudentsInput, CasteUncheckedCreateWithoutStudentsInput>
+    connectOrCreate?: CasteCreateOrConnectWithoutStudentsInput
+    upsert?: CasteUpsertWithoutStudentsInput
+    disconnect?: CasteWhereInput | boolean
+    delete?: CasteWhereInput | boolean
+    connect?: CasteWhereUniqueInput
+    update?: XOR<XOR<CasteUpdateToOneWithWhereWithoutStudentsInput, CasteUpdateWithoutStudentsInput>, CasteUncheckedUpdateWithoutStudentsInput>
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
     increment?: number
     decrement?: number
     multiply?: number
@@ -28336,14 +31153,6 @@ export namespace Prisma {
     set?: $Enums.SubmissionStatus
   }
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type AssignmentUpdateOneRequiredWithoutSubmissionsNestedInput = {
     create?: XOR<AssignmentCreateWithoutSubmissionsInput, AssignmentUncheckedCreateWithoutSubmissionsInput>
     connectOrCreate?: AssignmentCreateOrConnectWithoutSubmissionsInput
@@ -28584,6 +31393,48 @@ export namespace Prisma {
     divide?: bigint | number
   }
 
+  export type StudentCreateNestedManyWithoutCasteInput = {
+    create?: XOR<StudentCreateWithoutCasteInput, StudentUncheckedCreateWithoutCasteInput> | StudentCreateWithoutCasteInput[] | StudentUncheckedCreateWithoutCasteInput[]
+    connectOrCreate?: StudentCreateOrConnectWithoutCasteInput | StudentCreateOrConnectWithoutCasteInput[]
+    createMany?: StudentCreateManyCasteInputEnvelope
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+  }
+
+  export type StudentUncheckedCreateNestedManyWithoutCasteInput = {
+    create?: XOR<StudentCreateWithoutCasteInput, StudentUncheckedCreateWithoutCasteInput> | StudentCreateWithoutCasteInput[] | StudentUncheckedCreateWithoutCasteInput[]
+    connectOrCreate?: StudentCreateOrConnectWithoutCasteInput | StudentCreateOrConnectWithoutCasteInput[]
+    createMany?: StudentCreateManyCasteInputEnvelope
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+  }
+
+  export type StudentUpdateManyWithoutCasteNestedInput = {
+    create?: XOR<StudentCreateWithoutCasteInput, StudentUncheckedCreateWithoutCasteInput> | StudentCreateWithoutCasteInput[] | StudentUncheckedCreateWithoutCasteInput[]
+    connectOrCreate?: StudentCreateOrConnectWithoutCasteInput | StudentCreateOrConnectWithoutCasteInput[]
+    upsert?: StudentUpsertWithWhereUniqueWithoutCasteInput | StudentUpsertWithWhereUniqueWithoutCasteInput[]
+    createMany?: StudentCreateManyCasteInputEnvelope
+    set?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    disconnect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    delete?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    update?: StudentUpdateWithWhereUniqueWithoutCasteInput | StudentUpdateWithWhereUniqueWithoutCasteInput[]
+    updateMany?: StudentUpdateManyWithWhereWithoutCasteInput | StudentUpdateManyWithWhereWithoutCasteInput[]
+    deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[]
+  }
+
+  export type StudentUncheckedUpdateManyWithoutCasteNestedInput = {
+    create?: XOR<StudentCreateWithoutCasteInput, StudentUncheckedCreateWithoutCasteInput> | StudentCreateWithoutCasteInput[] | StudentUncheckedCreateWithoutCasteInput[]
+    connectOrCreate?: StudentCreateOrConnectWithoutCasteInput | StudentCreateOrConnectWithoutCasteInput[]
+    upsert?: StudentUpsertWithWhereUniqueWithoutCasteInput | StudentUpsertWithWhereUniqueWithoutCasteInput[]
+    createMany?: StudentCreateManyCasteInputEnvelope
+    set?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    disconnect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    delete?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    update?: StudentUpdateWithWhereUniqueWithoutCasteInput | StudentUpdateWithWhereUniqueWithoutCasteInput[]
+    updateMany?: StudentUpdateManyWithWhereWithoutCasteInput | StudentUpdateManyWithWhereWithoutCasteInput[]
+    deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[]
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -28725,6 +31576,20 @@ export namespace Prisma {
     not?: NestedEnumUserSexFilter<$PrismaModel> | $Enums.UserSex
   }
 
+  export type NestedEnumSocialCategoryNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.SocialCategory | EnumSocialCategoryFieldRefInput<$PrismaModel> | null
+    in?: $Enums.SocialCategory[] | null
+    notIn?: $Enums.SocialCategory[] | null
+    not?: NestedEnumSocialCategoryNullableFilter<$PrismaModel> | $Enums.SocialCategory | null
+  }
+
+  export type NestedEnumReligionNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Religion | EnumReligionFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Religion[] | null
+    notIn?: $Enums.Religion[] | null
+    not?: NestedEnumReligionNullableFilter<$PrismaModel> | $Enums.Religion | null
+  }
+
   export type NestedEnumUserSexWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.UserSex | EnumUserSexFieldRefInput<$PrismaModel>
     in?: $Enums.UserSex[]
@@ -28762,6 +31627,53 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type NestedEnumSocialCategoryNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SocialCategory | EnumSocialCategoryFieldRefInput<$PrismaModel> | null
+    in?: $Enums.SocialCategory[] | null
+    notIn?: $Enums.SocialCategory[] | null
+    not?: NestedEnumSocialCategoryNullableWithAggregatesFilter<$PrismaModel> | $Enums.SocialCategory | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumSocialCategoryNullableFilter<$PrismaModel>
+    _max?: NestedEnumSocialCategoryNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumReligionNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Religion | EnumReligionFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Religion[] | null
+    notIn?: $Enums.Religion[] | null
+    not?: NestedEnumReligionNullableWithAggregatesFilter<$PrismaModel> | $Enums.Religion | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumReligionNullableFilter<$PrismaModel>
+    _max?: NestedEnumReligionNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedEnumDayFilter<$PrismaModel = never> = {
     equals?: $Enums.Day | EnumDayFieldRefInput<$PrismaModel>
     in?: $Enums.Day[]
@@ -28794,33 +31706,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumSubmissionStatusFilter<$PrismaModel>
     _max?: NestedEnumSubmissionStatusFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedBoolFilter<$PrismaModel = never> = {
@@ -28949,6 +31834,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone: string
+    aadhar?: string | null
     address: string
     createdAt?: Date | string
     deletedAt?: Date | string | null
@@ -28962,6 +31848,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone: string
+    aadhar?: string | null
     address: string
     createdAt?: Date | string
     deletedAt?: Date | string | null
@@ -29132,6 +32019,26 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CasteCreateWithoutStudentsInput = {
+    name: string
+    category?: string | null
+    description?: string | null
+    createdAt?: Date | string
+  }
+
+  export type CasteUncheckedCreateWithoutStudentsInput = {
+    id?: number
+    name: string
+    category?: string | null
+    description?: string | null
+    createdAt?: Date | string
+  }
+
+  export type CasteCreateOrConnectWithoutStudentsInput = {
+    where: CasteWhereUniqueInput
+    create: XOR<CasteCreateWithoutStudentsInput, CasteUncheckedCreateWithoutStudentsInput>
+  }
+
   export type ParentUpsertWithoutStudentsInput = {
     update: XOR<ParentUpdateWithoutStudentsInput, ParentUncheckedUpdateWithoutStudentsInput>
     create: XOR<ParentCreateWithoutStudentsInput, ParentUncheckedCreateWithoutStudentsInput>
@@ -29151,6 +32058,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -29164,6 +32072,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -29341,6 +32250,32 @@ export namespace Prisma {
     score?: IntNullableFilter<"AssignmentSubmission"> | number | null
     createdAt?: DateTimeFilter<"AssignmentSubmission"> | Date | string
     updatedAt?: DateTimeFilter<"AssignmentSubmission"> | Date | string
+  }
+
+  export type CasteUpsertWithoutStudentsInput = {
+    update: XOR<CasteUpdateWithoutStudentsInput, CasteUncheckedUpdateWithoutStudentsInput>
+    create: XOR<CasteCreateWithoutStudentsInput, CasteUncheckedCreateWithoutStudentsInput>
+    where?: CasteWhereInput
+  }
+
+  export type CasteUpdateToOneWithWhereWithoutStudentsInput = {
+    where?: CasteWhereInput
+    data: XOR<CasteUpdateWithoutStudentsInput, CasteUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type CasteUpdateWithoutStudentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CasteUncheckedUpdateWithoutStudentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SubjectCreateWithoutTeachersInput = {
@@ -29567,6 +32502,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone?: string | null
+    aadhar?: string | null
     address: string
     img?: string | null
     bloodType: string
@@ -29574,12 +32510,15 @@ export namespace Prisma {
     createdAt?: Date | string
     deletedAt?: Date | string | null
     birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
     class: ClassCreateNestedOneWithoutStudentsInput
     grade: GradeCreateNestedOneWithoutStudentsInput
     attendances?: AttendanceCreateNestedManyWithoutStudentInput
     results?: ResultCreateNestedManyWithoutStudentInput
     fees?: FeeCreateNestedManyWithoutStudentInput
     assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutStudentInput
+    caste?: CasteCreateNestedOneWithoutStudentsInput
   }
 
   export type StudentUncheckedCreateWithoutParentInput = {
@@ -29590,6 +32529,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone?: string | null
+    aadhar?: string | null
     address: string
     img?: string | null
     bloodType: string
@@ -29599,6 +32539,9 @@ export namespace Prisma {
     classId: number
     gradeId: number
     birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
+    casteId?: number | null
     attendances?: AttendanceUncheckedCreateNestedManyWithoutStudentInput
     results?: ResultUncheckedCreateNestedManyWithoutStudentInput
     fees?: FeeUncheckedCreateNestedManyWithoutStudentInput
@@ -29642,6 +32585,7 @@ export namespace Prisma {
     surname?: StringFilter<"Student"> | string
     email?: StringNullableFilter<"Student"> | string | null
     phone?: StringNullableFilter<"Student"> | string | null
+    aadhar?: StringNullableFilter<"Student"> | string | null
     address?: StringFilter<"Student"> | string
     img?: StringNullableFilter<"Student"> | string | null
     bloodType?: StringFilter<"Student"> | string
@@ -29652,6 +32596,9 @@ export namespace Prisma {
     classId?: IntFilter<"Student"> | number
     gradeId?: IntFilter<"Student"> | number
     birthday?: DateTimeFilter<"Student"> | Date | string
+    category?: EnumSocialCategoryNullableFilter<"Student"> | $Enums.SocialCategory | null
+    religion?: EnumReligionNullableFilter<"Student"> | $Enums.Religion | null
+    casteId?: IntNullableFilter<"Student"> | number | null
   }
 
   export type StudentCreateWithoutGradeInput = {
@@ -29662,6 +32609,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone?: string | null
+    aadhar?: string | null
     address: string
     img?: string | null
     bloodType: string
@@ -29669,12 +32617,15 @@ export namespace Prisma {
     createdAt?: Date | string
     deletedAt?: Date | string | null
     birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
     parent: ParentCreateNestedOneWithoutStudentsInput
     class: ClassCreateNestedOneWithoutStudentsInput
     attendances?: AttendanceCreateNestedManyWithoutStudentInput
     results?: ResultCreateNestedManyWithoutStudentInput
     fees?: FeeCreateNestedManyWithoutStudentInput
     assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutStudentInput
+    caste?: CasteCreateNestedOneWithoutStudentsInput
   }
 
   export type StudentUncheckedCreateWithoutGradeInput = {
@@ -29685,6 +32636,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone?: string | null
+    aadhar?: string | null
     address: string
     img?: string | null
     bloodType: string
@@ -29694,6 +32646,9 @@ export namespace Prisma {
     parentId: string
     classId: number
     birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
+    casteId?: number | null
     attendances?: AttendanceUncheckedCreateNestedManyWithoutStudentInput
     results?: ResultUncheckedCreateNestedManyWithoutStudentInput
     fees?: FeeUncheckedCreateNestedManyWithoutStudentInput
@@ -29861,6 +32816,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone?: string | null
+    aadhar?: string | null
     address: string
     img?: string | null
     bloodType: string
@@ -29868,12 +32824,15 @@ export namespace Prisma {
     createdAt?: Date | string
     deletedAt?: Date | string | null
     birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
     parent: ParentCreateNestedOneWithoutStudentsInput
     grade: GradeCreateNestedOneWithoutStudentsInput
     attendances?: AttendanceCreateNestedManyWithoutStudentInput
     results?: ResultCreateNestedManyWithoutStudentInput
     fees?: FeeCreateNestedManyWithoutStudentInput
     assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutStudentInput
+    caste?: CasteCreateNestedOneWithoutStudentsInput
   }
 
   export type StudentUncheckedCreateWithoutClassInput = {
@@ -29884,6 +32843,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone?: string | null
+    aadhar?: string | null
     address: string
     img?: string | null
     bloodType: string
@@ -29893,6 +32853,9 @@ export namespace Prisma {
     parentId: string
     gradeId: number
     birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
+    casteId?: number | null
     attendances?: AttendanceUncheckedCreateNestedManyWithoutStudentInput
     results?: ResultUncheckedCreateNestedManyWithoutStudentInput
     fees?: FeeUncheckedCreateNestedManyWithoutStudentInput
@@ -30892,6 +33855,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone?: string | null
+    aadhar?: string | null
     address: string
     img?: string | null
     bloodType: string
@@ -30899,12 +33863,15 @@ export namespace Prisma {
     createdAt?: Date | string
     deletedAt?: Date | string | null
     birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
     parent: ParentCreateNestedOneWithoutStudentsInput
     class: ClassCreateNestedOneWithoutStudentsInput
     grade: GradeCreateNestedOneWithoutStudentsInput
     attendances?: AttendanceCreateNestedManyWithoutStudentInput
     results?: ResultCreateNestedManyWithoutStudentInput
     fees?: FeeCreateNestedManyWithoutStudentInput
+    caste?: CasteCreateNestedOneWithoutStudentsInput
   }
 
   export type StudentUncheckedCreateWithoutAssignmentSubmissionsInput = {
@@ -30915,6 +33882,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone?: string | null
+    aadhar?: string | null
     address: string
     img?: string | null
     bloodType: string
@@ -30925,6 +33893,9 @@ export namespace Prisma {
     classId: number
     gradeId: number
     birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
+    casteId?: number | null
     attendances?: AttendanceUncheckedCreateNestedManyWithoutStudentInput
     results?: ResultUncheckedCreateNestedManyWithoutStudentInput
     fees?: FeeUncheckedCreateNestedManyWithoutStudentInput
@@ -30986,6 +33957,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -30993,12 +33965,15 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
     parent?: ParentUpdateOneRequiredWithoutStudentsNestedInput
     class?: ClassUpdateOneRequiredWithoutStudentsNestedInput
     grade?: GradeUpdateOneRequiredWithoutStudentsNestedInput
     attendances?: AttendanceUpdateManyWithoutStudentNestedInput
     results?: ResultUpdateManyWithoutStudentNestedInput
     fees?: FeeUpdateManyWithoutStudentNestedInput
+    caste?: CasteUpdateOneWithoutStudentsNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutAssignmentSubmissionsInput = {
@@ -31009,6 +33984,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -31019,6 +33995,9 @@ export namespace Prisma {
     classId?: IntFieldUpdateOperationsInput | number
     gradeId?: IntFieldUpdateOperationsInput | number
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
+    casteId?: NullableIntFieldUpdateOperationsInput | number | null
     attendances?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput
     results?: ResultUncheckedUpdateManyWithoutStudentNestedInput
     fees?: FeeUncheckedUpdateManyWithoutStudentNestedInput
@@ -31078,6 +34057,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone?: string | null
+    aadhar?: string | null
     address: string
     img?: string | null
     bloodType: string
@@ -31085,12 +34065,15 @@ export namespace Prisma {
     createdAt?: Date | string
     deletedAt?: Date | string | null
     birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
     parent: ParentCreateNestedOneWithoutStudentsInput
     class: ClassCreateNestedOneWithoutStudentsInput
     grade: GradeCreateNestedOneWithoutStudentsInput
     attendances?: AttendanceCreateNestedManyWithoutStudentInput
     fees?: FeeCreateNestedManyWithoutStudentInput
     assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutStudentInput
+    caste?: CasteCreateNestedOneWithoutStudentsInput
   }
 
   export type StudentUncheckedCreateWithoutResultsInput = {
@@ -31101,6 +34084,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone?: string | null
+    aadhar?: string | null
     address: string
     img?: string | null
     bloodType: string
@@ -31111,6 +34095,9 @@ export namespace Prisma {
     classId: number
     gradeId: number
     birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
+    casteId?: number | null
     attendances?: AttendanceUncheckedCreateNestedManyWithoutStudentInput
     fees?: FeeUncheckedCreateNestedManyWithoutStudentInput
     assignmentSubmissions?: AssignmentSubmissionUncheckedCreateNestedManyWithoutStudentInput
@@ -31198,6 +34185,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -31205,12 +34193,15 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
     parent?: ParentUpdateOneRequiredWithoutStudentsNestedInput
     class?: ClassUpdateOneRequiredWithoutStudentsNestedInput
     grade?: GradeUpdateOneRequiredWithoutStudentsNestedInput
     attendances?: AttendanceUpdateManyWithoutStudentNestedInput
     fees?: FeeUpdateManyWithoutStudentNestedInput
     assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutStudentNestedInput
+    caste?: CasteUpdateOneWithoutStudentsNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutResultsInput = {
@@ -31221,6 +34212,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -31231,6 +34223,9 @@ export namespace Prisma {
     classId?: IntFieldUpdateOperationsInput | number
     gradeId?: IntFieldUpdateOperationsInput | number
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
+    casteId?: NullableIntFieldUpdateOperationsInput | number | null
     attendances?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput
     fees?: FeeUncheckedUpdateManyWithoutStudentNestedInput
     assignmentSubmissions?: AssignmentSubmissionUncheckedUpdateManyWithoutStudentNestedInput
@@ -31244,6 +34239,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone?: string | null
+    aadhar?: string | null
     address: string
     img?: string | null
     bloodType: string
@@ -31251,12 +34247,15 @@ export namespace Prisma {
     createdAt?: Date | string
     deletedAt?: Date | string | null
     birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
     parent: ParentCreateNestedOneWithoutStudentsInput
     class: ClassCreateNestedOneWithoutStudentsInput
     grade: GradeCreateNestedOneWithoutStudentsInput
     results?: ResultCreateNestedManyWithoutStudentInput
     fees?: FeeCreateNestedManyWithoutStudentInput
     assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutStudentInput
+    caste?: CasteCreateNestedOneWithoutStudentsInput
   }
 
   export type StudentUncheckedCreateWithoutAttendancesInput = {
@@ -31267,6 +34266,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone?: string | null
+    aadhar?: string | null
     address: string
     img?: string | null
     bloodType: string
@@ -31277,6 +34277,9 @@ export namespace Prisma {
     classId: number
     gradeId: number
     birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
+    casteId?: number | null
     results?: ResultUncheckedCreateNestedManyWithoutStudentInput
     fees?: FeeUncheckedCreateNestedManyWithoutStudentInput
     assignmentSubmissions?: AssignmentSubmissionUncheckedCreateNestedManyWithoutStudentInput
@@ -31336,6 +34339,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -31343,12 +34347,15 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
     parent?: ParentUpdateOneRequiredWithoutStudentsNestedInput
     class?: ClassUpdateOneRequiredWithoutStudentsNestedInput
     grade?: GradeUpdateOneRequiredWithoutStudentsNestedInput
     results?: ResultUpdateManyWithoutStudentNestedInput
     fees?: FeeUpdateManyWithoutStudentNestedInput
     assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutStudentNestedInput
+    caste?: CasteUpdateOneWithoutStudentsNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutAttendancesInput = {
@@ -31359,6 +34366,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -31369,6 +34377,9 @@ export namespace Prisma {
     classId?: IntFieldUpdateOperationsInput | number
     gradeId?: IntFieldUpdateOperationsInput | number
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
+    casteId?: NullableIntFieldUpdateOperationsInput | number | null
     results?: ResultUncheckedUpdateManyWithoutStudentNestedInput
     fees?: FeeUncheckedUpdateManyWithoutStudentNestedInput
     assignmentSubmissions?: AssignmentSubmissionUncheckedUpdateManyWithoutStudentNestedInput
@@ -31630,6 +34641,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone?: string | null
+    aadhar?: string | null
     address: string
     img?: string | null
     bloodType: string
@@ -31637,12 +34649,15 @@ export namespace Prisma {
     createdAt?: Date | string
     deletedAt?: Date | string | null
     birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
     parent: ParentCreateNestedOneWithoutStudentsInput
     class: ClassCreateNestedOneWithoutStudentsInput
     grade: GradeCreateNestedOneWithoutStudentsInput
     attendances?: AttendanceCreateNestedManyWithoutStudentInput
     results?: ResultCreateNestedManyWithoutStudentInput
     assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutStudentInput
+    caste?: CasteCreateNestedOneWithoutStudentsInput
   }
 
   export type StudentUncheckedCreateWithoutFeesInput = {
@@ -31653,6 +34668,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone?: string | null
+    aadhar?: string | null
     address: string
     img?: string | null
     bloodType: string
@@ -31663,6 +34679,9 @@ export namespace Prisma {
     classId: number
     gradeId: number
     birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
+    casteId?: number | null
     attendances?: AttendanceUncheckedCreateNestedManyWithoutStudentInput
     results?: ResultUncheckedCreateNestedManyWithoutStudentInput
     assignmentSubmissions?: AssignmentSubmissionUncheckedCreateNestedManyWithoutStudentInput
@@ -31725,6 +34744,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -31732,12 +34752,15 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
     parent?: ParentUpdateOneRequiredWithoutStudentsNestedInput
     class?: ClassUpdateOneRequiredWithoutStudentsNestedInput
     grade?: GradeUpdateOneRequiredWithoutStudentsNestedInput
     attendances?: AttendanceUpdateManyWithoutStudentNestedInput
     results?: ResultUpdateManyWithoutStudentNestedInput
     assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutStudentNestedInput
+    caste?: CasteUpdateOneWithoutStudentsNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutFeesInput = {
@@ -31748,6 +34771,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -31758,6 +34782,9 @@ export namespace Prisma {
     classId?: IntFieldUpdateOperationsInput | number
     gradeId?: IntFieldUpdateOperationsInput | number
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
+    casteId?: NullableIntFieldUpdateOperationsInput | number | null
     attendances?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput
     results?: ResultUncheckedUpdateManyWithoutStudentNestedInput
     assignmentSubmissions?: AssignmentSubmissionUncheckedUpdateManyWithoutStudentNestedInput
@@ -31867,6 +34894,86 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type StudentCreateWithoutCasteInput = {
+    id?: string
+    username: string
+    password: string
+    name: string
+    surname: string
+    email?: string | null
+    phone?: string | null
+    aadhar?: string | null
+    address: string
+    img?: string | null
+    bloodType: string
+    sex: $Enums.UserSex
+    createdAt?: Date | string
+    deletedAt?: Date | string | null
+    birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
+    parent: ParentCreateNestedOneWithoutStudentsInput
+    class: ClassCreateNestedOneWithoutStudentsInput
+    grade: GradeCreateNestedOneWithoutStudentsInput
+    attendances?: AttendanceCreateNestedManyWithoutStudentInput
+    results?: ResultCreateNestedManyWithoutStudentInput
+    fees?: FeeCreateNestedManyWithoutStudentInput
+    assignmentSubmissions?: AssignmentSubmissionCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentUncheckedCreateWithoutCasteInput = {
+    id?: string
+    username: string
+    password: string
+    name: string
+    surname: string
+    email?: string | null
+    phone?: string | null
+    aadhar?: string | null
+    address: string
+    img?: string | null
+    bloodType: string
+    sex: $Enums.UserSex
+    createdAt?: Date | string
+    deletedAt?: Date | string | null
+    parentId: string
+    classId: number
+    gradeId: number
+    birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutStudentInput
+    results?: ResultUncheckedCreateNestedManyWithoutStudentInput
+    fees?: FeeUncheckedCreateNestedManyWithoutStudentInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentCreateOrConnectWithoutCasteInput = {
+    where: StudentWhereUniqueInput
+    create: XOR<StudentCreateWithoutCasteInput, StudentUncheckedCreateWithoutCasteInput>
+  }
+
+  export type StudentCreateManyCasteInputEnvelope = {
+    data: StudentCreateManyCasteInput | StudentCreateManyCasteInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StudentUpsertWithWhereUniqueWithoutCasteInput = {
+    where: StudentWhereUniqueInput
+    update: XOR<StudentUpdateWithoutCasteInput, StudentUncheckedUpdateWithoutCasteInput>
+    create: XOR<StudentCreateWithoutCasteInput, StudentUncheckedCreateWithoutCasteInput>
+  }
+
+  export type StudentUpdateWithWhereUniqueWithoutCasteInput = {
+    where: StudentWhereUniqueInput
+    data: XOR<StudentUpdateWithoutCasteInput, StudentUncheckedUpdateWithoutCasteInput>
+  }
+
+  export type StudentUpdateManyWithWhereWithoutCasteInput = {
+    where: StudentScalarWhereInput
+    data: XOR<StudentUpdateManyMutationInput, StudentUncheckedUpdateManyWithoutCasteInput>
   }
 
   export type AttendanceCreateManyStudentInput = {
@@ -32162,6 +35269,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone?: string | null
+    aadhar?: string | null
     address: string
     img?: string | null
     bloodType: string
@@ -32171,6 +35279,9 @@ export namespace Prisma {
     classId: number
     gradeId: number
     birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
+    casteId?: number | null
   }
 
   export type StudentUpdateWithoutParentInput = {
@@ -32181,6 +35292,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -32188,12 +35300,15 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
     class?: ClassUpdateOneRequiredWithoutStudentsNestedInput
     grade?: GradeUpdateOneRequiredWithoutStudentsNestedInput
     attendances?: AttendanceUpdateManyWithoutStudentNestedInput
     results?: ResultUpdateManyWithoutStudentNestedInput
     fees?: FeeUpdateManyWithoutStudentNestedInput
     assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutStudentNestedInput
+    caste?: CasteUpdateOneWithoutStudentsNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutParentInput = {
@@ -32204,6 +35319,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -32213,6 +35329,9 @@ export namespace Prisma {
     classId?: IntFieldUpdateOperationsInput | number
     gradeId?: IntFieldUpdateOperationsInput | number
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
+    casteId?: NullableIntFieldUpdateOperationsInput | number | null
     attendances?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput
     results?: ResultUncheckedUpdateManyWithoutStudentNestedInput
     fees?: FeeUncheckedUpdateManyWithoutStudentNestedInput
@@ -32227,6 +35346,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -32236,6 +35356,9 @@ export namespace Prisma {
     classId?: IntFieldUpdateOperationsInput | number
     gradeId?: IntFieldUpdateOperationsInput | number
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
+    casteId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type StudentCreateManyGradeInput = {
@@ -32246,6 +35369,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone?: string | null
+    aadhar?: string | null
     address: string
     img?: string | null
     bloodType: string
@@ -32255,6 +35379,9 @@ export namespace Prisma {
     parentId: string
     classId: number
     birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
+    casteId?: number | null
   }
 
   export type ClassCreateManyGradeInput = {
@@ -32272,6 +35399,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -32279,12 +35407,15 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
     parent?: ParentUpdateOneRequiredWithoutStudentsNestedInput
     class?: ClassUpdateOneRequiredWithoutStudentsNestedInput
     attendances?: AttendanceUpdateManyWithoutStudentNestedInput
     results?: ResultUpdateManyWithoutStudentNestedInput
     fees?: FeeUpdateManyWithoutStudentNestedInput
     assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutStudentNestedInput
+    caste?: CasteUpdateOneWithoutStudentsNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutGradeInput = {
@@ -32295,6 +35426,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -32304,6 +35436,9 @@ export namespace Prisma {
     parentId?: StringFieldUpdateOperationsInput | string
     classId?: IntFieldUpdateOperationsInput | number
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
+    casteId?: NullableIntFieldUpdateOperationsInput | number | null
     attendances?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput
     results?: ResultUncheckedUpdateManyWithoutStudentNestedInput
     fees?: FeeUncheckedUpdateManyWithoutStudentNestedInput
@@ -32318,6 +35453,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -32327,6 +35463,9 @@ export namespace Prisma {
     parentId?: StringFieldUpdateOperationsInput | string
     classId?: IntFieldUpdateOperationsInput | number
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
+    casteId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ClassUpdateWithoutGradeInput = {
@@ -32375,6 +35514,7 @@ export namespace Prisma {
     surname: string
     email?: string | null
     phone?: string | null
+    aadhar?: string | null
     address: string
     img?: string | null
     bloodType: string
@@ -32384,6 +35524,9 @@ export namespace Prisma {
     parentId: string
     gradeId: number
     birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
+    casteId?: number | null
   }
 
   export type EventCreateManyClassInput = {
@@ -32445,6 +35588,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -32452,12 +35596,15 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
     parent?: ParentUpdateOneRequiredWithoutStudentsNestedInput
     grade?: GradeUpdateOneRequiredWithoutStudentsNestedInput
     attendances?: AttendanceUpdateManyWithoutStudentNestedInput
     results?: ResultUpdateManyWithoutStudentNestedInput
     fees?: FeeUpdateManyWithoutStudentNestedInput
     assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutStudentNestedInput
+    caste?: CasteUpdateOneWithoutStudentsNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutClassInput = {
@@ -32468,6 +35615,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -32477,6 +35625,9 @@ export namespace Prisma {
     parentId?: StringFieldUpdateOperationsInput | string
     gradeId?: IntFieldUpdateOperationsInput | number
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
+    casteId?: NullableIntFieldUpdateOperationsInput | number | null
     attendances?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput
     results?: ResultUncheckedUpdateManyWithoutStudentNestedInput
     fees?: FeeUncheckedUpdateManyWithoutStudentNestedInput
@@ -32491,6 +35642,7 @@ export namespace Prisma {
     surname?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     img?: NullableStringFieldUpdateOperationsInput | string | null
     bloodType?: StringFieldUpdateOperationsInput | string
@@ -32500,6 +35652,9 @@ export namespace Prisma {
     parentId?: StringFieldUpdateOperationsInput | string
     gradeId?: IntFieldUpdateOperationsInput | number
     birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
+    casteId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type EventUpdateWithoutClassInput = {
@@ -32893,6 +36048,106 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type StudentCreateManyCasteInput = {
+    id?: string
+    username: string
+    password: string
+    name: string
+    surname: string
+    email?: string | null
+    phone?: string | null
+    aadhar?: string | null
+    address: string
+    img?: string | null
+    bloodType: string
+    sex: $Enums.UserSex
+    createdAt?: Date | string
+    deletedAt?: Date | string | null
+    parentId: string
+    classId: number
+    gradeId: number
+    birthday: Date | string
+    category?: $Enums.SocialCategory | null
+    religion?: $Enums.Religion | null
+  }
+
+  export type StudentUpdateWithoutCasteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    surname?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: StringFieldUpdateOperationsInput | string
+    img?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodType?: StringFieldUpdateOperationsInput | string
+    sex?: EnumUserSexFieldUpdateOperationsInput | $Enums.UserSex
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
+    parent?: ParentUpdateOneRequiredWithoutStudentsNestedInput
+    class?: ClassUpdateOneRequiredWithoutStudentsNestedInput
+    grade?: GradeUpdateOneRequiredWithoutStudentsNestedInput
+    attendances?: AttendanceUpdateManyWithoutStudentNestedInput
+    results?: ResultUpdateManyWithoutStudentNestedInput
+    fees?: FeeUpdateManyWithoutStudentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUpdateManyWithoutStudentNestedInput
+  }
+
+  export type StudentUncheckedUpdateWithoutCasteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    surname?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: StringFieldUpdateOperationsInput | string
+    img?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodType?: StringFieldUpdateOperationsInput | string
+    sex?: EnumUserSexFieldUpdateOperationsInput | $Enums.UserSex
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentId?: StringFieldUpdateOperationsInput | string
+    classId?: IntFieldUpdateOperationsInput | number
+    gradeId?: IntFieldUpdateOperationsInput | number
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
+    attendances?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput
+    results?: ResultUncheckedUpdateManyWithoutStudentNestedInput
+    fees?: FeeUncheckedUpdateManyWithoutStudentNestedInput
+    assignmentSubmissions?: AssignmentSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  }
+
+  export type StudentUncheckedUpdateManyWithoutCasteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    surname?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: StringFieldUpdateOperationsInput | string
+    img?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodType?: StringFieldUpdateOperationsInput | string
+    sex?: EnumUserSexFieldUpdateOperationsInput | $Enums.UserSex
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentId?: StringFieldUpdateOperationsInput | string
+    classId?: IntFieldUpdateOperationsInput | number
+    gradeId?: IntFieldUpdateOperationsInput | number
+    birthday?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: NullableEnumSocialCategoryFieldUpdateOperationsInput | $Enums.SocialCategory | null
+    religion?: NullableEnumReligionFieldUpdateOperationsInput | $Enums.Religion | null
+  }
+
 
 
   /**
@@ -32938,6 +36193,10 @@ export namespace Prisma {
      * @deprecated Use FeeCountOutputTypeDefaultArgs instead
      */
     export type FeeCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = FeeCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CasteCountOutputTypeDefaultArgs instead
+     */
+    export type CasteCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CasteCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use AdminDefaultArgs instead
      */
@@ -33018,6 +36277,14 @@ export namespace Prisma {
      * @deprecated Use StoredFileDefaultArgs instead
      */
     export type StoredFileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = StoredFileDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SystemSettingDefaultArgs instead
+     */
+    export type SystemSettingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SystemSettingDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CasteDefaultArgs instead
+     */
+    export type CasteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CasteDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

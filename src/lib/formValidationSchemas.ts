@@ -1,5 +1,30 @@
 import { z } from "zod";
 
+const parseDateInput = (val: unknown): Date => {
+  if (val instanceof Date) return val;
+  if (typeof val === "string") {
+    const trimmed = val.trim();
+    // Support DD/MM/YYYY or DD-MM-YYYY
+    const ddmmyyyyMatch = trimmed.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+    if (ddmmyyyyMatch) {
+      const day = parseInt(ddmmyyyyMatch[1], 10);
+      const month = parseInt(ddmmyyyyMatch[2], 10) - 1;
+      const year = parseInt(ddmmyyyyMatch[3], 10);
+      const d = new Date(year, month, day);
+      if (!isNaN(d.getTime())) return d;
+    }
+    const d = new Date(trimmed);
+    if (!isNaN(d.getTime())) return d;
+  }
+  return new Date(NaN);
+};
+
+const dateFieldSchema = (message: string) =>
+  z.preprocess(
+    parseDateInput,
+    z.date({ message }).refine((d) => !isNaN(d.getTime()), { message })
+  );
+
 export const subjectSchema = z.object({
   id: z.coerce.number().optional(),
   name: z.string().min(1, { message: "Subject name is required!" }),
@@ -36,7 +61,7 @@ export const teacherSchema = z.object({
   address: z.string(),
   img: z.string().optional(),
   bloodType: z.string().min(1, { message: "Blood Type is required!" }),
-  birthday: z.coerce.date({ message: "Birthday is required!" }),
+  birthday: dateFieldSchema("Birthday is required!"),
   sex: z.enum(["MALE", "FEMALE"], { message: "Sex is required!" }),
   subjects: z.array(z.string()).optional(), // subject ids
 });
@@ -48,21 +73,39 @@ export const studentSchema = z.object({
   username: z
     .string()
     .min(3, { message: "Username must be at least 3 characters long!" })
-    .max(20, { message: "Username must be at most 20 characters long!" }),
+    .max(30, { message: "Username must be at most 30 characters long!" })
+    .optional()
+    .or(z.literal("")),
   password: z
     .string()
-    .min(8, { message: "Password must be at least 8 characters long!" })
+    .min(6, { message: "Password must be at least 6 characters long!" })
     .optional()
     .or(z.literal("")),
   name: z.string().min(1, { message: "First name is required!" }),
   surname: z.string().min(1, { message: "Last name is required!" }),
   email: z.string().email({ message: "Invalid email address!" }).optional().or(z.literal("")),
   phone: z.string().optional(),
-  address: z.string(),
+  aadhar: z
+    .string()
+    .regex(/^$|^(\d{4}\s\d{4}\s\d{4}|\d{12})$/, {
+      message: "Aadhar number must be exactly 12 digits (e.g. 1234 5678 9012)!",
+    })
+    .optional()
+    .or(z.literal("")),
+  address: z.string().min(1, { message: "Address is required!" }),
   img: z.string().optional(),
   bloodType: z.string().min(1, { message: "Blood Type is required!" }),
-  birthday: z.coerce.date({ message: "Birthday is required!" }),
+  birthday: dateFieldSchema("Birthday is required!"),
   sex: z.enum(["MALE", "FEMALE"], { message: "Sex is required!" }),
+  category: z
+    .enum(["GENERAL", "OBC", "SC", "ST", "EWS", "MINORITY", "OTHER"])
+    .optional()
+    .nullable(),
+  religion: z
+    .enum(["HINDU", "MUSLIM", "CHRISTIAN", "SIKH", "BUDDHIST", "JAIN", "PARSI", "JEWISH", "OTHER"])
+    .optional()
+    .nullable(),
+  casteId: z.coerce.number().optional().nullable(),
   gradeId: z.coerce.number().min(1, { message: "Grade is required!" }),
   classId: z.coerce.number().min(1, { message: "Class is required!" }),
   parentId: z.string().min(1, { message: "Parent Id is required!" }),
@@ -70,21 +113,38 @@ export const studentSchema = z.object({
 
 export type StudentSchema = z.infer<typeof studentSchema>;
 
+export const casteSchema = z.object({
+  id: z.coerce.number().optional(),
+  name: z.string().min(1, { message: "Caste name is required!" }),
+  category: z.string().optional().or(z.literal("")),
+  description: z.string().optional().or(z.literal("")),
+});
+
+export type CasteSchema = z.infer<typeof casteSchema>;
+
 export const parentSchema = z.object({
   id: z.string().optional(),
-  username: z
-    .string()
-    .min(3, { message: "Username must be at least 3 characters long!" })
-    .max(20, { message: "Username must be at most 20 characters long!" }),
+  username: z.string().optional().or(z.literal("")),
   password: z
     .string()
-    .min(8, { message: "Password must be at least 8 characters long!" })
+    .min(6, { message: "Password must be at least 6 characters long!" })
     .optional()
     .or(z.literal("")),
   name: z.string().min(1, { message: "First name is required!" }),
   surname: z.string().min(1, { message: "Last name is required!" }),
   email: z.string().email({ message: "Invalid email address!" }).optional().or(z.literal("")),
-  phone: z.string().min(1, { message: "Phone number is required!" }),
+  phone: z
+    .string()
+    .min(10, { message: "Valid 10-digit mobile number is required!" })
+    .max(15, { message: "Phone number is too long!" })
+    .regex(/^[0-9+\-\s]+$/, { message: "Invalid phone number format!" }),
+  aadhar: z
+    .string()
+    .regex(/^$|^(\d{4}\s\d{4}\s\d{4}|\d{12})$/, {
+      message: "Aadhar number must be exactly 12 digits (e.g. 1234 5678 9012)!",
+    })
+    .optional()
+    .or(z.literal("")),
   address: z.string().min(1, { message: "Address is required!" }),
   students: z.array(z.string()).optional(), // student IDs to connect
 });
@@ -232,3 +292,21 @@ export const feePaymentSchema = z.object({
 });
 
 export type FeePaymentSchema = z.infer<typeof feePaymentSchema>;
+
+export const idFormatConfigSchema = z.object({
+  studentIdPrefix: z.string().min(1, { message: "Student prefix is required!" }).max(10),
+  studentIdYear: z.boolean().default(true),
+  studentIdDigits: z.coerce.number().min(2).max(8),
+  studentIdFormat: z.string().min(3, { message: "Student ID format is required!" }),
+
+  teacherIdPrefix: z.string().min(1, { message: "Teacher prefix is required!" }).max(10),
+  teacherIdYear: z.boolean().default(true),
+  teacherIdDigits: z.coerce.number().min(2).max(8),
+  teacherIdFormat: z.string().min(3, { message: "Teacher ID format is required!" }),
+
+  parentIdPrefix: z.string().min(1, { message: "Parent prefix is required!" }).max(10),
+  parentIdDigits: z.coerce.number().min(2).max(8),
+  parentIdFormat: z.string().min(3, { message: "Parent ID format is required!" }),
+});
+
+export type IdFormatConfigSchema = z.infer<typeof idFormatConfigSchema>;

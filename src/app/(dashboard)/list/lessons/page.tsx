@@ -7,6 +7,7 @@ import { ITEM_PER_PAGE } from "@/lib/settings";
 import { Class, Lesson, Prisma, Subject, Teacher } from "@/generated/client";
 import TableActions from "@/components/TableActions";
 import { auth } from "@/lib/auth";
+import { getClassOptions, getSubjectOptions, getTeacherOptions } from "@/lib/queries";
 
 type LessonList = Lesson & { subject: Subject } & { class: Class } & {
   teacher: Teacher;
@@ -91,7 +92,7 @@ const LessonListPage = async ({
       </div>
 
       <div className="mt-3 flex items-center justify-between border-t border-gray-100 pt-2.5">
-        <span className="text-xs text-gray-400 font-medium">Day: {item.day}</span>
+        <span className="text-xs font-medium text-gray-400">Day: {item.day}</span>
         {role === "admin" && (
           <div className="flex items-center gap-2">
             <FormContainer table="lesson" type="update" data={item} />
@@ -152,7 +153,7 @@ const LessonListPage = async ({
     }
   }
 
-  const [data, count, filterClasses, filterTeachers, filterSubjects] = await prisma.$transaction([
+  const [data, count, filterClasses, filterTeachers, filterSubjects] = await Promise.all([
     prisma.lesson.findMany({
       where: query,
       include: {
@@ -165,9 +166,9 @@ const LessonListPage = async ({
       skip: ITEM_PER_PAGE * (p - 1),
     }),
     prisma.lesson.count({ where: query }),
-    prisma.class.findMany({ select: { id: true, name: true } }),
-    prisma.teacher.findMany({ select: { id: true, name: true, surname: true } }),
-    prisma.subject.findMany({ select: { id: true, name: true } }),
+    getClassOptions(),
+    getTeacherOptions(),
+    getSubjectOptions(),
   ]);
 
   const filterOptions = [

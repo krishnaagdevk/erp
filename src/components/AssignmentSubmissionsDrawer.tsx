@@ -86,18 +86,18 @@ export default function AssignmentSubmissionsDrawer({
         className="inline-flex items-center gap-1.5 rounded-xl border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700 shadow-sm transition hover:bg-blue-100 active:scale-95"
       >
         <span>📥 Submissions</span>
-        <span className="rounded-md bg-blue-200/80 px-1.5 py-0.2 text-[11px] font-bold text-blue-900">
+        <span className="py-0.2 rounded-md bg-blue-200/80 px-1.5 text-[11px] font-bold text-blue-900">
           {submittedCount}/{totalStudents}
         </span>
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 sm:p-4 backdrop-blur-sm">
-          <div className="relative flex max-h-[90vh] w-full max-w-2xl flex-col rounded-2xl bg-white shadow-2xl animate-in fade-in zoom-in duration-150 overflow-hidden">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 backdrop-blur-sm sm:p-4">
+          <div className="animate-in fade-in zoom-in relative flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl duration-150">
             {/* DRAWER HEADER */}
             <div className="flex items-center justify-between border-b border-gray-100 p-4 sm:p-5">
               <div>
-                <h2 className="text-sm sm:text-base font-bold text-gray-800">
+                <h2 className="text-sm font-bold text-gray-800 sm:text-base">
                   Student Submissions: {assignmentTitle}
                 </h2>
                 <p className="text-xs text-gray-500">
@@ -132,12 +132,7 @@ export default function AssignmentSubmissionsDrawer({
                       <div className="flex items-start gap-3">
                         <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full border border-gray-200 bg-gray-100">
                           {sub.student.img ? (
-                            <Image
-                              src={sub.student.img}
-                              alt=""
-                              fill
-                              className="object-cover"
-                            />
+                            <Image src={sub.student.img} alt="" fill className="object-cover" />
                           ) : (
                             <div className="flex h-full w-full items-center justify-center bg-lamaSkyLight text-xs font-bold text-gray-700">
                               {sub.student.name[0]}
@@ -164,7 +159,7 @@ export default function AssignmentSubmissionsDrawer({
                           </span>
 
                           {sub.notes && (
-                            <p className="mt-1.5 max-w-md rounded-md bg-gray-50 p-2 text-xs text-gray-600 border border-gray-100">
+                            <p className="mt-1.5 max-w-md rounded-md border border-gray-100 bg-gray-50 p-2 text-xs text-gray-600">
                               &ldquo;{sub.notes}&rdquo;
                             </p>
                           )}
@@ -201,7 +196,8 @@ export default function AssignmentSubmissionsDrawer({
               <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
                 <div className="w-full max-w-md rounded-2xl bg-white p-5 shadow-2xl">
                   <h3 className="text-sm font-bold text-gray-800">
-                    Grade Submission: {selectedSubmission.student.name} {selectedSubmission.student.surname}
+                    Grade Submission: {selectedSubmission.student.name}{" "}
+                    {selectedSubmission.student.surname}
                   </h3>
                   <form onSubmit={handleSaveGrade} className="mt-3 flex flex-col gap-3">
                     <div>

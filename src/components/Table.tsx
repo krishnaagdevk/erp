@@ -39,10 +39,7 @@ const Table = ({
           <tbody>
             {data.length === 0 ? (
               <tr>
-                <td
-                  colSpan={columns.length}
-                  className="py-10 text-center text-sm text-gray-400"
-                >
+                <td colSpan={columns.length} className="py-10 text-center text-sm text-gray-400">
                   No records found.
                 </td>
               </tr>

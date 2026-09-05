@@ -7,6 +7,7 @@ import { ITEM_PER_PAGE } from "@/lib/settings";
 import { Class, Prisma, Teacher } from "@/generated/client";
 import TableActions from "@/components/TableActions";
 import { auth } from "@/lib/auth";
+import { getGradeOptions, getTeacherOptions } from "@/lib/queries";
 
 type ClassList = Class & { supervisor: Teacher };
 
@@ -153,7 +154,7 @@ const ClassListPage = async ({
     }
   }
 
-  const [data, count, filterTeachers, filterGrades] = await prisma.$transaction([
+  const [data, count, filterTeachers, filterGrades] = await Promise.all([
     prisma.class.findMany({
       where: query,
       include: {
@@ -164,8 +165,8 @@ const ClassListPage = async ({
       skip: ITEM_PER_PAGE * (p - 1),
     }),
     prisma.class.count({ where: query }),
-    prisma.teacher.findMany({ select: { id: true, name: true, surname: true } }),
-    prisma.grade.findMany({ select: { id: true, level: true } }),
+    getTeacherOptions(),
+    getGradeOptions(),
   ]);
 
   const filterOptions = [

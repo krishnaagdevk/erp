@@ -1,17 +1,11 @@
-import prisma from "@/lib/prisma";
 import { getCurrentAcademicYear } from "@/lib/utils";
 import UserCardDropdown from "./UserCardDropdown";
+import { getUserCardsCounts } from "@/lib/queries";
 
 const UserCards = async () => {
   const academicYear = getCurrentAcademicYear();
-  const [adminCount, teacherCount, studentCount, parentCount, accountantCount] =
-    await prisma.$transaction([
-      prisma.admin.count(),
-      prisma.teacher.count(),
-      prisma.student.count(),
-      prisma.parent.count(),
-      prisma.accountant.count(),
-    ]);
+  const { adminCount, teacherCount, studentCount, parentCount, accountantCount } =
+    await getUserCardsCounts();
 
   const cards = [
     { type: "admin" as const, count: adminCount, color: "bg-lamaPurple" },

@@ -19,11 +19,13 @@ const SingleStudentPage = async ({ params }: { params: Promise<{ id: string }> }
   const student:
     | (Student & {
         class: Class & { _count: { lessons: number } };
+        caste: { name: string; category: string | null } | null;
       })
     | null = await prisma.student.findUnique({
     where: { id },
     include: {
       class: { include: { _count: { select: { lessons: true } } } },
+      caste: { select: { name: true, category: true } },
     },
   });
 
@@ -53,8 +55,23 @@ const SingleStudentPage = async ({ params }: { params: Promise<{ id: string }> }
                 <h1 className="text-xl font-semibold">{student.name + " " + student.surname}</h1>
                 {role === "admin" && <FormContainer table="student" type="update" data={student} />}
               </div>
-              <p className="text-sm text-gray-500">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+              <p className="flex flex-wrap items-center gap-1.5 text-sm text-gray-500">
+                <span>Student ID: <strong className="font-mono text-gray-700">{student.username}</strong></span>
+                {student.category && (
+                  <span className="rounded-md bg-blue-50 px-2 py-0.5 text-xs font-semibold text-blue-700 ring-1 ring-blue-200">
+                    {student.category}
+                  </span>
+                )}
+                {student.religion && (
+                  <span className="rounded-md bg-amber-50 px-2 py-0.5 text-xs font-semibold text-amber-700 ring-1 ring-amber-200">
+                    {student.religion}
+                  </span>
+                )}
+                {student.caste && (
+                  <span className="rounded-md bg-purple-50 px-2 py-0.5 text-xs font-semibold text-purple-700 ring-1 ring-purple-200">
+                    {student.caste.name}
+                  </span>
+                )}
               </p>
               <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-medium">
                 <div className="flex w-full items-center gap-2 md:w-1/3 lg:w-full 2xl:w-1/3">

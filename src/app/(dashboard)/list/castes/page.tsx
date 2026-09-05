@@ -1,16 +1,16 @@
-import FormContainer from "@/components/FormContainer";
+﻿import FormContainer from "@/components/FormContainer";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
-import { Prisma, Subject, Teacher } from "@/generated/client";
+import { Caste, Prisma } from "@/generated/client";
 import TableActions from "@/components/TableActions";
 import { auth } from "@/lib/auth";
 
-type SubjectList = Subject & { teachers: Teacher[] };
+type CasteList = Caste & { _count?: { students: number } };
 
-const SubjectListPage = async ({
+const CasteListPage = async ({
   searchParams,
 }: {
   searchParams: Promise<{ [key: string]: string | undefined }>;
@@ -21,12 +21,22 @@ const SubjectListPage = async ({
 
   const columns = [
     {
-      header: "Subject Name",
+      header: "Caste Name",
       accessor: "name",
     },
     {
-      header: "Teachers",
-      accessor: "teachers",
+      header: "Category",
+      accessor: "category",
+      className: "hidden md:table-cell",
+    },
+    {
+      header: "Description",
+      accessor: "description",
+      className: "hidden lg:table-cell",
+    },
+    {
+      header: "Enrolled Students",
+      accessor: "students",
       className: "hidden md:table-cell",
     },
     {
@@ -35,22 +45,27 @@ const SubjectListPage = async ({
     },
   ];
 
-  const renderRow = (item: SubjectList) => (
+  const renderRow = (item: CasteList) => (
     <tr
       key={item.id}
       className="border-b border-gray-200 text-sm even:bg-slate-50 hover:bg-lamaPurpleLight"
     >
       <td className="flex items-center gap-4 p-4 font-bold text-gray-800">{item.name}</td>
       <td className="hidden md:table-cell">
-        {item.teachers.map((teacher: Teacher) => `${teacher.name} ${teacher.surname}`).join(", ") ||
-          "None"}
+        <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-blue-700 ring-1 ring-blue-200">
+          {item.category || "General"}
+        </span>
+      </td>
+      <td className="hidden text-xs text-gray-500 lg:table-cell">{item.description || "—"}</td>
+      <td className="hidden text-xs font-medium text-gray-700 md:table-cell">
+        {item._count?.students || 0} student(s)
       </td>
       <td>
         <div className="flex items-center gap-2">
           {role === "admin" && (
             <>
-              <FormContainer table="subject" type="update" data={item} />
-              <FormContainer table="subject" type="delete" id={item.id} />
+              <FormContainer table="caste" type="update" data={item} />
+              <FormContainer table="caste" type="delete" id={item.id} />
             </>
           )}
         </div>
@@ -58,7 +73,7 @@ const SubjectListPage = async ({
     </tr>
   );
 
-  const renderCard = (item: SubjectList) => (
+  const renderCard = (item: CasteList) => (
     <div
       key={item.id}
       className="flex flex-col justify-between rounded-xl border border-gray-200/80 bg-white p-4 shadow-sm transition hover:shadow-md"
@@ -66,24 +81,23 @@ const SubjectListPage = async ({
       <div>
         <div className="flex items-start justify-between gap-2">
           <h3 className="text-base font-bold text-gray-800">{item.name}</h3>
-          <span className="shrink-0 rounded-full bg-purple-50 px-2.5 py-0.5 text-xs font-semibold text-purple-700 ring-1 ring-purple-200">
-            {item.teachers.length} Faculty
+          <span className="shrink-0 rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-blue-700 ring-1 ring-blue-200">
+            {item.category || "General"}
           </span>
         </div>
-        <div className="mt-2.5 text-xs text-gray-500">
-          <span className="font-medium text-gray-700">Teachers: </span>
-          <span>
-            {item.teachers.map((t: Teacher) => `${t.name} ${t.surname}`).join(", ") ||
-              "No teachers assigned"}
-          </span>
+        <div className="mt-2 text-xs text-gray-500">
+          <p>{item.description || "No description provided."}</p>
+          <p className="mt-1 font-medium text-gray-700">
+            {item._count?.students || 0} enrolled student(s)
+          </p>
         </div>
       </div>
 
       <div className="mt-3.5 flex items-center justify-end border-t border-gray-100 pt-2.5">
         {role === "admin" && (
           <div className="flex items-center gap-2">
-            <FormContainer table="subject" type="update" data={item} />
-            <FormContainer table="subject" type="delete" id={item.id} />
+            <FormContainer table="caste" type="update" data={item} />
+            <FormContainer table="caste" type="delete" id={item.id} />
           </div>
         )}
       </div>
@@ -95,15 +109,14 @@ const SubjectListPage = async ({
   const p = page ? parseInt(page) : 1;
 
   // URL PARAMS CONDITION
-
-  const query: Prisma.SubjectWhereInput = {};
+  const query: Prisma.CasteWhereInput = {};
 
   if (queryParams) {
     for (const [key, value] of Object.entries(queryParams)) {
       if (value !== undefined) {
         switch (key) {
           case "search":
-            query.name = { contains: value };
+            query.OR = [{ name: { contains: value } }, { category: { contains: value } }];
             break;
           default:
             break;
@@ -112,7 +125,7 @@ const SubjectListPage = async ({
     }
   }
 
-  let orderBy: Prisma.SubjectOrderByWithRelationInput = { name: "asc" };
+  let orderBy: Prisma.CasteOrderByWithRelationInput = { name: "asc" };
   if (sort) {
     const [field, direction] = sort.split(":");
     if (field === "name") {
@@ -121,33 +134,33 @@ const SubjectListPage = async ({
   }
 
   const [data, count] = await Promise.all([
-    prisma.subject.findMany({
+    prisma.caste.findMany({
       where: query,
       include: {
-        teachers: true,
+        _count: { select: { students: true } },
       },
       orderBy,
       take: ITEM_PER_PAGE,
       skip: ITEM_PER_PAGE * (p - 1),
     }),
-    prisma.subject.count({ where: query }),
+    prisma.caste.count({ where: query }),
   ]);
 
   return (
     <div className="m-4 mt-0 flex-1 rounded-md bg-white p-4">
       {/* TOP */}
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <h1 className="text-base font-bold text-gray-800 md:text-lg">All Subjects</h1>
+        <h1 className="text-base font-bold text-gray-800 md:text-lg">Caste & Category Master</h1>
         <div className="flex w-full flex-col items-center gap-3 sm:flex-row md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-3 self-end sm:self-auto">
             <TableActions
               sortFields={[
-                { label: "Subject Name (A-Z)", field: "name:asc" },
-                { label: "Subject Name (Z-A)", field: "name:desc" },
+                { label: "Caste Name (A-Z)", field: "name:asc" },
+                { label: "Caste Name (Z-A)", field: "name:desc" },
               ]}
             />
-            {role === "admin" && <FormContainer table="subject" type="create" />}
+            {role === "admin" && <FormContainer table="caste" type="create" />}
           </div>
         </div>
       </div>
@@ -159,4 +172,4 @@ const SubjectListPage = async ({
   );
 };
 
-export default SubjectListPage;
+export default CasteListPage;

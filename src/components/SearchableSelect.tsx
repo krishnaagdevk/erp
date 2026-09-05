@@ -18,8 +18,9 @@ interface SearchableSelectProps {
   placeholder?: string;
   error?: FieldError | { message?: string };
   register?: UseFormRegisterReturn;
-  setValue?: UseFormSetValue<any>;
+  setValue?: any;
   disabled?: boolean;
+  className?: string;
 }
 
 export default function SearchableSelect({
@@ -27,22 +28,33 @@ export default function SearchableSelect({
   name,
   options = [],
   defaultValue,
-  placeholder = "Search and select...",
   error,
   setValue,
   disabled = false,
+  className,
 }: SearchableSelectProps) {
   const [selected, setSelected] = useState<string | number | undefined>(defaultValue);
   const [search, setSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [openUpwards, setOpenUpwards] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setSelected(defaultValue);
-    if (setValue && defaultValue !== undefined) {
-      setValue(name, defaultValue);
+  }, [defaultValue]);
+
+  useEffect(() => {
+    if (isOpen && containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      // If close to bottom of screen or scroll container, open upwards
+      if (spaceBelow < 270 && rect.top > 250) {
+        setOpenUpwards(true);
+      } else {
+        setOpenUpwards(false);
+      }
     }
-  }, [defaultValue, name, setValue]);
+  }, [isOpen]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -86,7 +98,12 @@ export default function SearchableSelect({
   };
 
   return (
-    <div className="relative flex w-full flex-col gap-1.5 md:w-1/4" ref={containerRef}>
+    <div
+      className={`relative flex flex-col gap-1.5 ${className || "w-full md:w-1/4"} ${
+        isOpen ? "z-[60]" : "z-10"
+      }`}
+      ref={containerRef}
+    >
       <label className="text-xs font-semibold text-gray-600">{label}</label>
 
       {/* Hidden input to ensure form submission includes this field */}
@@ -117,7 +134,7 @@ export default function SearchableSelect({
               )}
             </div>
           ) : (
-            <span className="text-sm text-gray-400">{placeholder}</span>
+            <span className=""></span>
           )}
         </div>
 
@@ -152,7 +169,11 @@ export default function SearchableSelect({
 
       {/* Floating Searchable Menu */}
       {isOpen && (
-        <div className="animate-in fade-in zoom-in-95 absolute left-0 top-[102%] z-50 flex max-h-64 w-full min-w-[240px] flex-col rounded-xl border border-gray-200 bg-white p-2 shadow-2xl ring-1 ring-black/5 duration-150">
+        <div
+          className={`animate-in fade-in zoom-in-95 absolute left-0 z-[70] flex max-h-64 w-full min-w-[240px] flex-col rounded-xl border border-gray-200 bg-white p-2 shadow-2xl ring-1 ring-black/5 duration-150 ${
+            openUpwards ? "bottom-[105%] top-auto" : "bottom-auto top-[105%]"
+          }`}
+        >
           {/* Search Input */}
           <div className="relative mb-2">
             <input

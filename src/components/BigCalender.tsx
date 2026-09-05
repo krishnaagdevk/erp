@@ -42,4 +42,3 @@ const BigCalendar = ({ data }: { data: { title: string; start: Date; end: Date }
 };
 
 export default BigCalendar;
-

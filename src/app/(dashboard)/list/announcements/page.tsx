@@ -7,6 +7,7 @@ import { ITEM_PER_PAGE } from "@/lib/settings";
 import { Announcement, Class, Prisma } from "@/generated/client";
 import TableActions from "@/components/TableActions";
 import { auth } from "@/lib/auth";
+import { getClassOptions } from "@/lib/queries";
 
 type AnnouncementList = Announcement & { class: Class | null };
 const AnnouncementListPage = async ({
@@ -50,7 +51,9 @@ const AnnouncementListPage = async ({
     >
       <td className="flex items-center gap-4 p-4 font-medium text-gray-800">{item.title}</td>
       <td>{item.class?.name || "All"}</td>
-      <td className="hidden md:table-cell">{new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(item.date)}</td>
+      <td className="hidden md:table-cell">
+        {new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(item.date)}
+      </td>
       <td>
         <div className="flex items-center gap-2">
           {(role === "admin" || role === "teacher") && (
@@ -83,7 +86,7 @@ const AnnouncementListPage = async ({
           </span>
         </div>
         {item.description && (
-          <p className="mt-2 text-xs text-gray-600 line-clamp-2 leading-relaxed">
+          <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-gray-600">
             {item.description}
           </p>
         )}
@@ -178,7 +181,7 @@ const AnnouncementListPage = async ({
     }
   }
 
-  const [data, count, filterClasses] = await prisma.$transaction([
+  const [data, count, filterClasses] = await Promise.all([
     prisma.announcement.findMany({
       where: query,
       include: {
@@ -189,7 +192,7 @@ const AnnouncementListPage = async ({
       skip: ITEM_PER_PAGE * (p - 1),
     }),
     prisma.announcement.count({ where: query }),
-    prisma.class.findMany({ select: { id: true, name: true } }),
+    getClassOptions(),
   ]);
 
   const filterOptions = [

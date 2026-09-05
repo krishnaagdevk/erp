@@ -11,6 +11,8 @@ import TableActions from "@/components/TableActions";
 import Link from "next/link";
 
 import { auth } from "@/lib/auth";
+import { getClassOptions, getGradeOptions } from "@/lib/queries";
+import { getOptimizedCloudinaryUrl } from "@/lib/utils";
 
 type StudentList = Student & { class: Class };
 
@@ -66,7 +68,7 @@ const StudentListPage = async ({
     >
       <td className="flex items-center gap-4 p-4">
         <Image
-          src={item.img || "/noAvatar.png"}
+          src={getOptimizedCloudinaryUrl(item.img, 80, 80)}
           alt=""
           width={40}
           height={40}
@@ -88,9 +90,7 @@ const StudentListPage = async ({
               <Image src="/view.png" alt="" width={16} height={16} />
             </button>
           </Link>
-          {role === "admin" && (
-            <FormContainer table="student" type="delete" id={item.id} />
-          )}
+          {role === "admin" && <FormContainer table="student" type="delete" id={item.id} />}
         </div>
       </td>
     </tr>
@@ -104,14 +104,16 @@ const StudentListPage = async ({
       <div>
         <div className="flex items-center gap-3">
           <Image
-            src={item.img || "/noAvatar.png"}
+            src={getOptimizedCloudinaryUrl(item.img, 88, 88)}
             alt=""
             width={44}
             height={44}
             className="h-11 w-11 rounded-full object-cover ring-2 ring-sky-100"
           />
           <div className="min-w-0 flex-1">
-            <h3 className="truncate font-bold text-gray-800 text-sm">{item.name} {item.surname}</h3>
+            <h3 className="truncate text-sm font-bold text-gray-800">
+              {item.name} {item.surname}
+            </h3>
             <p className="truncate text-xs text-gray-500">@{item.username}</p>
           </div>
           <span className="shrink-0 rounded-full bg-sky-50 px-2.5 py-0.5 text-xs font-semibold text-sky-700 ring-1 ring-sky-200">
@@ -133,9 +135,7 @@ const StudentListPage = async ({
               <Image src="/view.png" alt="" width={15} height={15} />
             </button>
           </Link>
-          {role === "admin" && (
-            <FormContainer table="student" type="delete" id={item.id} />
-          )}
+          {role === "admin" && <FormContainer table="student" type="delete" id={item.id} />}
         </div>
       </div>
     </div>
@@ -200,7 +200,7 @@ const StudentListPage = async ({
     }
   }
 
-  const [data, count, filterClasses, filterGrades] = await prisma.$transaction([
+  const [data, count, filterClasses, filterGrades] = await Promise.all([
     prisma.student.findMany({
       where: query,
       include: {
@@ -211,8 +211,8 @@ const StudentListPage = async ({
       skip: ITEM_PER_PAGE * (p - 1),
     }),
     prisma.student.count({ where: query }),
-    prisma.class.findMany({ select: { id: true, name: true } }),
-    prisma.grade.findMany({ select: { id: true, level: true } }),
+    getClassOptions(),
+    getGradeOptions(),
   ]);
 
   const filterOptions = [

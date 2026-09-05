@@ -151,6 +151,7 @@ exports.Prisma.StudentScalarFieldEnum = {
   surname: 'surname',
   email: 'email',
   phone: 'phone',
+  aadhar: 'aadhar',
   address: 'address',
   img: 'img',
   bloodType: 'bloodType',
@@ -160,7 +161,10 @@ exports.Prisma.StudentScalarFieldEnum = {
   parentId: 'parentId',
   classId: 'classId',
   gradeId: 'gradeId',
-  birthday: 'birthday'
+  birthday: 'birthday',
+  category: 'category',
+  religion: 'religion',
+  casteId: 'casteId'
 };
 
 exports.Prisma.TeacherScalarFieldEnum = {
@@ -188,6 +192,7 @@ exports.Prisma.ParentScalarFieldEnum = {
   surname: 'surname',
   email: 'email',
   phone: 'phone',
+  aadhar: 'aadhar',
   address: 'address',
   createdAt: 'createdAt',
   deletedAt: 'deletedAt'
@@ -342,6 +347,30 @@ exports.Prisma.StoredFileScalarFieldEnum = {
   deletedAt: 'deletedAt'
 };
 
+exports.Prisma.SystemSettingScalarFieldEnum = {
+  id: 'id',
+  studentIdPrefix: 'studentIdPrefix',
+  studentIdYear: 'studentIdYear',
+  studentIdDigits: 'studentIdDigits',
+  studentIdFormat: 'studentIdFormat',
+  teacherIdPrefix: 'teacherIdPrefix',
+  teacherIdYear: 'teacherIdYear',
+  teacherIdDigits: 'teacherIdDigits',
+  teacherIdFormat: 'teacherIdFormat',
+  parentIdPrefix: 'parentIdPrefix',
+  parentIdDigits: 'parentIdDigits',
+  parentIdFormat: 'parentIdFormat',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CasteScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  category: 'category',
+  description: 'description',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -354,6 +383,28 @@ exports.Prisma.NullsOrder = {
 exports.UserSex = exports.$Enums.UserSex = {
   MALE: 'MALE',
   FEMALE: 'FEMALE'
+};
+
+exports.SocialCategory = exports.$Enums.SocialCategory = {
+  GENERAL: 'GENERAL',
+  OBC: 'OBC',
+  SC: 'SC',
+  ST: 'ST',
+  EWS: 'EWS',
+  MINORITY: 'MINORITY',
+  OTHER: 'OTHER'
+};
+
+exports.Religion = exports.$Enums.Religion = {
+  HINDU: 'HINDU',
+  MUSLIM: 'MUSLIM',
+  CHRISTIAN: 'CHRISTIAN',
+  SIKH: 'SIKH',
+  BUDDHIST: 'BUDDHIST',
+  JAIN: 'JAIN',
+  PARSI: 'PARSI',
+  JEWISH: 'JEWISH',
+  OTHER: 'OTHER'
 };
 
 exports.Day = exports.$Enums.Day = {
@@ -417,7 +468,9 @@ exports.Prisma.ModelName = {
   Fee: 'Fee',
   FeePayment: 'FeePayment',
   AuditLog: 'AuditLog',
-  StoredFile: 'StoredFile'
+  StoredFile: 'StoredFile',
+  SystemSetting: 'SystemSetting',
+  Caste: 'Caste'
 };
 
 /**

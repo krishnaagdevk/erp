@@ -26,22 +26,21 @@ export default function SearchableMultiSelect({
   name,
   options = [],
   defaultValues = [],
-  placeholder = "Search and select multiple...",
+  placeholder = "",
   error,
   setValue,
   disabled = false,
 }: SearchableMultiSelectProps) {
-  const [selected, setSelected] = useState<(string | number)[]>(defaultValues);
+  const [selected, setSelected] = useState<(string | number)[]>(() => defaultValues || []);
   const [search, setSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const defaultValuesKey = JSON.stringify(defaultValues || []);
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
     setSelected(defaultValues || []);
-    if (setValue && defaultValues) {
-      setValue(name, defaultValues);
-    }
-  }, [defaultValues, name, setValue]);
+  }, [defaultValuesKey]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {

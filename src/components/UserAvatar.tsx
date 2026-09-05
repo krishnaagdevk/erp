@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { getOptimizedCloudinaryUrl } from "@/lib/utils";
 
 type UserAvatarProps = {
   user: {
@@ -69,7 +70,7 @@ export const UserAvatar = ({ user }: UserAvatarProps) => {
         aria-label="User profile menu"
       >
         <Image
-          src={user?.img || "/avatar.png"}
+          src={getOptimizedCloudinaryUrl(user?.img || "/avatar.png", 72, 72)}
           alt="Avatar"
           width={36}
           height={36}

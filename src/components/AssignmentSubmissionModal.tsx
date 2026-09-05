@@ -97,7 +97,7 @@ export default function AssignmentSubmissionModal({
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="relative w-full max-w-lg rounded-2xl bg-white p-5 sm:p-6 shadow-2xl animate-in fade-in zoom-in duration-150">
+          <div className="animate-in fade-in zoom-in relative w-full max-w-lg rounded-2xl bg-white p-5 shadow-2xl duration-150 sm:p-6">
             {/* CLOSE BUTTON */}
             <button
               onClick={() => setOpen(false)}
@@ -111,11 +111,15 @@ export default function AssignmentSubmissionModal({
               <span className="rounded-md bg-blue-50 px-2 py-0.5 text-[11px] font-semibold text-blue-700">
                 {subjectName} · {className}
               </span>
-              <h2 className="mt-1 text-base sm:text-lg font-bold text-gray-900">
+              <h2 className="mt-1 text-base font-bold text-gray-900 sm:text-lg">
                 {assignmentTitle}
               </h2>
               <p className="mt-0.5 text-xs text-gray-500">
-                Due: {new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(dueDate))}
+                Due:{" "}
+                {new Intl.DateTimeFormat("en-US", {
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                }).format(new Date(dueDate))}
               </p>
             </div>
 
@@ -131,7 +135,7 @@ export default function AssignmentSubmissionModal({
                   )}
                 </div>
                 {existingSubmission.feedback && (
-                  <p className="mt-1 text-[11px] text-emerald-900 bg-white/70 p-2 rounded-lg border border-emerald-100">
+                  <p className="mt-1 rounded-lg border border-emerald-100 bg-white/70 p-2 text-[11px] text-emerald-900">
                     <strong>Teacher Feedback:</strong> {existingSubmission.feedback}
                   </p>
                 )}
@@ -184,7 +188,11 @@ export default function AssignmentSubmissionModal({
                   disabled={isPending}
                   className="rounded-xl bg-blue-600 px-5 py-2 text-xs font-semibold text-white shadow transition hover:bg-blue-700 disabled:opacity-50"
                 >
-                  {isPending ? "Submitting..." : existingSubmission ? "Update Submission" : "Submit Assignment"}
+                  {isPending
+                    ? "Submitting..."
+                    : existingSubmission
+                      ? "Update Submission"
+                      : "Submit Assignment"}
                 </button>
               </div>
             </form>

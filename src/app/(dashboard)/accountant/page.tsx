@@ -54,6 +54,7 @@ const AccountantPage = async ({
           { parent: { id: { equals: search } } },
           { parent: { username: { contains: search } } },
           { parent: { phone: { contains: search } } },
+          { parent: { aadhar: { contains: search } } },
           { parent: { name: { contains: search } } },
           { parent: { surname: { contains: search } } },
         ],

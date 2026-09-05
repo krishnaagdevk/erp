@@ -3,7 +3,7 @@ import Link from "next/link";
 import { MobileDrawer } from "./MobileDrawer";
 import { getCurrentUser } from "@/lib/auth";
 import { UserAvatar } from "./UserAvatar";
-import prisma from "@/lib/prisma";
+import { getCachedUserAnnouncementCount } from "@/lib/memo";
 
 const Navbar = async () => {
   const user = await getCurrentUser();
@@ -13,44 +13,8 @@ const Navbar = async () => {
   const role = user.role;
   const fullName = user.name && user.surname ? `${user.name} ${user.surname}` : user.username;
 
-  // Fetch role-targeted unread / recent announcements count
-  let audienceWhere: any = { classId: null };
-  if (role === "admin") {
-    audienceWhere = {};
-  } else if (role === "teacher" && user.id) {
-    audienceWhere = {
-      OR: [
-        { classId: null },
-        { teacherId: user.id },
-        {
-          class: {
-            OR: [
-              { supervisorId: user.id },
-              { lessons: { some: { teacherId: user.id } } },
-            ],
-          },
-        },
-      ],
-    };
-  } else if (role === "student" && user.id) {
-    audienceWhere = {
-      OR: [
-        { classId: null },
-        { class: { students: { some: { id: user.id } } } },
-      ],
-    };
-  } else if (role === "parent" && user.id) {
-    audienceWhere = {
-      OR: [
-        { classId: null },
-        { class: { students: { some: { parentId: user.id } } } },
-      ],
-    };
-  }
-
-  const announcementCount = await prisma.announcement.count({
-    where: audienceWhere,
-  });
+  // Fetch cached role-targeted unread / recent announcements count (30s in-memory TTL memo)
+  const announcementCount = await getCachedUserAnnouncementCount(user);
 
   return (
     <div className="sticky top-0 z-30 flex items-center justify-between border-b border-gray-100 bg-white/70 p-3 backdrop-blur-sm sm:p-4">

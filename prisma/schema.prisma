@@ -27,6 +27,8 @@ model Accountant {
   img       String?
   createdAt DateTime  @default(now())
   deletedAt DateTime?
+
+  @@index([name])
 }
 
 model Student {
@@ -37,6 +39,7 @@ model Student {
   surname               String
   email                 String?                @unique
   phone                 String?                @unique
+  aadhar                String?                @unique
   address               String                 @db.Text
   img                   String?
   bloodType             String
@@ -54,10 +57,19 @@ model Student {
   fees                  Fee[]
   assignmentSubmissions AssignmentSubmission[]
   birthday              DateTime
+  category              SocialCategory?
+  religion              Religion?
+  casteId               Int?
+  caste                 Caste?                 @relation(fields: [casteId], references: [id])
 
   @@index([parentId])
   @@index([classId])
   @@index([gradeId])
+  @@index([casteId])
+  @@index([category])
+  @@index([religion])
+  @@index([name])
+  @@index([aadhar])
 }
 
 model Teacher {
@@ -79,6 +91,8 @@ model Teacher {
   classes       Class[]
   announcements Announcement[]
   birthday      DateTime
+
+  @@index([name])
 }
 
 model Parent {
@@ -89,10 +103,15 @@ model Parent {
   surname   String
   email     String?   @unique
   phone     String    @unique
+  aadhar    String?   @unique
   address   String    @db.Text
   createdAt DateTime  @default(now())
   deletedAt DateTime?
   students  Student[]
+
+  @@index([name])
+  @@index([phone])
+  @@index([aadhar])
 }
 
 model Grade {
@@ -248,6 +267,7 @@ model Event {
   class   Class? @relation(fields: [classId], references: [id])
 
   @@index([classId])
+  @@index([startTime])
 }
 
 model Announcement {
@@ -263,6 +283,7 @@ model Announcement {
 
   @@index([classId])
   @@index([teacherId])
+  @@index([date])
 }
 
 model Fee {
@@ -369,6 +390,28 @@ enum UserSex {
   FEMALE
 }
 
+enum SocialCategory {
+  GENERAL
+  OBC
+  SC
+  ST
+  EWS
+  MINORITY
+  OTHER
+}
+
+enum Religion {
+  HINDU
+  MUSLIM
+  CHRISTIAN
+  SIKH
+  BUDDHIST
+  JAIN
+  PARSI
+  JEWISH
+  OTHER
+}
+
 enum Day {
   MONDAY
   TUESDAY
@@ -376,3 +419,34 @@ enum Day {
   THURSDAY
   FRIDAY
 }
+
+model SystemSetting {
+  id               String   @id @default("default")
+  studentIdPrefix  String   @default("STU")
+  studentIdYear    Boolean  @default(true)
+  studentIdDigits  Int      @default(4)
+  studentIdFormat  String   @default("STU[YYYY][SEQ]")
+
+  teacherIdPrefix  String   @default("TCH")
+  teacherIdYear    Boolean  @default(true)
+  teacherIdDigits  Int      @default(4)
+  teacherIdFormat  String   @default("TCH[YYYY][SEQ]")
+
+  parentIdPrefix   String   @default("PRN")
+  parentIdDigits   Int      @default(4)
+  parentIdFormat   String   @default("PRN[SEQ]")
+
+  updatedAt        DateTime @updatedAt
+}
+
+model Caste {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  category    String?   // e.g. "General", "OBC", "SC", "ST", "EWS", etc.
+  description String?
+  createdAt   DateTime  @default(now())
+  students    Student[]
+
+  @@index([name])
+}
+

@@ -116,12 +116,14 @@ const ResultListPage = async ({
           <span className="rounded-md bg-gray-100 px-2 py-0.5 font-medium text-gray-700">
             Class {item.className}
           </span>
-          <span>👨‍🏫 {item.teacherName} {item.teacherSurname}</span>
+          <span>
+            👨‍🏫 {item.teacherName} {item.teacherSurname}
+          </span>
         </div>
       </div>
 
       <div className="mt-3.5 flex items-center justify-between border-t border-gray-100 pt-2.5">
-        <span className="text-xs text-gray-400 font-medium">
+        <span className="text-xs font-medium text-gray-400">
           📅 {new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(item.startTime)}
         </span>
         {(role === "admin" || role === "teacher") && (
@@ -197,7 +199,7 @@ const ResultListPage = async ({
     }
   }
 
-  const [dataRes, count] = await prisma.$transaction([
+  const [dataRes, count] = await Promise.all([
     prisma.result.findMany({
       where: query,
       include: {

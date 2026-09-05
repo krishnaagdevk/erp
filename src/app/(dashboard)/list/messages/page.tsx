@@ -67,7 +67,7 @@ const MessagesPage = async ({
 
   const finalWhere = { ...where, ...audienceFilter };
 
-  const [announcements, count] = await prisma.$transaction([
+  const [announcements, count] = await Promise.all([
     prisma.announcement.findMany({
       where: finalWhere,
       include: {
@@ -82,11 +82,11 @@ const MessagesPage = async ({
   ]);
 
   return (
-    <div className="m-1 sm:m-4 mt-0 flex flex-1 flex-col gap-4 sm:gap-6 rounded-xl sm:rounded-2xl bg-white p-3 sm:p-5 shadow-sm">
+    <div className="m-1 mt-0 flex flex-1 flex-col gap-4 rounded-xl bg-white p-3 shadow-sm sm:m-4 sm:gap-6 sm:rounded-2xl sm:p-5">
       {/* HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-gray-100 pb-3">
+      <div className="flex flex-col gap-3 border-b border-gray-100 pb-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-lg sm:text-xl font-bold text-gray-800">Messages & Class Bulletins</h1>
+          <h1 className="text-lg font-bold text-gray-800 sm:text-xl">Messages & Class Bulletins</h1>
           <p className="mt-0.5 text-xs text-gray-500">
             Active communications and bulletins for {user?.name || user?.username} ({user?.role})
           </p>

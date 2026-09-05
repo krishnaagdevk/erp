@@ -7,6 +7,7 @@ import { ITEM_PER_PAGE } from "@/lib/settings";
 import { Assignment, Class, Prisma, Subject, Teacher } from "@/generated/client";
 import TableActions from "@/components/TableActions";
 import { auth } from "@/lib/auth";
+import { getClassOptions } from "@/lib/queries";
 import AssignmentSubmissionModal from "@/components/AssignmentSubmissionModal";
 import AssignmentSubmissionsDrawer from "@/components/AssignmentSubmissionsDrawer";
 
@@ -89,9 +90,7 @@ const AssignmentListPage = async ({
               {item.lesson.subject.name} · {item.lesson.name}
             </span>
             {item.description && (
-              <p className="mt-1 line-clamp-2 text-xs text-gray-600 max-w-sm">
-                {item.description}
-              </p>
+              <p className="mt-1 line-clamp-2 max-w-sm text-xs text-gray-600">{item.description}</p>
             )}
           </div>
         </td>
@@ -141,7 +140,7 @@ const AssignmentListPage = async ({
                 </span>
               ))}
               {item.submissions.length === 0 && (
-                <span className="text-xs text-amber-600 font-medium">Pending Submission</span>
+                <span className="text-xs font-medium text-amber-600">Pending Submission</span>
               )}
             </div>
           ) : (
@@ -192,7 +191,7 @@ const AssignmentListPage = async ({
           </div>
 
           {item.description && (
-            <p className="mt-2 text-xs text-gray-600 line-clamp-2 leading-relaxed">
+            <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-gray-600">
               {item.description}
             </p>
           )}
@@ -246,7 +245,8 @@ const AssignmentListPage = async ({
                           : "bg-blue-100 text-blue-800"
                       }`}
                     >
-                      {sub.student.name}: {sub.status === "GRADED" ? `${sub.score} pts` : "Submitted"}
+                      {sub.student.name}:{" "}
+                      {sub.status === "GRADED" ? `${sub.score} pts` : "Submitted"}
                     </span>
                   ))}
                   {item.submissions.length === 0 && (
@@ -348,7 +348,7 @@ const AssignmentListPage = async ({
     }
   }
 
-  const [data, count, filterClasses] = await prisma.$transaction([
+  const [data, count, filterClasses] = await Promise.all([
     prisma.assignment.findMany({
       where: query,
       include: {
@@ -385,7 +385,7 @@ const AssignmentListPage = async ({
       skip: ITEM_PER_PAGE * (p - 1),
     }),
     prisma.assignment.count({ where: query }),
-    prisma.class.findMany({ select: { id: true, name: true } }),
+    getClassOptions(),
   ]);
 
   const filterOptions = [
@@ -397,11 +397,11 @@ const AssignmentListPage = async ({
   ];
 
   return (
-    <div className="m-1 sm:m-4 mt-0 flex-1 rounded-xl bg-white p-3 sm:p-5 shadow-sm">
+    <div className="m-1 mt-0 flex-1 rounded-xl bg-white p-3 shadow-sm sm:m-4 sm:p-5">
       {/* TOP */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-gray-100 pb-3">
+      <div className="flex flex-col gap-3 border-b border-gray-100 pb-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-lg sm:text-xl font-bold text-gray-800">Assignments & Homework</h1>
+          <h1 className="text-lg font-bold text-gray-800 sm:text-xl">Assignments & Homework</h1>
           <p className="text-xs text-gray-500">
             {role === "student"
               ? "View homework, download worksheets, and submit assignments."
@@ -437,4 +437,3 @@ const AssignmentListPage = async ({
 };
 
 export default AssignmentListPage;
-

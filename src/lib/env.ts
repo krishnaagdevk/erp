@@ -29,9 +29,14 @@ export const CLOUDINARY_CONFIG = {
  * Cloudflare R2 Storage Config
  */
 export const R2_CONFIG = {
-  accountId: process.env.R2_ACCOUNT_ID || "",
-  accessKeyId: process.env.R2_ACCESS_KEY_ID || "",
-  secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || "",
-  bucketName: process.env.R2_BUCKET_NAME || "school-erp",
-  publicUrl: process.env.NEXT_PUBLIC_R2_PUBLIC_URL || "",
+  accountId:
+    process.env.R2_ACCOUNT_ID ||
+    process.env.CLOUDFLARE_R2_ACCOUNT_ID ||
+    process.env.CLOUDFLARE_ACCOUNT_ID ||
+    "",
+  accessKeyId: process.env.R2_ACCESS_KEY_ID || process.env.CLOUDFLARE_R2_ACCESS_KEY_ID || "",
+  secretAccessKey:
+    process.env.R2_SECRET_ACCESS_KEY || process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY || "",
+  bucketName: process.env.R2_BUCKET_NAME || process.env.CLOUDFLARE_R2_BUCKET_NAME || "emantra",
+  publicUrl: process.env.NEXT_PUBLIC_R2_PUBLIC_URL || process.env.CLOUDFLARE_R2_PUBLIC_DOMAIN || "",
 };

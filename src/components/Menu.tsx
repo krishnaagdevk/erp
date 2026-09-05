@@ -55,6 +55,12 @@ const menuItems = [
         visible: ["admin", "teacher"],
       },
       {
+        icon: "/singleBranch.png",
+        label: "Caste Categories",
+        href: "/list/castes",
+        visible: ["admin"],
+      },
+      {
         icon: "/lesson.png",
         label: "Lessons",
         href: "/list/lessons",

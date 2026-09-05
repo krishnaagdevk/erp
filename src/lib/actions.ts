@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { Prisma } from "@/generated/client";
 import {
   accountantSchema,
@@ -29,10 +29,15 @@ import {
   SubjectSchema,
   teacherSchema,
   TeacherSchema,
+  idFormatConfigSchema,
+  IdFormatConfigSchema,
+  casteSchema,
+  CasteSchema,
 } from "./formValidationSchemas";
 import prisma from "./prisma";
 import { hashPassword } from "./auth";
 import { requireRole } from "./guard";
+import { generateNextStudentId, generateNextTeacherId } from "./idGenerator";
 
 type CurrentState = { success: boolean; error: boolean; message?: string };
 
@@ -439,13 +444,64 @@ export const createStudent = async (currentState: CurrentState, data: StudentSch
       return { success: false, error: true, message: "Invalid student data." };
     }
 
+    // Verify class exists, belongs to grade, and check capacity
     const classItem = await prisma.class.findUnique({
       where: { id: parsed.data.classId },
       include: { _count: { select: { students: true } } },
     });
 
-    if (classItem && classItem._count.students >= classItem.capacity) {
-      return { success: false, error: true, message: "Class capacity reached!" };
+    if (!classItem) {
+      return { success: false, error: true, message: "Selected class section does not exist." };
+    }
+
+    if (classItem.gradeId !== parsed.data.gradeId) {
+      return {
+        success: false,
+        error: true,
+        message: "Selected class section does not belong to the selected grade level.",
+      };
+    }
+
+    if (classItem._count.students >= classItem.capacity) {
+      return {
+        success: false,
+        error: true,
+        message: `Class section capacity (${classItem.capacity}) reached!`,
+      };
+    }
+
+    // Autogenerate Student ID as username if not manually specified
+    let studentUsername = parsed.data.username?.trim();
+    if (!studentUsername) {
+      studentUsername = await generateNextStudentId();
+    } else {
+      const existingUser = await prisma.student.findUnique({
+        where: { username: studentUsername },
+      });
+      if (existingUser) {
+        return { success: false, error: true, message: "Student ID/Username already exists." };
+      }
+    }
+
+    // Format and validate Aadhar uniqueness
+    const cleanAadhar = parsed.data.aadhar
+      ? parsed.data.aadhar
+          .replace(/\D/g, "")
+          .replace(/(\d{4})(?=\d)/g, "$1 ")
+          .trim()
+      : null;
+
+    if (cleanAadhar) {
+      const existingAadhar = await prisma.student.findUnique({
+        where: { aadhar: cleanAadhar },
+      });
+      if (existingAadhar) {
+        return {
+          success: false,
+          error: true,
+          message: "A student with this Aadhar number already exists.",
+        };
+      }
     }
 
     const rawPassword = parsed.data.password || "student123";
@@ -453,17 +509,21 @@ export const createStudent = async (currentState: CurrentState, data: StudentSch
 
     const created = await prisma.student.create({
       data: {
-        username: parsed.data.username,
+        username: studentUsername,
         password: hashedPassword,
         name: parsed.data.name,
         surname: parsed.data.surname,
         email: parsed.data.email || null,
         phone: parsed.data.phone || null,
+        aadhar: cleanAadhar || null,
         address: parsed.data.address,
         img: parsed.data.img || null,
         bloodType: parsed.data.bloodType,
         sex: parsed.data.sex,
         birthday: parsed.data.birthday,
+        category: (parsed.data.category as any) || null,
+        religion: (parsed.data.religion as any) || null,
+        casteId: parsed.data.casteId || null,
         gradeId: parsed.data.gradeId,
         classId: parsed.data.classId,
         parentId: parsed.data.parentId,
@@ -477,11 +537,12 @@ export const createStudent = async (currentState: CurrentState, data: StudentSch
         action: "CREATE",
         entity: "Student",
         entityId: created.id,
-        details: JSON.stringify({ username: created.username }),
+        details: JSON.stringify({ username: created.username, aadhar: created.aadhar }),
       },
     });
 
     revalidatePath("/list/students");
+    revalidatePath("/list/classes");
     return { success: true, error: false };
   } catch (err: any) {
     console.error("createStudent error:", err);
@@ -497,6 +558,30 @@ export const updateStudent = async (currentState: CurrentState, data: StudentSch
       return { success: false, error: true, message: "Invalid student data." };
     }
 
+    // Clean and validate Aadhar uniqueness
+    const cleanAadhar = parsed.data.aadhar
+      ? parsed.data.aadhar
+          .replace(/\D/g, "")
+          .replace(/(\d{4})(?=\d)/g, "$1 ")
+          .trim()
+      : null;
+
+    if (cleanAadhar) {
+      const existingAadhar = await prisma.student.findFirst({
+        where: {
+          aadhar: cleanAadhar,
+          NOT: { id: parsed.data.id },
+        },
+      });
+      if (existingAadhar) {
+        return {
+          success: false,
+          error: true,
+          message: "Another student already has this Aadhar number.",
+        };
+      }
+    }
+
     let hashedPassword: string | undefined = undefined;
     if (parsed.data.password && parsed.data.password.trim() !== "") {
       hashedPassword = await hashPassword(parsed.data.password);
@@ -506,16 +591,20 @@ export const updateStudent = async (currentState: CurrentState, data: StudentSch
       where: { id: parsed.data.id },
       data: {
         ...(hashedPassword && { password: hashedPassword }),
-        username: parsed.data.username,
+        ...(parsed.data.username && { username: parsed.data.username }),
         name: parsed.data.name,
         surname: parsed.data.surname,
         email: parsed.data.email || null,
         phone: parsed.data.phone || null,
+        aadhar: cleanAadhar || null,
         address: parsed.data.address,
         img: parsed.data.img || null,
         bloodType: parsed.data.bloodType,
         sex: parsed.data.sex,
         birthday: parsed.data.birthday,
+        category: (parsed.data.category as any) || null,
+        religion: (parsed.data.religion as any) || null,
+        casteId: parsed.data.casteId || null,
         gradeId: parsed.data.gradeId,
         classId: parsed.data.classId,
         parentId: parsed.data.parentId,
@@ -529,11 +618,12 @@ export const updateStudent = async (currentState: CurrentState, data: StudentSch
         action: "UPDATE",
         entity: "Student",
         entityId: updated.id,
-        details: JSON.stringify({ username: updated.username }),
+        details: JSON.stringify({ username: updated.username, aadhar: updated.aadhar }),
       },
     });
 
     revalidatePath("/list/students");
+    revalidatePath("/list/classes");
     return { success: true, error: false };
   } catch (err: any) {
     console.error("updateStudent error:", err);
@@ -704,7 +794,7 @@ export const createAnnouncement = async (currentState: CurrentState, data: Annou
     }
 
     const classId = parsed.data.classId && parsed.data.classId > 0 ? parsed.data.classId : null;
-    const teacherId = actor.role === "teacher" ? actor.id : (parsed.data.teacherId || null);
+    const teacherId = actor.role === "teacher" ? actor.id : parsed.data.teacherId || null;
     const created = await prisma.announcement.create({
       data: {
         title: parsed.data.title,
@@ -1182,25 +1272,56 @@ export const createParent = async (currentState: CurrentState, data: ParentSchem
     const actor = await requireRole("admin");
     const parsed = parentSchema.safeParse(data);
     if (!parsed.success) {
-      return { success: false, error: true, message: "Invalid parent data." };
+      const errorMsg =
+        Object.values(parsed.error.flatten().fieldErrors).flat().join(" ") ||
+        "Invalid parent data.";
+      return { success: false, error: true, message: errorMsg };
     }
 
-    const hashedPassword = await hashPassword(parsed.data.password || "parent123");
+    const cleanPhone = parsed.data.phone.trim();
+    const effectiveUsername = parsed.data.username?.trim() || cleanPhone;
+    const cleanAadhar = parsed.data.aadhar?.trim() || null;
+
+    // Check if parent with same phone / username or aadhar already exists
+    const existing = await prisma.parent.findFirst({
+      where: {
+        OR: [
+          { phone: cleanPhone },
+          { username: effectiveUsername },
+          ...(cleanAadhar ? [{ aadhar: cleanAadhar }] : []),
+        ],
+      },
+    });
+
+    if (existing) {
+      if (existing.phone === cleanPhone || existing.username === effectiveUsername) {
+        return {
+          success: false,
+          error: true,
+          message: "A parent with this Mobile Number already exists.",
+        };
+      }
+      if (cleanAadhar && existing.aadhar === cleanAadhar) {
+        return {
+          success: false,
+          error: true,
+          message: "A parent with this Aadhar Number already exists.",
+        };
+      }
+    }
+
+    const hashedPassword = await hashPassword(parsed.data.password || cleanPhone);
 
     const created = await prisma.parent.create({
       data: {
-        username: parsed.data.username,
-        name: parsed.data.name,
-        surname: parsed.data.surname,
-        email: parsed.data.email || null,
-        phone: parsed.data.phone,
-        address: parsed.data.address,
+        username: effectiveUsername,
+        name: parsed.data.name.trim(),
+        surname: parsed.data.surname.trim(),
+        email: parsed.data.email?.trim() || null,
+        phone: cleanPhone,
+        aadhar: cleanAadhar,
+        address: parsed.data.address.trim(),
         password: hashedPassword,
-        students: parsed.data.students?.length
-          ? {
-              connect: parsed.data.students.map((studentId) => ({ id: studentId })),
-            }
-          : undefined,
       },
     });
 
@@ -1214,11 +1335,15 @@ export const createParent = async (currentState: CurrentState, data: ParentSchem
         details: JSON.stringify({
           name: `${created.name} ${created.surname}`,
           username: created.username,
+          phone: created.phone,
+          aadhar: created.aadhar,
         }),
       },
     });
 
     revalidatePath("/list/parents");
+    revalidateTag("parents", { expire: 0 });
+    revalidateTag("dashboard-counts", { expire: 0 });
     return { success: true, error: false };
   } catch (err: any) {
     console.error("createParent error:", err);
@@ -1234,21 +1359,53 @@ export const updateParent = async (currentState: CurrentState, data: ParentSchem
     const actor = await requireRole("admin");
     const parsed = parentSchema.safeParse(data);
     if (!parsed.success) {
-      return { success: false, error: true, message: "Invalid parent data." };
+      const errorMsg =
+        Object.values(parsed.error.flatten().fieldErrors).flat().join(" ") ||
+        "Invalid parent data.";
+      return { success: false, error: true, message: errorMsg };
+    }
+
+    const cleanPhone = parsed.data.phone.trim();
+    const effectiveUsername = parsed.data.username?.trim() || cleanPhone;
+    const cleanAadhar = parsed.data.aadhar?.trim() || null;
+
+    // Check conflict with other parents
+    const existing = await prisma.parent.findFirst({
+      where: {
+        id: { not: data.id },
+        OR: [
+          { phone: cleanPhone },
+          { username: effectiveUsername },
+          ...(cleanAadhar ? [{ aadhar: cleanAadhar }] : []),
+        ],
+      },
+    });
+
+    if (existing) {
+      if (existing.phone === cleanPhone || existing.username === effectiveUsername) {
+        return {
+          success: false,
+          error: true,
+          message: "Another parent with this Mobile Number already exists.",
+        };
+      }
+      if (cleanAadhar && existing.aadhar === cleanAadhar) {
+        return {
+          success: false,
+          error: true,
+          message: "Another parent with this Aadhar Number already exists.",
+        };
+      }
     }
 
     const updatePayload: any = {
-      username: parsed.data.username,
-      name: parsed.data.name,
-      surname: parsed.data.surname,
-      email: parsed.data.email || null,
-      phone: parsed.data.phone,
-      address: parsed.data.address,
-      students: parsed.data.students
-        ? {
-            set: parsed.data.students.map((studentId) => ({ id: studentId })),
-          }
-        : undefined,
+      username: effectiveUsername,
+      name: parsed.data.name.trim(),
+      surname: parsed.data.surname.trim(),
+      email: parsed.data.email?.trim() || null,
+      phone: cleanPhone,
+      aadhar: cleanAadhar,
+      address: parsed.data.address.trim(),
     };
 
     if (parsed.data.password && parsed.data.password.trim() !== "") {
@@ -1270,11 +1427,15 @@ export const updateParent = async (currentState: CurrentState, data: ParentSchem
         details: JSON.stringify({
           name: `${updated.name} ${updated.surname}`,
           username: updated.username,
+          phone: updated.phone,
+          aadhar: updated.aadhar,
         }),
       },
     });
 
     revalidatePath("/list/parents");
+    revalidateTag("parents", { expire: 0 });
+    revalidateTag("dashboard-counts", { expire: 0 });
     return { success: true, error: false };
   } catch (err: any) {
     console.error("updateParent error:", err);
@@ -1314,6 +1475,8 @@ export const deleteParent = async (currentState: CurrentState, data: FormData) =
     });
 
     revalidatePath("/list/parents");
+    revalidateTag("parents", { expire: 0 });
+    revalidateTag("dashboard-counts", { expire: 0 });
     return { success: true, error: false };
   } catch (err: any) {
     console.error("deleteParent error:", err);
@@ -1618,7 +1781,9 @@ export const submitAssignment = async (
     return {
       success: true,
       error: false,
-      message: isLate ? "Assignment submitted (marked Late)." : "Assignment submitted successfully!",
+      message: isLate
+        ? "Assignment submitted (marked Late)."
+        : "Assignment submitted successfully!",
     };
   } catch (err: any) {
     console.error("submitAssignment error:", err);
@@ -2062,5 +2227,234 @@ export const markClassAttendance = async (
   } catch (err: any) {
     console.error("markClassAttendance error:", err);
     return { success: false, error: true, message: err.message || "Failed to mark attendance." };
+  }
+};
+
+// ==========================================
+// SYSTEM ID CONFIG ACTIONS
+// ==========================================
+
+export const updateIdConfig = async (currentState: CurrentState, data: IdFormatConfigSchema) => {
+  try {
+    const actor = await requireRole("admin");
+    const parsed = idFormatConfigSchema.safeParse(data);
+    if (!parsed.success) {
+      return { success: false, error: true, message: "Invalid ID format configuration." };
+    }
+
+    await prisma.systemSetting.upsert({
+      where: { id: "default" },
+      update: parsed.data,
+      create: {
+        id: "default",
+        ...parsed.data,
+      },
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        actorId: actor.id,
+        actorRole: actor.role,
+        action: "UPDATE",
+        entity: "SystemSetting",
+        entityId: "default",
+        details: JSON.stringify(parsed.data),
+      },
+    });
+
+    revalidatePath("/settings");
+    return { success: true, error: false };
+  } catch (err: any) {
+    console.error("updateIdConfig error:", err);
+    return {
+      success: false,
+      error: true,
+      message: err.message || "Failed to update ID configuration.",
+    };
+  }
+};
+
+export const searchParentByPhone = async (phoneQuery: string) => {
+  try {
+    const actor = await requireRole("admin");
+    const cleanPhone = phoneQuery.trim();
+    if (!cleanPhone || cleanPhone.length < 3) {
+      return { success: false, parent: null };
+    }
+
+    const parent = await prisma.parent.findFirst({
+      where: {
+        deletedAt: null,
+        OR: [
+          { phone: cleanPhone },
+          { username: cleanPhone },
+          { phone: { contains: cleanPhone } },
+          { username: { contains: cleanPhone } },
+        ],
+      },
+      select: {
+        id: true,
+        name: true,
+        surname: true,
+        phone: true,
+        username: true,
+        email: true,
+        aadhar: true,
+        address: true,
+      },
+    });
+
+    return { success: true, parent: parent || null };
+  } catch (err: any) {
+    console.error("searchParentByPhone error:", err);
+    return { success: false, parent: null };
+  }
+};
+
+// ==========================================
+// CASTE ACTIONS
+// ==========================================
+
+export const createCaste = async (currentState: CurrentState, data: CasteSchema) => {
+  try {
+    const actor = await requireRole("admin");
+    const parsed = casteSchema.safeParse(data);
+    if (!parsed.success) {
+      return { success: false, error: true, message: "Invalid caste data." };
+    }
+
+    const trimmedName = parsed.data.name.trim();
+
+    const existing = await prisma.caste.findUnique({
+      where: { name: trimmedName },
+    });
+
+    if (existing) {
+      return { success: false, error: true, message: "A caste with this name already exists." };
+    }
+
+    const created = await prisma.caste.create({
+      data: {
+        name: trimmedName,
+        category: parsed.data.category?.trim() || null,
+        description: parsed.data.description?.trim() || null,
+      },
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        actorId: actor.id,
+        actorRole: actor.role,
+        action: "CREATE",
+        entity: "Caste",
+        entityId: String(created.id),
+        details: JSON.stringify({ name: created.name, category: created.category }),
+      },
+    });
+
+    revalidatePath("/list/students");
+    revalidatePath("/list/castes");
+    return { success: true, error: false };
+  } catch (err: any) {
+    console.error("createCaste error:", err);
+    return { success: false, error: true, message: err.message || "Failed to create caste." };
+  }
+};
+
+export const updateCaste = async (currentState: CurrentState, data: CasteSchema) => {
+  try {
+    const actor = await requireRole("admin");
+    const parsed = casteSchema.safeParse(data);
+    if (!parsed.success || !parsed.data.id) {
+      return { success: false, error: true, message: "Invalid caste data." };
+    }
+
+    const trimmedName = parsed.data.name.trim();
+
+    const existing = await prisma.caste.findFirst({
+      where: {
+        name: trimmedName,
+        NOT: { id: parsed.data.id },
+      },
+    });
+
+    if (existing) {
+      return {
+        success: false,
+        error: true,
+        message: "Another caste with this name already exists.",
+      };
+    }
+
+    const updated = await prisma.caste.update({
+      where: { id: parsed.data.id },
+      data: {
+        name: trimmedName,
+        category: parsed.data.category?.trim() || null,
+        description: parsed.data.description?.trim() || null,
+      },
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        actorId: actor.id,
+        actorRole: actor.role,
+        action: "UPDATE",
+        entity: "Caste",
+        entityId: String(updated.id),
+        details: JSON.stringify({ name: updated.name, category: updated.category }),
+      },
+    });
+
+    revalidatePath("/list/students");
+    revalidatePath("/list/castes");
+    return { success: true, error: false };
+  } catch (err: any) {
+    console.error("updateCaste error:", err);
+    return { success: false, error: true, message: err.message || "Failed to update caste." };
+  }
+};
+
+export const deleteCaste = async (currentState: CurrentState, data: FormData) => {
+  try {
+    const actor = await requireRole("admin");
+    const id = Number(data.get("id"));
+    if (!id) {
+      return { success: false, error: true, message: "Missing caste ID." };
+    }
+
+    // Check if students are using this caste
+    const studentCount = await prisma.student.count({
+      where: { casteId: id },
+    });
+
+    if (studentCount > 0) {
+      return {
+        success: false,
+        error: true,
+        message: `Cannot delete caste: ${studentCount} student(s) are associated with it.`,
+      };
+    }
+
+    await prisma.caste.delete({
+      where: { id },
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        actorId: actor.id,
+        actorRole: actor.role,
+        action: "DELETE",
+        entity: "Caste",
+        entityId: String(id),
+      },
+    });
+
+    revalidatePath("/list/students");
+    revalidatePath("/list/castes");
+    return { success: true, error: false };
+  } catch (err: any) {
+    console.error("deleteCaste error:", err);
+    return { success: false, error: true, message: err.message || "Failed to delete caste." };
   }
 };

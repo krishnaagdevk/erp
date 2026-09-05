@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 import Announcements from "@/components/Announcements";
 import BigCalendarContainer from "@/components/BigCalendarContainer";
 import prisma from "@/lib/prisma";
@@ -45,7 +43,7 @@ const TeacherPage = async () => {
   });
 
   // Fetch count statistics for teacher
-  const [totalClassesCount, totalStudentsCount, totalExamsCount] = await prisma.$transaction([
+  const [totalClassesCount, totalStudentsCount, totalExamsCount] = await Promise.all([
     prisma.class.count({
       where: {
         OR: [{ supervisorId: userId }, { lessons: { some: { teacherId: userId } } }],
@@ -66,7 +64,15 @@ const TeacherPage = async () => {
   // Fetch today's attendance stats for teacher's lessons
   const today = new Date();
   const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-  const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
+  const endOfDay = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate(),
+    23,
+    59,
+    59,
+    999
+  );
 
   const [todayAttendanceCount, todayPresentCount] = await Promise.all([
     prisma.attendance.count({
@@ -93,7 +99,6 @@ const TeacherPage = async () => {
       <div className="flex w-full flex-col gap-6 xl:w-2/3">
         {/* HERO GREETING */}
 
-
         {/* METRICS ROW */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
@@ -115,7 +120,9 @@ const TeacherPage = async () => {
           </div>
 
           <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
-            <span className="text-xs font-medium uppercase text-purple-600">Today&apos;s Attendance</span>
+            <span className="text-xs font-medium uppercase text-purple-600">
+              Today&apos;s Attendance
+            </span>
             <p className="mt-1 text-2xl font-bold text-purple-700">
               {todayAttendanceCount > 0 ? `${todayAttendanceRate}%` : "Pending"}
             </p>
@@ -128,17 +135,19 @@ const TeacherPage = async () => {
         </div>
 
         {/* TIMETABLE SCHEDULE */}
-        <div className="rounded-2xl border border-gray-100 bg-white p-3 sm:p-5 shadow-sm">
-          <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between border-b border-gray-100 pb-3">
+        <div className="rounded-2xl border border-gray-100 bg-white p-3 shadow-sm sm:p-5">
+          <div className="mb-3 flex flex-col gap-1 border-b border-gray-100 pb-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h2 className="text-sm sm:text-base font-bold text-gray-800">Weekly Teaching Schedule</h2>
+              <h2 className="text-sm font-bold text-gray-800 sm:text-base">
+                Weekly Teaching Schedule
+              </h2>
               <p className="text-[11px] text-gray-400">Class periods & scheduled lesson slots</p>
             </div>
-            <span className="self-start sm:self-auto rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700">
+            <span className="self-start rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700 sm:self-auto">
               Mon – Fri (8:00 AM - 5:00 PM)
             </span>
           </div>
-          <div className="h-[520px] sm:h-[600px] w-full">
+          <div className="h-[520px] w-full sm:h-[600px]">
             <BigCalendarContainer type="teacherId" id={userId} />
           </div>
         </div>

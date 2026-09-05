@@ -1,4 +1,6 @@
 import { getCurrentUser } from "@/lib/auth";
+import { getSystemIdConfig } from "@/lib/idGenerator";
+import IdFormatSettings from "@/components/IdFormatSettings";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -9,17 +11,23 @@ const SettingsPage = async () => {
     redirect("/sign-in");
   }
 
+  const isAdmin = user.role === "admin";
+  const idConfig = isAdmin ? await getSystemIdConfig() : null;
+
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6 p-4">
       <div>
         <h1 className="text-2xl font-bold text-gray-800">Settings & Preferences</h1>
         <p className="mt-1 text-xs text-gray-500">
-          Manage your portal account and security configurations
+          Manage your portal account, system numbering formats, and security configurations.
         </p>
       </div>
 
       {/* SETTINGS CARDS */}
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-6">
+        {/* ADMIN ID FORMATTING SYSTEM CONFIG */}
+        {isAdmin && idConfig && <IdFormatSettings initialConfig={idConfig} />}
+
         {/* PROFILE SECTION */}
         <div className="flex flex-col gap-3 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
           <h2 className="text-base font-semibold text-gray-800">Account Preferences</h2>

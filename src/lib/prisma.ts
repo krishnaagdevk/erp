@@ -14,4 +14,3 @@ export default prisma;
 export * from "@/generated/client";
 
 if (process.env.NODE_ENV !== "production") globalThis.prismaGlobal = prisma;
-

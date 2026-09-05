@@ -7,6 +7,7 @@ import { ITEM_PER_PAGE } from "@/lib/settings";
 import { Class, Exam, Prisma, Subject, Teacher } from "@/generated/client";
 import TableActions from "@/components/TableActions";
 import { auth } from "@/lib/auth";
+import { getClassOptions } from "@/lib/queries";
 
 type ExamList = Exam & {
   lesson: {
@@ -60,7 +61,9 @@ const ExamListPage = async ({
       key={item.id}
       className="border-b border-gray-200 text-sm even:bg-slate-50 hover:bg-lamaPurpleLight"
     >
-      <td className="flex items-center gap-4 p-4 font-medium text-gray-800">{item.lesson.subject.name}</td>
+      <td className="flex items-center gap-4 p-4 font-medium text-gray-800">
+        {item.lesson.subject.name}
+      </td>
       <td>{item.lesson.class.name}</td>
       <td className="hidden md:table-cell">
         {item.lesson.teacher.name + " " + item.lesson.teacher.surname}
@@ -90,7 +93,9 @@ const ExamListPage = async ({
         <div className="flex items-start justify-between gap-2">
           <div>
             <h3 className="text-sm font-bold text-gray-800">{item.title}</h3>
-            <span className="text-xs font-semibold text-lamaPurple">{item.lesson.subject.name}</span>
+            <span className="text-xs font-semibold text-lamaPurple">
+              {item.lesson.subject.name}
+            </span>
           </div>
           <span className="shrink-0 rounded-full bg-sky-50 px-2.5 py-0.5 text-xs font-semibold text-sky-700 ring-1 ring-sky-200">
             Class {item.lesson.class.name}
@@ -194,7 +199,7 @@ const ExamListPage = async ({
     }
   }
 
-  const [data, count, filterClasses] = await prisma.$transaction([
+  const [data, count, filterClasses] = await Promise.all([
     prisma.exam.findMany({
       where: query,
       include: {
@@ -211,7 +216,7 @@ const ExamListPage = async ({
       skip: ITEM_PER_PAGE * (p - 1),
     }),
     prisma.exam.count({ where: query }),
-    prisma.class.findMany({ select: { id: true, name: true } }),
+    getClassOptions(),
   ]);
 
   const filterOptions = [

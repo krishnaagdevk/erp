@@ -16,27 +16,18 @@ const Announcements = async () => {
         { teacherId: userId },
         {
           class: {
-            OR: [
-              { supervisorId: userId },
-              { lessons: { some: { teacherId: userId } } },
-            ],
+            OR: [{ supervisorId: userId }, { lessons: { some: { teacherId: userId } } }],
           },
         },
       ],
     };
   } else if (role === "student" && userId) {
     audienceWhere = {
-      OR: [
-        { classId: null },
-        { class: { students: { some: { id: userId } } } },
-      ],
+      OR: [{ classId: null }, { class: { students: { some: { id: userId } } } }],
     };
   } else if (role === "parent" && userId) {
     audienceWhere = {
-      OR: [
-        { classId: null },
-        { class: { students: { some: { parentId: userId } } } },
-      ],
+      OR: [{ classId: null }, { class: { students: { some: { parentId: userId } } } }],
     };
   }
 

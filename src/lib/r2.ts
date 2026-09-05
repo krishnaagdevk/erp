@@ -64,20 +64,26 @@ export function getR2Accounts(): R2AccountConfig[] {
   }
 
   // 3. Fallback to default single account if no indexed/json accounts found
-  if (
-    accounts.length === 0 &&
-    process.env.R2_ACCOUNT_ID &&
-    process.env.R2_ACCESS_KEY_ID &&
-    process.env.R2_SECRET_ACCESS_KEY &&
-    process.env.R2_BUCKET_NAME
-  ) {
+  const accountId =
+    process.env.R2_ACCOUNT_ID ||
+    process.env.CLOUDFLARE_R2_ACCOUNT_ID ||
+    process.env.CLOUDFLARE_ACCOUNT_ID;
+  const accessKeyId = process.env.R2_ACCESS_KEY_ID || process.env.CLOUDFLARE_R2_ACCESS_KEY_ID;
+  const secretAccessKey =
+    process.env.R2_SECRET_ACCESS_KEY || process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY;
+  const bucketName =
+    process.env.R2_BUCKET_NAME || process.env.CLOUDFLARE_R2_BUCKET_NAME || "emantra";
+  const publicUrl =
+    process.env.NEXT_PUBLIC_R2_PUBLIC_URL || process.env.CLOUDFLARE_R2_PUBLIC_DOMAIN;
+
+  if (accounts.length === 0 && accountId && accessKeyId && secretAccessKey && bucketName) {
     accounts.push({
       id: "default",
-      accountId: process.env.R2_ACCOUNT_ID,
-      accessKeyId: process.env.R2_ACCESS_KEY_ID,
-      secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
-      bucketName: process.env.R2_BUCKET_NAME,
-      publicUrl: process.env.NEXT_PUBLIC_R2_PUBLIC_URL,
+      accountId,
+      accessKeyId,
+      secretAccessKey,
+      bucketName,
+      publicUrl,
       enabled: true,
     });
   }

@@ -69,7 +69,7 @@ const FeesListPage = async ({
     ];
   }
 
-  const [feesRaw, count] = await prisma.$transaction([
+  const [feesRaw, count] = await Promise.all([
     prisma.fee.findMany({
       where: query,
       select: {
@@ -279,15 +279,15 @@ const FeesListPage = async ({
             </div>
             <div className="mt-2 flex items-center justify-between border-t border-gray-200/60 pt-1.5 text-xs">
               <div>
-                <span className="text-[11px] text-gray-400 block">Total</span>
+                <span className="block text-[11px] text-gray-400">Total</span>
                 <span className="font-bold text-gray-800">₹{amountNum.toFixed(2)}</span>
               </div>
               <div>
-                <span className="text-[11px] text-green-600 block">Paid</span>
+                <span className="block text-[11px] text-green-600">Paid</span>
                 <span className="font-bold text-green-700">₹{paidAmountNum.toFixed(2)}</span>
               </div>
               <div className="text-right">
-                <span className="text-[11px] text-amber-600 block">Due</span>
+                <span className="block text-[11px] text-amber-600">Due</span>
                 <span className="font-bold text-amber-700">₹{balance.toFixed(2)}</span>
               </div>
             </div>
@@ -296,7 +296,10 @@ const FeesListPage = async ({
 
         <div className="mt-3 flex items-center justify-between border-t border-gray-100 pt-2.5">
           <span className="text-xs text-gray-400">
-            Due: {new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(item.dueDate))}
+            Due:{" "}
+            {new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(
+              new Date(item.dueDate)
+            )}
           </span>
           <div className="flex items-center gap-2">
             {(role === "admin" || role === "accountant") && (
